@@ -1,8 +1,16 @@
-package schema
+package gojsa
+
+import (
+	"encoding/json"
+	"io"
+	"log"
+)
+
+type Reference struct {
+	Ref string `json:"$ref"`
+}
 
 type Node struct {
-	Ref string `json:"$ref"`
-
 	Description string
 	Type        []string
 }
@@ -20,6 +28,8 @@ type Root struct {
 }
 
 type Schema struct {
+	json.Unmarshaler
+	SchemaUnmarshaler
 	Node
 
 	ID          string
@@ -29,6 +39,22 @@ type Schema struct {
 
 	Title string
 	Links []Link
+}
+
+type SchemaUnmarshaler struct{}
+
+func (s SchemaUnmarshaler) UnmarshalJSON(b []byte) error {
+	var tmp map[string]interface{}
+	if err := json.Unmarshal(b, &tmp); err != nil {
+		return err
+	}
+	if id := tmp["id"]; id != nil {
+		log.Println(id)
+	}
+	if ref := tmp["$ref"]; ref != nil {
+		log.Println(ref)
+	}
+	return nil
 }
 
 type Property struct {
@@ -53,4 +79,13 @@ type Link struct {
 
 type AnyOf struct {
 	Ref string
+}
+
+func Parse(r io.Reader) (root Root) {
+	dec := json.NewDecoder(r)
+	if err := dec.Decode(&root); err != nil {
+		panic(err)
+	}
+
+	return root
 }
