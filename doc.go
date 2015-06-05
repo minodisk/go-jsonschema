@@ -5,6 +5,6 @@ import (
 	"text/template"
 )
 
-func Doc(w io.Writer, root *Root, t *template.Template) error {
-	return t.Execute(w, root)
+func Doc(w io.Writer, s *Schema, t *template.Template) error {
+	return t.Execute(w, s)
 }
