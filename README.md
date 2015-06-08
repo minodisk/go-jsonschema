@@ -57,12 +57,12 @@ func main() {
       - [ ] OneOf
       - [ ] Not
       - [ ] Definitions
-    - 6. Metadata keywords
-      - [ ] Title
-      - [ ] Description
-      - [ ] Default
-    - 7. Semantic validation with "format"
-      - [ ] Format
+  - 6. Metadata keywords
+    - [ ] Title
+    - [ ] Description
+    - [ ] Default
+  - 7. Semantic validation with "format"
+    - [ ] Format
 
 - [json-schema-hypermedia](http://json-schema.org/latest/json-schema-hypermedia.html)
   - [ ] Links     []Link
