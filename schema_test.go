@@ -145,32 +145,32 @@ func TestSchemaOrStrings(t *testing.T) {
 	}
 }
 
-func TestStrings(t *testing.T) {
-	json := `{
-		"properties": {
-			"foo": {
-				"type": "number"
-			},
-			"bar": {
-				"type": ["number", "boolean"]
-			}
-		}
-	}`
-	buf := bytes.NewBufferString(json)
-	schema, err := gojsa.Parse(buf)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if a := schema.Properties["foo"].Type[0]; a != "number" {
-		t.Errorf("foo.Type[0] is'nt number but %+v", a)
-	}
-	if a := schema.Properties["bar"].Type[0]; a != "number" {
-		t.Errorf("foo.Type[0] is'nt number but %+v", a)
-	}
-	if a := schema.Properties["bar"].Type[1]; a != "boolean" {
-		t.Errorf("foo.Type[0] is'nt boolean but %+v", a)
-	}
-}
+// func TestStrings(t *testing.T) {
+// 	json := `{
+// 		"properties": {
+// 			"foo": {
+// 				"type": "number"
+// 			},
+// 			"bar": {
+// 				"type": ["number", "boolean"]
+// 			}
+// 		}
+// 	}`
+// 	buf := bytes.NewBufferString(json)
+// 	schema, err := gojsa.Parse(buf)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// 	if a := schema.Properties["foo"].Type[0]; a != "number" {
+// 		t.Errorf("foo.Type[0] is'nt number but %+v", a)
+// 	}
+// 	if a := schema.Properties["bar"].Type[0]; a != "number" {
+// 		t.Errorf("foo.Type[0] is'nt number but %+v", a)
+// 	}
+// 	if a := schema.Properties["bar"].Type[1]; a != "boolean" {
+// 		t.Errorf("foo.Type[0] is'nt boolean but %+v", a)
+// 	}
+// }
 
 // func TestParse(t *testing.T) {
 // 	json := `{
