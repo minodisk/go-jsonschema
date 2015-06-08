@@ -2,6 +2,7 @@ package gojsa
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 )
 
@@ -26,8 +27,8 @@ type Schema struct {
 	MinLength int
 	Pattern   string // regexp
 	// 5.3. Validation keywords for arrays
-	AdditionalItems interface{} // bool or Schema
-	Items           Schemas     // Schema or []Schema
+	AdditionalItems SchemaOrBool    // Schema or bool
+	Items           SchemaOrSchemas // Schema or []Schema
 	MaxItems        int
 	MinItems        int
 	UniqueItems     bool
@@ -35,7 +36,7 @@ type Schema struct {
 	MaxProperties        int
 	MinProperties        int
 	Required             []string
-	AdditionalProperties interface{} // bool or Schema
+	AdditionalProperties SchemaOrBool // Schema or bool
 	Properties           map[string]*Schema
 	PatternProperties    map[string]string      // regexp
 	Dependencies         map[string]interface{} // Schema or []string
@@ -63,27 +64,62 @@ type Schema struct {
 	PathStart string
 }
 
-type Schemas struct {
-	isSingle bool
-	schemas  []*Schema
+type SchemaOrBool struct {
+	IsSchema bool
+	Schema   *Schema
+	Bool     bool
 }
 
-func (s *Schemas) IsSingle() bool {
-	return isSingle
+func (b *SchemaOrBool) UnmarshalJSON(data []byte) (err error) {
+	var i interface{}
+	if err = json.Unmarshal(data, &i); err != nil {
+		return err
+	}
+	switch t := i.(type) {
+	default:
+		return fmt.Errorf("unexpected type %T", t)
+	case map[string]interface{}:
+		s := new(Schema)
+		if err = json.Unmarshal(data, &s); err != nil {
+			return err
+		}
+		b.IsSchema = true
+		b.Schema = s
+	case bool:
+		b.Bool = t
+	}
+	return nil
 }
 
-func (s *Schemas) UnmarshalJSON(data []byte) (err error) {
-	var schemas []*Schema
-	if err = json.Unmarshal(data, &schemas); err == nil {
-		s.schemas = schemas
-		return
+type SchemaOrSchemas struct {
+	IsSchema bool
+	Schema   *Schema
+	Schemas  []*Schema
+}
+
+func (b *SchemaOrSchemas) UnmarshalJSON(data []byte) (err error) {
+	var i interface{}
+	if err = json.Unmarshal(data, &i); err != nil {
+		return err
 	}
-	schema = new(Schema)
-	if err = json.Unmarshal(data, schema); err == nil {
-		s.isSingle = true
-		s.schemas = []*Schema{schema}
+	switch t := i.(type) {
+	default:
+		return fmt.Errorf("unexpected type %T", t)
+	case map[string]interface{}:
+		s := new(Schema)
+		if err = json.Unmarshal(data, &s); err != nil {
+			return err
+		}
+		b.IsSchema = true
+		b.Schema = s
+	case []interface{}:
+		s := new([]*Schema)
+		if err = json.Unmarshal(data, &s); err != nil {
+			return err
+		}
+		b.Schemas = *s
 	}
-	return
+	return nil
 }
 
 type Strings []string
