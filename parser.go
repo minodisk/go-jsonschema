@@ -38,8 +38,8 @@ type Schema struct {
 	Required             []string
 	AdditionalProperties SchemaOrBool // Schema or bool
 	Properties           map[string]*Schema
-	PatternProperties    map[string]string      // regexp
-	Dependencies         map[string]interface{} // Schema or []string
+	PatternProperties    map[string]string // regexp
+	Dependencies         SchemaOrStrings   // Schema or []string
 	// 5.5. Validation keywords for any instance type
 	Enum        []interface{}
 	Type        Strings // string or []string
@@ -118,6 +118,41 @@ func (b *SchemaOrSchemas) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		b.Schemas = *s
+	}
+	return nil
+}
+
+type SchemaOrStrings struct {
+	IsSchema bool
+	Schema   *Schema
+	Strings  []string
+}
+
+func (b *SchemaOrStrings) UnmarshalJSON(data []byte) (err error) {
+	var i interface{}
+	if err = json.Unmarshal(data, &i); err != nil {
+		return err
+	}
+	switch t := i.(type) {
+	default:
+		return fmt.Errorf("unexpected type %T", t)
+	case map[string]interface{}:
+		s := new(Schema)
+		if err = json.Unmarshal(data, &s); err != nil {
+			return err
+		}
+		b.IsSchema = true
+		b.Schema = s
+	case []interface{}:
+		var strs []string
+		for _, v := range t {
+			str, ok := v.(string)
+			if !ok {
+				fmt.Errorf("unexpected type %T", t)
+			}
+			strs = append(strs, str)
+		}
+		b.Strings = strs
 	}
 	return nil
 }

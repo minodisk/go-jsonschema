@@ -103,6 +103,48 @@ func TestSchemaOrSchemas(t *testing.T) {
 	}
 }
 
+func TestSchemaOrStrings(t *testing.T) {
+	var json string
+	var s gojsa.Schema
+	var err error
+
+	json = `{
+		"dependencies": {
+			"id": "foo"
+		}
+	}`
+	s, err = gojsa.Parse(bytes.NewBufferString(json))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !s.Dependencies.IsSchema {
+		t.Fatal("should be Schema")
+	}
+	if a := s.Dependencies.Schema.ID; a != "foo" {
+		t.Errorf("id is expected foo, but actual %s", a)
+	}
+
+	json = `{
+		"dependencies": [
+			"foo",
+			"bar"
+		]
+	}`
+	s, err = gojsa.Parse(bytes.NewBufferString(json))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.Dependencies.IsSchema {
+		t.Fatal("shouldn't be Schema")
+	}
+	if a := s.Dependencies.Strings[0]; a != "foo" {
+		t.Errorf("expected foo, but actual %s", a)
+	}
+	if a := s.Dependencies.Strings[1]; a != "bar" {
+		t.Errorf("expected foo, but actual %s", a)
+	}
+}
+
 func TestStrings(t *testing.T) {
 	json := `{
 		"properties": {
