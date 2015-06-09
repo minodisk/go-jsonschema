@@ -63,6 +63,21 @@ func (b *SchemaOrSchemas) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
+func (s *SchemaOrSchemas) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+	var schema *Schema
+	var schemas []*Schema
+	if err = unmarshal(&schema); err == nil {
+		s.IsSchema = true
+		s.Schema = schema
+		return nil
+	}
+	if err = unmarshal(&schemas); err == nil {
+		s.Schemas = schemas
+		return nil
+	}
+	return fmt.Errorf("unexpected type")
+}
+
 type SchemaOrStrings struct {
 	IsSchema bool
 	Schema   *Schema
@@ -127,4 +142,19 @@ func (s *StringOrStrings) UnmarshalJSON(data []byte) (err error) {
 		s.Strings = strs
 	}
 	return nil
+}
+
+func (s *StringOrStrings) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+	var str string
+	var strs []string
+	if err = unmarshal(&str); err == nil {
+		s.IsString = true
+		s.String = str
+		return nil
+	}
+	if err = unmarshal(&strs); err == nil {
+		s.Strings = strs
+		return nil
+	}
+	return fmt.Errorf("unexpected type")
 }

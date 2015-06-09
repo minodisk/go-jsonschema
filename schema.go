@@ -35,13 +35,13 @@ type Schema struct {
 	PatternProperties    map[string]string // regexp
 	Dependencies         SchemaOrStrings   // Schema or []string
 	// 5.5. Validation keywords for any instance type
-	Enum        []interface{}
-	Type        Type // string or []string
-	AllOf       []*Schema
-	AnyOf       []*Schema
-	OneOf       []*Schema
-	Not         *Schema
-	Definitions []*Schema
+	Enum []interface{}
+	Type Type // string or []string
+	// AllOf       []*Schema
+	// AnyOf       []*Schema
+	// OneOf       []*Schema
+	Not *Schema
+	// Definitions []*Schema
 	// 6. Metadata keywords
 	Title       string
 	Description string
@@ -52,9 +52,14 @@ type Schema struct {
 	// JSON Hyper-Schema: Hypertext definitions for JSON Schema
 	// json-schema-hypermedia
 	// See http://json-schema.org/latest/json-schema-hypermedia.html
-	Links     []Link
-	Media     Media
-	ReadOnly  bool
+	// 4.1. links
+	Links []Link
+	// 4.3. media
+	Media   Media
+	Example string
+	// 4.4. readOnly
+	ReadOnly bool
+	// 4.5. pathStart
 	PathStart string
 }
 
