@@ -1,6 +1,9 @@
 package gojsa
 
-import "log"
+import (
+	"encoding/json"
+	"log"
+)
 
 type Schema struct {
 	// JSON Schema: core definitions and terminology
@@ -43,7 +46,7 @@ type Schema struct {
 	AnyOf       Schemas //[]*Schema
 	OneOf       Schemas //[]*Schema
 	Not         *Schema
-	Definitions Schemas //[]*Schema
+	Definitions SchemaMap
 	// 6. Metadata keywords
 	Title       string
 	Description string
@@ -58,7 +61,7 @@ type Schema struct {
 	Links []Link
 	// 4.3. media
 	Media   Media
-	Example string
+	Example interface{}
 	// 4.4. readOnly
 	ReadOnly bool
 	// 4.5. pathStart
@@ -68,25 +71,123 @@ type Schema struct {
 	Ref    string `json:"$ref"`
 }
 
-func (s *Schema) Resolve() (err error) {
-	schemas := make(map[string]*Schema)
-	s.Collect(&schemas)
-	log.Println(schemas)
+func NewJSON(b []byte) (*Schema, error) {
+	s := new(Schema)
+	if err := json.Unmarshal(b, s); err != nil {
+		return nil, err
+	}
+	if err := s.Reference(); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
 
+// func NewYAML(b []byte) (*Schema, error) {
+// 	s := new(Schema)
+// 	if err := yaml.Unmarshal(b, s); err != nil {
+// 		return nil, err
+// 	}
+// 	s.Resolve()
+//
+// 	return s, nil
+// }
+
+func (s *Schema) Reference() (err error) {
+	schemas := make(map[string]*Schema)
+	if err := s.Collect(&schemas); err != nil {
+		return err
+	}
+	if err := s.Resolve(&schemas); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s *Schema) Collect(schemas *map[string]*Schema) (err error) {
-	s.AdditionalItems.Collect(schemas)
-	s.Items.Collect(schemas)
-	s.AdditionalProperties.Collect(schemas)
-	s.Properties.Collect(schemas)
-	s.Dependencies.Collect(schemas)
-	s.AllOf.Collect(schemas)
-	s.AnyOf.Collect(schemas)
-	s.OneOf.Collect(schemas)
-	s.Not.Collect(schemas)
-	s.Definitions.Collect(schemas)
+	if s.ID != "" {
+		(*schemas)[s.ID] = s
+		return nil
+	}
+
+	if err := s.AdditionalItems.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.Items.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.AdditionalProperties.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.Properties.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.Dependencies.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.AllOf.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.AnyOf.Collect(schemas); err != nil {
+		return err
+	}
+	if err := s.OneOf.Collect(schemas); err != nil {
+		return err
+	}
+	if s.Not != nil {
+		if err := s.Not.Collect(schemas); err != nil {
+			return err
+		}
+	}
+	if err := s.Definitions.Collect(schemas); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Schema) Resolve(schemas *map[string]*Schema) error {
+	if s.Ref != "" {
+		schema := (*schemas)[s.Ref]
+		log.Println("->", s.Ref, schema)
+		if schema != nil {
+			s = schema
+			return nil
+		}
+	}
+
+	if err := s.AdditionalItems.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.Items.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.AdditionalProperties.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.Properties.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.Dependencies.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.AllOf.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.AnyOf.Resolve(schemas); err != nil {
+		return err
+	}
+	if err := s.OneOf.Resolve(schemas); err != nil {
+		return err
+	}
+	if s.Not != nil {
+		if err := s.Not.Resolve(schemas); err != nil {
+			return err
+		}
+	}
+	if err := s.Definitions.Resolve(schemas); err != nil {
+		return err
+	}
+
 	return nil
 }
 

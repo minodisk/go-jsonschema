@@ -7,19 +7,22 @@ import (
 	"testing"
 	"text/template"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/minodisk/gojsa"
 	"github.com/minodisk/gojsa/tools/doc"
 )
 
 func TestMarkdown(t *testing.T) {
-	y, err := ioutil.ReadFile("../../fixtures/schema.yml")
+	// y, err := ioutil.ReadFile("../../fixtures/schema.yml")
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
+	// s, err := gojsa.NewYAML(y)
+	j, err := ioutil.ReadFile("../../fixtures/schema.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	s := new(gojsa.Schema)
-	if err := yaml.Unmarshal(y, s); err != nil {
+	s, err := gojsa.NewJSON(j)
+	if err != nil {
 		t.Fatal(err)
 	}
 
