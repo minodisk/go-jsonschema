@@ -1,5 +1,7 @@
 package gojsa
 
+import "log"
+
 type Schema struct {
 	// JSON Schema: core definitions and terminology
 	// json-schema-core
@@ -30,18 +32,18 @@ type Schema struct {
 	MaxProperties        int
 	MinProperties        int
 	Required             []string
-	AdditionalProperties SchemaOrBool // Schema or bool
-	Properties           map[string]*Schema
+	AdditionalProperties SchemaOrBool      // Schema or bool
+	Properties           SchemaMap         //map[string]*Schema
 	PatternProperties    map[string]string // regexp
 	Dependencies         SchemaOrStrings   // Schema or []string
 	// 5.5. Validation keywords for any instance type
-	Enum []interface{}
-	Type Type // string or []string
-	// AllOf       []*Schema
-	// AnyOf       []*Schema
-	// OneOf       []*Schema
-	Not *Schema
-	// Definitions []*Schema
+	Enum        []interface{}
+	Type        Type    // string or []string
+	AllOf       Schemas //[]*Schema
+	AnyOf       Schemas //[]*Schema
+	OneOf       Schemas //[]*Schema
+	Not         *Schema
+	Definitions Schemas //[]*Schema
 	// 6. Metadata keywords
 	Title       string
 	Description string
@@ -61,6 +63,31 @@ type Schema struct {
 	ReadOnly bool
 	// 4.5. pathStart
 	PathStart string
+
+	Schema string `json:"$schema"`
+	Ref    string `json:"$ref"`
+}
+
+func (s *Schema) Resolve() (err error) {
+	schemas := make(map[string]*Schema)
+	s.Collect(&schemas)
+	log.Println(schemas)
+
+	return nil
+}
+
+func (s *Schema) Collect(schemas *map[string]*Schema) (err error) {
+	s.AdditionalItems.Collect(schemas)
+	s.Items.Collect(schemas)
+	s.AdditionalProperties.Collect(schemas)
+	s.Properties.Collect(schemas)
+	s.Dependencies.Collect(schemas)
+	s.AllOf.Collect(schemas)
+	s.AnyOf.Collect(schemas)
+	s.OneOf.Collect(schemas)
+	s.Not.Collect(schemas)
+	s.Definitions.Collect(schemas)
+	return nil
 }
 
 func (s Schema) Validate(o interface{}) (err error) {
