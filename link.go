@@ -26,15 +26,21 @@ type Link struct {
 	Description string
 }
 
-// func (l *Link) UnmarshalJSON(data []byte) error {
-// 	type Tmp Link
-// 	var tmp Tmp
-// 	if err := json.UnmarshalJSON(data, &tmp); err != nil {
-// 		return err
-// 	}
-// 	*l = tmp
-// 	return nil
-// }
+func (l *Link) UnmarshalJSON(data []byte) error {
+	type Tmp Link
+	var tmp Tmp
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	if tmp.Method == "" {
+		tmp.Method = "GET"
+	}
+	if tmp.EncType == "" {
+		tmp.EncType = "application/json"
+	}
+	*l = Link(tmp)
+	return nil
+}
 
 // func NewLink(href, rel string) Link {
 // 	return Link{
@@ -45,11 +51,24 @@ type Link struct {
 // 	}
 // }
 
-func (l *Link) Resolve(schemas *map[string]*Schema) error {
-	return l.HRef.Resolve(schemas)
+func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
+	if err := l.HRef.Resolve(schemas); err != nil {
+		return err
+	}
+	if l.TargetSchema != nil {
+		if err := l.TargetSchema.Resolve(schemas, root); err != nil {
+			return err
+		}
+	}
+	if l.Schema != nil {
+		if err := l.Schema.Resolve(schemas, root); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-func (l *Link) QueryString() string {
+func (l Link) QueryString() string {
 	if l.Method != "GET" {
 		return ""
 	}
@@ -57,6 +76,32 @@ func (l *Link) QueryString() string {
 		return ""
 	}
 	return fmt.Sprintf("?%s", l.Schema.QueryString())
+}
+
+func (l Link) ContentType() string {
+	return l.EncType
+}
+
+func (l Link) HasRequestBody() bool {
+	return l.Schema != nil
+}
+
+func (l Link) RequestBody() string {
+	if l.HasRequestBody() {
+		return l.Schema.Body()
+	}
+	return ""
+}
+
+func (l Link) HasResponseBody() bool {
+	return l.TargetSchema != nil
+}
+
+func (l Link) ResponseBody() string {
+	if l.HasResponseBody() {
+		return l.TargetSchema.Body()
+	}
+	return ""
 }
 
 type Media struct {
@@ -100,6 +145,10 @@ func (h *HRef) Resolve(schemas *map[string]*Schema) error {
 	})
 	h.id = rand.Int()
 	return nil
+}
+
+func (h HRef) String() string {
+	return h.value
 }
 
 func (h HRef) ColonString() string {

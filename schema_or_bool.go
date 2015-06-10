@@ -39,9 +39,9 @@ func (s *SchemaOrBool) Collect(schemas *map[string]*Schema, p string) error {
 	return nil
 }
 
-func (s *SchemaOrBool) Resolve(schemas *map[string]*Schema) error {
+func (s *SchemaOrBool) Resolve(schemas *map[string]*Schema, root *Schema) error {
 	if s.IsSchema {
-		return s.Schema.Resolve(schemas)
+		return s.Schema.Resolve(schemas, root)
 	}
 	return nil
 }

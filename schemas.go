@@ -24,9 +24,9 @@ func (s *Schemas) Collect(schemas *map[string]*Schema, p string) error {
 	return nil
 }
 
-func (s *Schemas) Resolve(schemas *map[string]*Schema) error {
+func (s *Schemas) Resolve(schemas *map[string]*Schema, root *Schema) error {
 	for _, schema := range s.Schemas {
-		if err := schema.Resolve(schemas); err != nil {
+		if err := schema.Resolve(schemas, root); err != nil {
 			return err
 		}
 	}

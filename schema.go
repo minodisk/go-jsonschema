@@ -3,6 +3,7 @@ package gojsa
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 type Schema struct {
@@ -69,6 +70,8 @@ type Schema struct {
 
 	Schema string `json:"$schema"`
 	Ref    string `json:"$ref"`
+
+	root *Schema
 }
 
 func NewJSON(b []byte) (*Schema, error) {
@@ -76,7 +79,7 @@ func NewJSON(b []byte) (*Schema, error) {
 	if err := json.Unmarshal(b, s); err != nil {
 		return nil, err
 	}
-	if err := s.Reference(); err != nil {
+	if err := s.normalize(); err != nil {
 		return nil, err
 	}
 	return s, nil
@@ -92,15 +95,25 @@ func NewJSON(b []byte) (*Schema, error) {
 // 	return s, nil
 // }
 
-func (s *Schema) Reference() (err error) {
+func (s *Schema) normalize() (err error) {
 	schemas := make(map[string]*Schema)
 	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
 	}
-	if err := s.Resolve(&schemas); err != nil {
+	if err := s.Resolve(&schemas, s); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *Schema) Host() string {
+	if s.root == nil {
+		log.Printf("----> %+v", s.ID)
+	}
+	// if len(s.root.Links) > 0 {
+	// 	log.Println(s.root.Links[0].HRef)
+	// }
+	return "api.example.com"
 }
 
 func (s *Schema) Collect(schemas *map[string]*Schema, p string) (err error) {
@@ -140,7 +153,12 @@ func (s *Schema) Collect(schemas *map[string]*Schema, p string) (err error) {
 	return nil
 }
 
-func (s *Schema) Resolve(schemas *map[string]*Schema) error {
+func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
+	s.root = root
+	if s.ID == "schemata/app" {
+		log.Println(s.root)
+	}
+
 	if s.Ref != "" {
 		schema := (*schemas)[s.Ref]
 		if schema == nil {
@@ -150,40 +168,42 @@ func (s *Schema) Resolve(schemas *map[string]*Schema) error {
 		return nil
 	}
 
-	if err := s.AdditionalItems.Resolve(schemas); err != nil {
+	if err := s.AdditionalItems.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.Items.Resolve(schemas); err != nil {
+	if err := s.Items.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.AdditionalProperties.Resolve(schemas); err != nil {
+	if err := s.AdditionalProperties.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.Properties.Resolve(schemas); err != nil {
+	if err := s.Properties.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.Dependencies.Resolve(schemas); err != nil {
+	if err := s.Dependencies.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.AllOf.Resolve(schemas); err != nil {
+	if err := s.AllOf.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.AnyOf.Resolve(schemas); err != nil {
+	if err := s.AnyOf.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.OneOf.Resolve(schemas); err != nil {
+	if err := s.OneOf.Resolve(schemas, root); err != nil {
 		return err
 	}
 	if s.Not != nil {
-		if err := s.Not.Resolve(schemas); err != nil {
+		if err := s.Not.Resolve(schemas, root); err != nil {
 			return err
 		}
 	}
-	if err := s.Definitions.Resolve(schemas); err != nil {
+	if err := s.Definitions.Resolve(schemas, root); err != nil {
 		return err
 	}
 	for _, link := range s.Links {
-		link.Resolve(schemas)
+		if err := link.Resolve(schemas, root); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -198,4 +218,9 @@ func (s Schema) Validate(o interface{}) (err error) {
 
 func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
+}
+
+func (s Schema) Body() string {
+	// log.Println(s)
+	return "-----BODY-----"
 }

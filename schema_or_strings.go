@@ -47,9 +47,9 @@ func (s *SchemaOrStrings) Collect(schemas *map[string]*Schema, p string) (err er
 	return nil
 }
 
-func (s *SchemaOrStrings) Resolve(schemas *map[string]*Schema) (err error) {
+func (s *SchemaOrStrings) Resolve(schemas *map[string]*Schema, root *Schema) (err error) {
 	if s.IsSchema {
-		return s.Resolve(schemas)
+		return s.Resolve(schemas, root)
 	}
 	return nil
 }
