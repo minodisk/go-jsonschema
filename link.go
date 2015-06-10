@@ -17,11 +17,11 @@ type Link struct {
 	HRef         *HRef
 	Rel          string
 	Title        string
-	TargetSchema Schema
+	TargetSchema *Schema
 	MediaType    string
 	Method       string
 	EncType      string
-	Schema       Schema
+	Schema       *Schema
 
 	Description string
 }
@@ -45,8 +45,18 @@ type Link struct {
 // 	}
 // }
 
-func (l Link) Resolve(schemas *map[string]*Schema) error {
+func (l *Link) Resolve(schemas *map[string]*Schema) error {
 	return l.HRef.Resolve(schemas)
+}
+
+func (l *Link) QueryString() string {
+	if l.Method != "GET" {
+		return ""
+	}
+	if l.Schema == nil {
+		return ""
+	}
+	return fmt.Sprintf("?%s", l.Schema.QueryString())
 }
 
 type Media struct {

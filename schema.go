@@ -35,8 +35,8 @@ type Schema struct {
 	MaxProperties        int
 	MinProperties        int
 	Required             []string
-	AdditionalProperties SchemaOrBool      // Schema or bool
-	Properties           SchemaMap         //map[string]*Schema
+	AdditionalProperties SchemaOrBool // Schema or bool
+	Properties           Properties
 	PatternProperties    map[string]string // regexp
 	Dependencies         SchemaOrStrings   // Schema or []string
 	// 5.5. Validation keywords for any instance type
@@ -194,4 +194,8 @@ func (s Schema) Validate(o interface{}) (err error) {
 		return err
 	}
 	return nil
+}
+
+func (s Schema) QueryString() string {
+	return s.Properties.QueryString()
 }
