@@ -2,7 +2,7 @@ package gojsa
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 )
 
 type Schema struct {
@@ -46,7 +46,7 @@ type Schema struct {
 	AnyOf       Schemas //[]*Schema
 	OneOf       Schemas //[]*Schema
 	Not         *Schema
-	Definitions SchemaMap
+	Definitions Definitions
 	// 6. Metadata keywords
 	Title       string
 	Description string
@@ -61,7 +61,7 @@ type Schema struct {
 	Links []Link
 	// 4.3. media
 	Media   Media
-	Example interface{}
+	Example Example
 	// 4.4. readOnly
 	ReadOnly bool
 	// 4.5. pathStart
@@ -94,7 +94,7 @@ func NewJSON(b []byte) (*Schema, error) {
 
 func (s *Schema) Reference() (err error) {
 	schemas := make(map[string]*Schema)
-	if err := s.Collect(&schemas); err != nil {
+	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
 	}
 	if err := s.Resolve(&schemas); err != nil {
@@ -103,42 +103,37 @@ func (s *Schema) Reference() (err error) {
 	return nil
 }
 
-func (s *Schema) Collect(schemas *map[string]*Schema) (err error) {
-	if s.ID != "" {
-		(*schemas)[s.ID] = s
-		return nil
-	}
-
-	if err := s.AdditionalItems.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.Items.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.AdditionalProperties.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.Properties.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.Dependencies.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.AllOf.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.AnyOf.Collect(schemas); err != nil {
-		return err
-	}
-	if err := s.OneOf.Collect(schemas); err != nil {
-		return err
-	}
-	if s.Not != nil {
-		if err := s.Not.Collect(schemas); err != nil {
-			return err
-		}
-	}
-	if err := s.Definitions.Collect(schemas); err != nil {
+func (s *Schema) Collect(schemas *map[string]*Schema, p string) (err error) {
+	// if err := s.AdditionalItems.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.Items.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.AdditionalProperties.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.Properties.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.Dependencies.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.AllOf.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.AnyOf.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if err := s.OneOf.Collect(schemas, p); err != nil {
+	// 	return err
+	// }
+	// if s.Not != nil {
+	// 	if err := s.Not.Collect(schemas, p); err != nil {
+	// 		return err
+	// 	}
+	// }
+	if err := s.Definitions.Collect(schemas, p); err != nil {
 		return err
 	}
 
@@ -148,11 +143,11 @@ func (s *Schema) Collect(schemas *map[string]*Schema) (err error) {
 func (s *Schema) Resolve(schemas *map[string]*Schema) error {
 	if s.Ref != "" {
 		schema := (*schemas)[s.Ref]
-		log.Println("->", s.Ref, schema)
-		if schema != nil {
-			s = schema
-			return nil
+		if schema == nil {
+			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}
+		*s = *schema
+		return nil
 	}
 
 	if err := s.AdditionalItems.Resolve(schemas); err != nil {
@@ -186,6 +181,9 @@ func (s *Schema) Resolve(schemas *map[string]*Schema) error {
 	}
 	if err := s.Definitions.Resolve(schemas); err != nil {
 		return err
+	}
+	for _, link := range s.Links {
+		link.Resolve(schemas)
 	}
 
 	return nil

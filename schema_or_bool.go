@@ -32,9 +32,9 @@ func (b *SchemaOrBool) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
-func (s *SchemaOrBool) Collect(schemas *map[string]*Schema) error {
+func (s *SchemaOrBool) Collect(schemas *map[string]*Schema, p string) error {
 	if s.IsSchema {
-		return s.Schema.Collect(schemas)
+		return s.Schema.Collect(schemas, p)
 	}
 	return nil
 }

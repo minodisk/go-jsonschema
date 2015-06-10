@@ -1,45 +1,57 @@
 # {{.Title}}
 {{.Description}}
-{{range .Properties}}
-* .MarkdownLink()
-{{range .Links}}
-  * .MarkdownLink()
-{{end}}
+{{range $name, $schema := .Properties.Schemas}}
+/* * $schema.MarkdownLink() */
+/* {{range .Links}}    */
+/*   * .MarkdownLink() */
+/* {{end}}             */
 {{end}}
 
-<% schema.resources.each do |resource| %>
-## <%= resource.title %>
-<%= resource.description %>
+{{range $name, $schema := .Properties.Schemas}}
+## {{$schema.Title}}
+{{$schema.Description}}
 
 ### Properties
-<% resource.properties.each do |property| %>
-* <%= property.name %>
-<% if property.description %>
- * <%= property.description %>
-<% end %>
-<% property.options.each do |key, value| %>
- * <%= key %>: <%= value %>
-<% end %>
-<% end %>
+{{range $name, $property := $schema.Properties.Schemas}}
+* {{$name}}
+{{if $property.Description}}
+  * {{$property.Description}}
+{{end}}
+{{if $property.Example}}
+  * Example: `{{$property.Example.TypedString}}`
+{{end}}
+{{if $property.Type}}
+  * Type: {{$property.Type.String}}
+{{end}}
+{{if $property.Pattern}}
+  * Pattern: `/{{$property.Pattern}}/`
+{{end}}
+{{end}}
 
-<% resource.links.each do |link| %>
-### <%= link.endpoint %>
-<%= link.description %>
+{{range $i, $link := $schema.Links}}
+### {{$link.Method}} {{$link.HRef.ColonString}}
+{{$link.Description}}
 
-<% if link.request_schema %>
-<% link.request_properties.each do |property| %>
-* <%= property.name %>
-<% if property.description %>
- * <%= property.description %>
-<% end %>
-<% property.options.each do |key, value| %>
- * <%= key %>: <%= value %>
-<% end %>
-<% end %>
+{{if $link.Schema}}
+{{range $name, $property := $link.Schema.Properties.Schemas}}
+* {{$name}}
+{{if $property.Description}}
+  * {{$property.Description}}
+{{end}}
+{{if $property.Example}}
+  * Example: `{{$property.Example.TypedString}}`
+{{end}}
+{{if $property.Type}}
+  * Type: {{$property.Type.String}}
+{{end}}
+{{if $property.Pattern}}
+  * Pattern: `/{{$property.Pattern}}/`
+{{end}}
+{{end}}
 
-<% end %>
+{{end}}
 ```
-<%= link.method %> <%= link.example_path %><%= link.query_string %> HTTP/1.1
+{{$link.Method}} {{$link.HRef.ExampleString}}{{/*$link.QueryString*/}} HTTP/1.1
 <%= "Content-Type: #{link.content_type}\n" if link.has_request_body? -%>
 Host: <%= schema.host_with_port %>
 <%= "\n" + link.request_body if link.has_request_body? -%>
@@ -51,5 +63,5 @@ HTTP/1.1 <%= link.response_status %> <%= link.response_reason_phrase %>
 <%= "\n\n#{link.response_body}\n" if link.has_response_body? -%>
 ```
 
-<% end %>
-<% end %>
+{{end}}
+{{end}}

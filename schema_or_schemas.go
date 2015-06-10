@@ -51,9 +51,9 @@ func (s *SchemaOrSchemas) UnmarshalYAML(unmarshal func(interface{}) error) (err 
 	return fmt.Errorf("unexpected type")
 }
 
-func (s *SchemaOrSchemas) Collect(schemas *map[string]*Schema) (err error) {
+func (s *SchemaOrSchemas) Collect(schemas *map[string]*Schema, p string) (err error) {
 	if s.IsSchema {
-		return s.Schema.Collect(schemas)
+		return s.Schema.Collect(schemas, p)
 	}
 	return nil
 }

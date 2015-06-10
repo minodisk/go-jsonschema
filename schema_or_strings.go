@@ -40,9 +40,9 @@ func (b *SchemaOrStrings) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
-func (s *SchemaOrStrings) Collect(schemas *map[string]*Schema) (err error) {
+func (s *SchemaOrStrings) Collect(schemas *map[string]*Schema, p string) (err error) {
 	if s.IsSchema {
-		return s.Collect(schemas)
+		return s.Collect(schemas, p)
 	}
 	return nil
 }

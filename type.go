@@ -22,10 +22,10 @@ func (t Type) Validate(o interface{}) error {
 }
 
 func (t Type) validate(o interface{}) bool {
-	if t.IsString {
-		return validateWith(t.String, o)
+	if t.isString {
+		return validateWith(t.string, o)
 	}
-	for _, s := range t.Strings {
+	for _, s := range t.strings {
 		if validateWith(s, o) {
 			return true
 		}

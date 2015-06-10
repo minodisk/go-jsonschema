@@ -33,9 +33,12 @@ func TestMarkdown(t *testing.T) {
 	tpl := template.Must(template.New("md").Parse(string(tplSrc)))
 
 	buf := bytes.NewBuffer(nil)
-	doc.Markdown(buf, s, tpl)
+	if err := doc.Markdown(buf, s, tpl); err != nil {
+		t.Fatal(err)
+	}
 
 	fmt.Println(string(buf.Bytes()))
+
 	// a := string(buf.Bytes())
 	// e := `this is title
 	// this is description`
