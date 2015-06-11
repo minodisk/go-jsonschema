@@ -155,9 +155,6 @@ func (s *Schema) Collect(schemas *map[string]*Schema, p string) (err error) {
 
 func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 	s.root = root
-	if s.ID == "schemata/app" {
-		log.Println(s.root)
-	}
 
 	if s.Ref != "" {
 		schema := (*schemas)[s.Ref]
@@ -220,7 +217,10 @@ func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
 }
 
-func (s Schema) Body() string {
-	// log.Println(s)
-	return "-----BODY-----"
+func (s Schema) ExampleJSON() (string, error) {
+	body, err := s.Properties.ExampleJSON()
+	if err != nil {
+		return "", err
+	}
+	return body, nil
 }

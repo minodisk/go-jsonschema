@@ -1,6 +1,9 @@
 package gojsa
 
-import "net/url"
+import (
+	"encoding/json"
+	"net/url"
+)
 
 type Properties struct {
 	SchemaMap
@@ -31,4 +34,18 @@ func (p *Properties) QueryString() string {
 		v.Set(name, schema.Example.String())
 	}
 	return v.Encode()
+}
+
+func (p *Properties) ExampleJSON() (string, error) {
+	data := make(map[string]interface{})
+	for name, prop := range p.Schemas {
+		if prop != nil {
+			data[name] = prop.Example.String()
+		}
+	}
+	b, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }

@@ -3,9 +3,6 @@ package gojsa
 import (
 	"encoding/json"
 	"fmt"
-	"math/rand"
-	"net/url"
-	"path"
 	"regexp"
 )
 
@@ -14,6 +11,7 @@ var (
 )
 
 type Link struct {
+	// http://json-schema.org/latest/json-schema-hypermedia.html
 	HRef         *HRef
 	Rel          string
 	Title        string
@@ -23,6 +21,7 @@ type Link struct {
 	EncType      string
 	Schema       *Schema
 
+	// Description is not defined but appears in lots of schema.json
 	Description string
 }
 
@@ -37,6 +36,9 @@ func (l *Link) UnmarshalJSON(data []byte) error {
 	}
 	if tmp.EncType == "" {
 		tmp.EncType = "application/json"
+	}
+	if tmp.MediaType == "" {
+		tmp.MediaType = "application/json"
 	}
 	*l = Link(tmp)
 	return nil
@@ -68,6 +70,10 @@ func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
 	return nil
 }
 
+func (l Link) Endpoint() string {
+	return l.HRef.ExampleString()
+}
+
 func (l Link) QueryString() string {
 	if l.Method != "GET" {
 		return ""
@@ -78,7 +84,7 @@ func (l Link) QueryString() string {
 	return fmt.Sprintf("?%s", l.Schema.QueryString())
 }
 
-func (l Link) ContentType() string {
+func (l Link) RequestContentType() string {
 	return l.EncType
 }
 
@@ -88,7 +94,9 @@ func (l Link) HasRequestBody() bool {
 
 func (l Link) RequestBody() string {
 	if l.HasRequestBody() {
-		return l.Schema.Body()
+		if body, err := l.Schema.ExampleJSON(); err == nil {
+			return body
+		}
 	}
 	return ""
 }
@@ -99,71 +107,35 @@ func (l Link) HasResponseBody() bool {
 
 func (l Link) ResponseBody() string {
 	if l.HasResponseBody() {
-		return l.TargetSchema.Body()
+		if body, err := l.TargetSchema.ExampleJSON(); err == nil {
+			return body
+		}
 	}
 	return ""
 }
 
-type Media struct {
-	Type           string
-	BinaryEncoding string
-}
-
-// func Parse(r io.Reader) (s Schema, err error) {
-// 	dec := json.NewDecoder(r)
-// 	if err := dec.Decode(&s); err != nil {
-// 		return s, err
-// 	}
-// 	return s, nil
-// }
-
-type HRef struct {
-	id      int
-	value   string
-	example string
-}
-
-func (h *HRef) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return err
+func (l Link) ResponseStatus() int {
+	switch {
+	case l.Method == "POST":
+		return 201
+	case !l.HasResponseBody():
+		return 204
+	default:
+		return 200
 	}
-	h.value = rBraceBracket.ReplaceAllStringFunc(s, func(s string) string {
-		d, err := url.QueryUnescape(s)
-		if err != nil {
-			return s
-		}
-		return d
-	})
-	return nil
 }
 
-func (h *HRef) Resolve(schemas *map[string]*Schema) error {
-	h.example = h.replaceBraceBracket(func(s string) string {
-		schema := (*schemas)[s]
-		return schema.Example.String()
-	})
-	h.id = rand.Int()
-	return nil
+func (l Link) ResponseReasonPhrase() string {
+	switch {
+	case l.Method == "POST":
+		return "Created"
+	case !l.HasResponseBody():
+		return "No Content"
+	default:
+		return "OK"
+	}
 }
 
-func (h HRef) String() string {
-	return h.value
-}
-
-func (h HRef) ColonString() string {
-	return h.replaceBraceBracket(func(s string) string {
-		return fmt.Sprintf(":%s", path.Base(s))
-	})
-}
-
-func (h *HRef) ExampleString() string {
-	return h.example
-}
-
-func (h HRef) replaceBraceBracket(replacer func(string) string) string {
-	return rBraceBracket.ReplaceAllStringFunc(h.value, func(s string) string {
-		m := rBraceBracket.FindStringSubmatch(s)
-		return replacer(m[1])
-	})
+func (l Link) ResponseContentType() string {
+	return l.MediaType
 }
