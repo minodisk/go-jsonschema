@@ -1,12 +1,10 @@
 # {{.Title}}
-{{.Description}}
-{{range $name, $schema := .Properties.Schemas}}
-/* * $schema.MarkdownLink() */
-/* {{range .Links}}    */
-/*   * .MarkdownLink() */
-/* {{end}}             */
-{{end}}
 
+{{.Description}}
+
+{{range $name, $schema := .Properties.Schemas}}* [{{$schema.Title}}]({{$schema.Title.LinkString}})
+{{range $i, $link := $schema.Links}}  * [{{$link.Title}}]({{$link.Title.LinkString}})
+{{end}}{{end}}
 {{range $name, $schema := .Properties.Schemas}}## {{$schema.Title}}
 
 {{if $schema.Description}}{{$schema.Description}}

@@ -14,7 +14,7 @@ type Link struct {
 	// http://json-schema.org/latest/json-schema-hypermedia.html
 	HRef         *HRef
 	Rel          string
-	Title        string
+	Title        Title
 	TargetSchema *Schema
 	MediaType    string
 	Method       string

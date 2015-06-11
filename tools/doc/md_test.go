@@ -2,7 +2,6 @@ package doc_test
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"testing"
 	"text/template"
@@ -37,23 +36,7 @@ func TestMarkdown(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Println(string(buf.Bytes()))
+	// fmt.Println(string(buf.Bytes()))
 
-	// a := string(buf.Bytes())
-	// e := `this is title
-	// this is description`
-	// if a != e {
-	// 	t.Errorf("expected %s, but actual %s", e, a)
-	// }
-
-	// b, err := ioutil.ReadFile("../../fixtures/schema.yml")
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	// s := new(gojsa.Schema)
-	// if err := yaml.Unmarshal(b, s); err != nil {
-	// 	t.Fatal(err)
-	// }
-	//
-	// log.Printf("%+v", s)
+	ioutil.WriteFile("../../fixtures/schema.go.md", buf.Bytes(), 0644)
 }

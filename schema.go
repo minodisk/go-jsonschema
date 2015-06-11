@@ -49,7 +49,7 @@ type Schema struct {
 	Not         *Schema
 	Definitions Definitions
 	// 6. Metadata keywords
-	Title       string
+	Title       Title
 	Description string
 	Default     interface{}
 	// 7. Semantic validation with "format"
