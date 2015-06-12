@@ -1,16 +1,16 @@
 # Example API
 A schema for a small example API.
 
-* [App](#)
- * [Create](#)
- * [Delete](#)
- * [Info](#)
- * [List](#)
- * [Update](#)
- * [Create](#)
+* [App](#app)
+ * [POST /apps](#post-apps)
+ * [DELETE /apps/:id](#delete-appsid)
+ * [GET /apps/:id](#get-appsid)
+ * [GET /apps](#get-apps)
+ * [PATCH /apps/:id](#patch-appsid)
+ * [POST /apps/:id/files](#post-appsidfiles)
 * [](#)
- * [List](#)
-* [User](#)
+ * [GET /recipes](#get-recipes)
+* [User](#user)
 
 ## App
 
@@ -26,6 +26,8 @@ An app is a program to be deployed.
  * unique identifier of app
  * Example: `"01234567-89ab-cdef-0123-456789abcdef"`
  * Type: string
+ * Format: uuid
+ * ReadOnly: true
 * name
  * unique name of app
  * Example: `"example"`

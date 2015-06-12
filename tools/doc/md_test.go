@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"testing"
-	"text/template"
 
 	"github.com/minodisk/gojsa"
 	"github.com/minodisk/gojsa/tools/doc"
@@ -25,14 +24,13 @@ func TestMarkdown(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	tplSrc, err := ioutil.ReadFile("../../fixtures/schema.md.tmpl")
+	tmpl, err := ioutil.ReadFile("../../fixtures/schema.md.tmpl")
 	if err != nil {
 		t.Fatal(err)
 	}
-	tpl := template.Must(template.New("md").Parse(string(tplSrc)))
 
 	buf := bytes.NewBuffer(nil)
-	if err := doc.Markdown(buf, s, tpl); err != nil {
+	if err := doc.Markdown(buf, s, "md", string(tmpl)); err != nil {
 		t.Fatal(err)
 	}
 

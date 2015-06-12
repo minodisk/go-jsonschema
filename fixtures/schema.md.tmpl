@@ -1,8 +1,8 @@
 # {{.Title}}
 {{.Description}}
 
-{{range $name, $schema := .Properties.Schemas}}* [{{$schema.Title}}]({{$schema.Title.LinkString}})
-{{range $i, $link := $schema.Links}} * [{{$link.Title}}]({{$link.Title.LinkString}})
+{{range $name, $schema := .Properties.Schemas}}* [{{$schema.Title.DocString}}]({{urlHash $schema.Title.DocString}})
+{{range $i, $link := $schema.Links}} * [{{$link.MethodEndpoint}}]({{urlHash $link.MethodEndpoint}})
 {{end}}{{end}}
 {{range $name, $schema := .Properties.Schemas}}## {{$schema.Title}}
 
@@ -15,8 +15,10 @@
 {{end}}{{if $property.Example}} * Example: `{{$property.Example.TypedString}}`
 {{end}}{{if $property.Type}} * Type: {{$property.Type.String}}
 {{end}}{{if $property.Pattern}} * Pattern: `/{{$property.Pattern}}/`
+{{end}}{{if $property.Format}} * Format: {{$property.Format}}
+{{end}}{{if $property.ReadOnly}} * ReadOnly: {{$property.ReadOnly}}
 {{end}}{{end}}
-{{range $i, $link := $schema.Links}}### {{$link.Method}} {{$link.HRef.ColonString}}
+{{range $i, $link := $schema.Links}}### {{$link.MethodEndpoint}}
 
 {{if $link.Description}}{{$link.Description}}
 
@@ -27,7 +29,7 @@
 {{end}}{{if $property.Pattern}} * Pattern: `/{{$property.Pattern}}/`
 {{end}}{{end}}{{end}}
 ```
-{{$link.Method}} {{$link.Endpoint}}{{$link.QueryString}} HTTP/1.1{{if $link.HasRequestBody}}
+{{$link.Method}} {{$link.ExampleEndpoint}}{{$link.QueryString}} HTTP/1.1{{if $link.HasRequestBody}}
 Content-Type: {{$link.RequestContentType}}{{end}}
 Host: {{$schema.Host}}{{if $link.HasRequestBody}}
 

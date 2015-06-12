@@ -71,7 +71,15 @@ func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
 }
 
 func (l Link) Endpoint() string {
+	return l.HRef.ColonString()
+}
+
+func (l Link) ExampleEndpoint() string {
 	return l.HRef.ExampleString()
+}
+
+func (l Link) MethodEndpoint() string {
+	return fmt.Sprintf("%s %s", l.Method, l.Endpoint())
 }
 
 func (l Link) QueryString() string {
