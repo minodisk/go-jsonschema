@@ -59,7 +59,7 @@ type Schema struct {
 	// json-schema-hypermedia
 	// See http://json-schema.org/latest/json-schema-hypermedia.html
 	// 4.1. links
-	Links []Link
+	Links []*Link
 	// 4.3. media
 	Media   Media
 	Example Example
@@ -79,7 +79,7 @@ func NewJSON(b []byte) (*Schema, error) {
 	if err := json.Unmarshal(b, s); err != nil {
 		return nil, err
 	}
-	if err := s.normalize(); err != nil {
+	if err := s.initialize(); err != nil {
 		return nil, err
 	}
 	return s, nil
@@ -95,7 +95,7 @@ func NewJSON(b []byte) (*Schema, error) {
 // 	return s, nil
 // }
 
-func (s *Schema) normalize() (err error) {
+func (s *Schema) initialize() (err error) {
 	schemas := make(map[string]*Schema)
 	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
@@ -116,36 +116,7 @@ func (s *Schema) Host() string {
 	return "api.example.com"
 }
 
-func (s *Schema) Collect(schemas *map[string]*Schema, p string) (err error) {
-	// if err := s.AdditionalItems.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.Items.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.AdditionalProperties.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.Properties.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.Dependencies.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.AllOf.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.AnyOf.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if err := s.OneOf.Collect(schemas, p); err != nil {
-	// 	return err
-	// }
-	// if s.Not != nil {
-	// 	if err := s.Not.Collect(schemas, p); err != nil {
-	// 		return err
-	// 	}
-	// }
+func (s *Schema) Collect(schemas *map[string]*Schema, p string) error {
 	if err := s.Definitions.Collect(schemas, p); err != nil {
 		return err
 	}
@@ -198,6 +169,7 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		return err
 	}
 	for _, link := range s.Links {
+		link.SetParent(s)
 		if err := link.Resolve(schemas, root); err != nil {
 			return err
 		}

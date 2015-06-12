@@ -66,6 +66,16 @@ Host: api.example.com
 
 ```
 HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "deleted_at": "",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "example",
+  "private": "",
+  "user_ids": "",
+  "users": ""
+}
 ```
 
 ### DELETE /apps/:id
@@ -93,7 +103,17 @@ Host: api.example.com
 ```
 
 ```
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "deleted_at": "",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "example",
+  "private": "",
+  "user_ids": "",
+  "users": ""
+}
 ```
 
 ### GET /apps
@@ -107,7 +127,17 @@ Host: api.example.com
 ```
 
 ```
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "deleted_at": "",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "example",
+  "private": "",
+  "user_ids": "",
+  "users": ""
+}
 ```
 
 ### PATCH /apps/:id
@@ -131,7 +161,17 @@ Host: api.example.com
 ```
 
 ```
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "deleted_at": "",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "example",
+  "private": "",
+  "user_ids": "",
+  "users": ""
+}
 ```
 
 ### POST /apps/:id/files
@@ -155,6 +195,16 @@ Host: api.example.com
 
 ```
 HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "deleted_at": "",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "example",
+  "private": "",
+  "user_ids": "",
+  "users": ""
+}
 ```
 
 ## 
@@ -179,7 +229,13 @@ Host: api.example.com
 ```
 
 ```
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "name": "Sushi",
+  "user": ""
+}
 ```
 
 ## User

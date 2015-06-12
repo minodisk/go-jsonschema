@@ -3,6 +3,7 @@ package gojsa
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"regexp"
 )
 
@@ -23,6 +24,8 @@ type Link struct {
 
 	// Description is not defined but appears in lots of schema.json
 	Description string
+
+	parent *Schema
 }
 
 func (l *Link) UnmarshalJSON(data []byte) error {
@@ -52,6 +55,10 @@ func (l *Link) UnmarshalJSON(data []byte) error {
 // 		EncType: "application/json",
 // 	}
 // }
+
+func (l *Link) SetParent(s *Schema) {
+	l.parent = s
+}
 
 func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
 	if err := l.HRef.Resolve(schemas); err != nil {
@@ -110,16 +117,30 @@ func (l Link) RequestBody() string {
 }
 
 func (l Link) HasResponseBody() bool {
-	return l.TargetSchema != nil
+	// switch {
+	// case l.MediaType == "null":
+	// 	return false
+	// }
+	// return l.TargetSchema != nil
+	return l.MediaType != "null"
 }
 
 func (l Link) ResponseBody() string {
-	if l.HasResponseBody() {
-		if body, err := l.TargetSchema.ExampleJSON(); err == nil {
-			return body
-		}
+	if !l.HasResponseBody() {
+		return ""
 	}
-	return ""
+	if l.TargetSchema != nil {
+		body, err := l.TargetSchema.ExampleJSON()
+		if err != nil {
+			log.Println("fail to create example JSON: %s", err)
+		}
+		return body
+	}
+	body, err := l.parent.ExampleJSON()
+	if err != nil {
+		log.Println(err)
+	}
+	return body
 }
 
 func (l Link) ResponseStatus() int {
