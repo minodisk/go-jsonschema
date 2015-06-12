@@ -95,19 +95,7 @@
           "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fid)}",
           "method": "GET",
           "rel": "self",
-          "title": "Info",
-          "schema": {
-            "properties": {
-              "foo":{
-                "type":"string",
-                "example":"fooooo"
-              },
-              "bar":{
-                "type":"string",
-                "example":"barrrrr"
-              }
-            }
-          }
+          "title": "Info"
         },
         {
           "description": "List existing apps.",

@@ -1,17 +1,16 @@
 # Example API
-
 A schema for a small example API.
 
-* [App](#app)
-  * [Create](#create)
-  * [Delete](#delete)
-  * [Info](#info)
-  * [List](#list)
-  * [Update](#update)
-  * [Create](#create)
+* [App](#)
+ * [Create](#)
+ * [Delete](#)
+ * [Info](#)
+ * [List](#)
+ * [Update](#)
+ * [Create](#)
 * [](#)
-  * [List](#list)
-* [User](#user)
+ * [List](#)
+* [User](#)
 
 ## App
 
@@ -20,38 +19,38 @@ An app is a program to be deployed.
 ### Properties
 
 * deleted_at
-  * When this resource was deleted at
-  * Example: `null`
-  * Type: null
+ * When this resource was deleted at
+ * Example: `null`
+ * Type: null
 * id
-  * unique identifier of app
-  * Example: `"01234567-89ab-cdef-0123-456789abcdef"`
-  * Type: string
+ * unique identifier of app
+ * Example: `"01234567-89ab-cdef-0123-456789abcdef"`
+ * Type: string
 * name
-  * unique name of app
-  * Example: `"example"`
-  * Type: string
-  * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+ * unique name of app
+ * Example: `"example"`
+ * Type: string
+ * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
 * private
-  * true if this resource is private use
-  * Example: `false`
-  * Type: boolean
+ * true if this resource is private use
+ * Example: `false`
+ * Type: boolean
 * user_ids
-  * Example: `null`
-  * Type: array
+ * Example: `null`
+ * Type: array
 * users
-  * Example: `null`
-  * Type: array
+ * Example: `null`
+ * Type: array
 
 ### POST /apps
 
 Create a new app.
 
 * name
-  * unique name of app
-  * Example: `"example"`
-  * Type: string
-  * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+ * unique name of app
+ * Example: `"example"`
+ * Type: string
+ * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
 
 ```
 POST /apps HTTP/1.1
@@ -85,22 +84,10 @@ HTTP/1.1 204 No Content
 
 Info for existing app.
 
-* bar
-  * Example: `"barrrrr"`
-  * Type: string
-* foo
-  * Example: `"fooooo"`
-  * Type: string
 
 ```
-GET /apps/01234567-89ab-cdef-0123-456789abcdef?bar=barrrrr&foo=fooooo HTTP/1.1
-Content-Type: application/json
+GET /apps/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
 Host: api.example.com
-
-{
-  "bar": "barrrrr",
-  "foo": "fooooo"
-}
 ```
 
 ```
@@ -126,10 +113,10 @@ HTTP/1.1 204 No Content
 Update an existing app.
 
 * name
-  * unique name of app
-  * Example: `"example"`
-  * Type: string
-  * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+ * unique name of app
+ * Example: `"example"`
+ * Type: string
+ * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
 
 ```
 PATCH /apps/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
@@ -150,9 +137,9 @@ HTTP/1.1 204 No Content
 Upload an attachment file for an app
 
 * file
-  * an attachment of app
-  * Example: `"... contents of file ..."`
-  * Type: string
+ * an attachment of app
+ * Example: `"... contents of file ..."`
+ * Type: string
 
 ```
 POST /apps/01234567-89ab-cdef-0123-456789abcdef/files HTTP/1.1
@@ -173,11 +160,11 @@ HTTP/1.1 201 Created
 ### Properties
 
 * name
-  * Example: `"Sushi"`
-  * Type: 
+ * Example: `"Sushi"`
+ * Type: 
 * user
-  * Example: `null`
-  * Type: object
+ * Example: `null`
+ * Type: object
 
 ### GET /recipes
 
@@ -198,7 +185,7 @@ HTTP/1.1 204 No Content
 ### Properties
 
 * name
-  * Example: `"alice"`
-  * Type: string
+ * Example: `"alice"`
+ * Type: string
 
 

@@ -1,9 +1,8 @@
 # {{.Title}}
-
 {{.Description}}
 
 {{range $name, $schema := .Properties.Schemas}}* [{{$schema.Title}}]({{$schema.Title.LinkString}})
-{{range $i, $link := $schema.Links}}  * [{{$link.Title}}]({{$link.Title.LinkString}})
+{{range $i, $link := $schema.Links}} * [{{$link.Title}}]({{$link.Title.LinkString}})
 {{end}}{{end}}
 {{range $name, $schema := .Properties.Schemas}}## {{$schema.Title}}
 
@@ -12,20 +11,20 @@
 {{end}}### Properties
 
 {{range $name, $property := $schema.Properties.Schemas}}* {{$name}}
-{{if $property.Description}}  * {{$property.Description}}
-{{end}}{{if $property.Example}}  * Example: `{{$property.Example.TypedString}}`
-{{end}}{{if $property.Type}}  * Type: {{$property.Type.String}}
-{{end}}{{if $property.Pattern}}  * Pattern: `/{{$property.Pattern}}/`
+{{if $property.Description}} * {{$property.Description}}
+{{end}}{{if $property.Example}} * Example: `{{$property.Example.TypedString}}`
+{{end}}{{if $property.Type}} * Type: {{$property.Type.String}}
+{{end}}{{if $property.Pattern}} * Pattern: `/{{$property.Pattern}}/`
 {{end}}{{end}}
 {{range $i, $link := $schema.Links}}### {{$link.Method}} {{$link.HRef.ColonString}}
 
 {{if $link.Description}}{{$link.Description}}
 
 {{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}* {{$name}}
-{{if $property.Description}}  * {{$property.Description}}
-{{end}}{{if $property.Example}}  * Example: `{{$property.Example.TypedString}}`
-{{end}}{{if $property.Type}}  * Type: {{$property.Type.String}}
-{{end}}{{if $property.Pattern}}  * Pattern: `/{{$property.Pattern}}/`
+{{if $property.Description}} * {{$property.Description}}
+{{end}}{{if $property.Example}} * Example: `{{$property.Example.TypedString}}`
+{{end}}{{if $property.Type}} * Type: {{$property.Type.String}}
+{{end}}{{if $property.Pattern}} * Pattern: `/{{$property.Pattern}}/`
 {{end}}{{end}}{{end}}
 ```
 {{$link.Method}} {{$link.Endpoint}}{{$link.QueryString}} HTTP/1.1{{if $link.HasRequestBody}}
