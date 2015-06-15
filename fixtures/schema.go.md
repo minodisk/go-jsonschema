@@ -20,7 +20,6 @@ An app is a program to be deployed.
 
 * deleted_at
  * When this resource was deleted at
- * Example: `null`
  * Type: null
 * id
  * unique identifier of app
@@ -38,10 +37,8 @@ An app is a program to be deployed.
  * Example: `false`
  * Type: boolean
 * user_ids
- * Example: `null`
  * Type: array
 * users
- * Example: `null`
  * Type: array
 
 ### POST /apps
@@ -69,12 +66,18 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "deleted_at": "",
+  "deleted_at": null,
   "id": "01234567-89ab-cdef-0123-456789abcdef",
   "name": "example",
-  "private": "",
-  "user_ids": "",
-  "users": ""
+  "private": false,
+  "user_ids": [
+    1
+  ],
+  "users": [
+    {
+      "name": "alice"
+    }
+  ]
 }
 ```
 
@@ -107,12 +110,18 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "deleted_at": "",
+  "deleted_at": null,
   "id": "01234567-89ab-cdef-0123-456789abcdef",
   "name": "example",
-  "private": "",
-  "user_ids": "",
-  "users": ""
+  "private": false,
+  "user_ids": [
+    1
+  ],
+  "users": [
+    {
+      "name": "alice"
+    }
+  ]
 }
 ```
 
@@ -130,14 +139,22 @@ Host: api.example.com
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{
-  "deleted_at": "",
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "example",
-  "private": "",
-  "user_ids": "",
-  "users": ""
-}
+[
+  {
+    "deleted_at": null,
+    "id": "01234567-89ab-cdef-0123-456789abcdef",
+    "name": "example",
+    "private": false,
+    "user_ids": [
+      1
+    ],
+    "users": [
+      {
+        "name": "alice"
+      }
+    ]
+  }
+]
 ```
 
 ### PATCH /apps/:id
@@ -165,12 +182,18 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "deleted_at": "",
+  "deleted_at": null,
   "id": "01234567-89ab-cdef-0123-456789abcdef",
   "name": "example",
-  "private": "",
-  "user_ids": "",
-  "users": ""
+  "private": false,
+  "user_ids": [
+    1
+  ],
+  "users": [
+    {
+      "name": "alice"
+    }
+  ]
 }
 ```
 
@@ -198,12 +221,18 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "deleted_at": "",
+  "deleted_at": null,
   "id": "01234567-89ab-cdef-0123-456789abcdef",
   "name": "example",
-  "private": "",
-  "user_ids": "",
-  "users": ""
+  "private": false,
+  "user_ids": [
+    1
+  ],
+  "users": [
+    {
+      "name": "alice"
+    }
+  ]
 }
 ```
 
@@ -215,7 +244,6 @@ Content-Type: application/json
  * Example: `"Sushi"`
  * Type: 
 * user
- * Example: `null`
  * Type: object
 
 ### GET /recipes
@@ -232,10 +260,14 @@ Host: api.example.com
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-{
-  "name": "Sushi",
-  "user": ""
-}
+[
+  {
+    "name": "Sushi",
+    "user": {
+      "name": "alice"
+    }
+  }
+]
 ```
 
 ## User

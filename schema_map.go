@@ -1,9 +1,6 @@
 package gojsa
 
-import (
-	"encoding/json"
-	"log"
-)
+import "encoding/json"
 
 type SchemaMap struct {
 	Schemas map[string]*Schema
@@ -14,9 +11,9 @@ func (s *SchemaMap) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &schemas); err != nil {
 		return err
 	}
-	for name, _ := range schemas {
-		log.Println(name)
-	}
+	// for name, _ := range schemas {
+	// 	log.Println(name)
+	// }
 	s.Schemas = schemas
 	return nil
 }

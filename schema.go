@@ -27,8 +27,8 @@ type Schema struct {
 	MinLength int
 	Pattern   string // regexp
 	// 5.3. Validation keywords for arrays
-	AdditionalItems SchemaOrBool    // Schema or bool
-	Items           SchemaOrSchemas // Schema or []Schema
+	AdditionalItems SchemaOrBool // Schema or bool
+	Items           Items        // Schema or []Schema
 	MaxItems        int
 	MinItems        int
 	UniqueItems     bool
@@ -62,7 +62,7 @@ type Schema struct {
 	Links []*Link
 	// 4.3. media
 	Media   Media
-	Example Example
+	Example *Example
 	// 4.4. readOnly
 	ReadOnly bool
 	// 4.5. pathStart
@@ -189,10 +189,29 @@ func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
 }
 
-func (s Schema) ExampleJSON() (string, error) {
-	body, err := s.Properties.ExampleJSON()
-	if err != nil {
-		return "", err
+// func (s Schema) ExampleJSON() (string, error) {
+// 	e, err := s.ExampleData()
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	j, err := json.MarshalIndent(e, "", "  ")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return string(j), nil
+// }
+
+func (s Schema) ExampleData() (interface{}, error) {
+	switch {
+	default:
+		return "", nil
+	case s.Example != nil:
+		return s.Example.Value(), nil
+	case s.Type.Include("array"):
+		return s.Items.ExampleData()
+	case s.Type.Include("object"):
+		return s.Properties.ExampleData()
+	case s.Type.Include("null"):
+		return nil, nil
 	}
-	return body, nil
 }

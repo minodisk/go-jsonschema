@@ -2,6 +2,7 @@ package doc_test
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -34,7 +35,7 @@ func TestMarkdown(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// fmt.Println(string(buf.Bytes()))
+	fmt.Println(string(buf.Bytes()))
 
 	ioutil.WriteFile("../../fixtures/schema.go.md", buf.Bytes(), 0644)
 }

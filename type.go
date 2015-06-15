@@ -14,6 +14,18 @@ type Type struct {
 	StringOrStrings
 }
 
+func (t Type) Include(s string) bool {
+	if t.isString {
+		return s == t.string
+	}
+	for _, tp := range t.strings {
+		if s == tp {
+			return true
+		}
+	}
+	return false
+}
+
 func (t Type) Validate(o interface{}) error {
 	if t.validate(o) {
 		return nil

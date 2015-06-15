@@ -16,24 +16,36 @@ func (e *Example) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (e Example) String() string {
-	if v, ok := e.value.(string); ok {
-		return string(v)
-	}
-	return ""
+func (e Example) Value() interface{} {
+	return e.value
 }
 
-func (e Example) TypedString() string {
-	switch t := e.value.(type) {
+func (e Example) String() string {
+	switch v := e.value.(type) {
 	default:
 		return ""
 	case nil:
 		return "null"
 	case string:
-		return fmt.Sprintf("\"%s\"", t)
+		return v
 	case float64:
-		return fmt.Sprintf("%f", t)
+		return fmt.Sprintf("%f", v)
 	case bool:
-		return fmt.Sprintf("%t", t)
+		return fmt.Sprintf("%t", v)
+	}
+}
+
+func (e Example) TypedString() string {
+	switch v := e.value.(type) {
+	default:
+		return ""
+	case nil:
+		return "null"
+	case string:
+		return fmt.Sprintf("\"%s\"", v)
+	case float64:
+		return fmt.Sprintf("%f", v)
+	case bool:
+		return fmt.Sprintf("%t", v)
 	}
 }

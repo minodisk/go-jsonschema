@@ -7,6 +7,11 @@ import (
 	"regexp"
 )
 
+const (
+	examplePrefix = ""
+	exampleIndent = "  "
+)
+
 var (
 	rBraceBracket = regexp.MustCompile(`{\((.*)\)}`)
 )
@@ -108,12 +113,20 @@ func (l Link) HasRequestBody() bool {
 }
 
 func (l Link) RequestBody() string {
-	if l.HasRequestBody() {
-		if body, err := l.Schema.ExampleJSON(); err == nil {
-			return body
-		}
+	if !l.HasRequestBody() {
+		return ""
 	}
-	return ""
+
+	d, err := l.Schema.ExampleData()
+	if err != nil {
+		return ""
+	}
+
+	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
+	if err != nil {
+		return ""
+	}
+	return string(b)
 }
 
 func (l Link) HasResponseBody() bool {
@@ -129,18 +142,29 @@ func (l Link) ResponseBody() string {
 	if !l.HasResponseBody() {
 		return ""
 	}
+
+	var d interface{}
+	var err error
 	if l.TargetSchema != nil {
-		body, err := l.TargetSchema.ExampleJSON()
-		if err != nil {
-			log.Println("fail to create example JSON: %s", err)
-		}
-		return body
+		d, err = l.TargetSchema.ExampleData()
+	} else {
+		d, err = l.parent.ExampleData()
 	}
-	body, err := l.parent.ExampleJSON()
 	if err != nil {
-		log.Println(err)
+		log.Println("fail to create example data: %s", err)
+		return ""
 	}
-	return body
+
+	if l.Rel == "instances" {
+		d = []interface{}{d}
+	}
+
+	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
+	if err != nil {
+		log.Println("fail to marshal as JSON: %s", err)
+		return ""
+	}
+	return string(b)
 }
 
 func (l Link) ResponseStatus() int {
