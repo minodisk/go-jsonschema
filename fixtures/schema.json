@@ -6,214 +6,193 @@
   "title": "Example API",
   "description": "A schema for a small example API.",
   "definitions": {
-    "app": {
-      "$schema": "http://json-schema.org/draft-04/hyper-schema",
-      "description": "An app is a program to be deployed.",
-      "id": "schemata/app",
-      "title": "App",
-      "type": [
-        "object"
-      ],
-      "required": [
-        "id"
-      ],
+    "user": {
+      "title": "User",
+      "type": "object",
       "definitions": {
         "id": {
-          "description": "unique identifier of app",
-          "example": "01234567-89ab-cdef-0123-456789abcdef",
-          "format": "uuid",
-          "readOnly": true,
-          "type": [
-            "string"
-          ]
+          "type": "integer",
+          "example": 12345,
+          "readOnly": true
         },
         "name": {
-          "description": "unique name of app",
-          "example": "example",
-          "pattern": "^[a-z][a-z0-9-]{3,50}$",
-          "readOnly": false,
-          "type": [
-            "string"
-          ]
+          "type": "string",
+          "example": "Gopher"
         },
-        "private": {
-          "description": "true if this resource is private use",
-          "example": false,
-          "type": [
-            "boolean"
-          ]
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "gopher@example.com"
+        }
+      },
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/user/definitions/id"
         },
-        "deleted_at": {
-          "description": "When this resource was deleted at",
-          "example": null,
-          "type": [
-            "null"
-          ]
+        "name": {
+          "$ref": "#/definitions/user/definitions/name"
         },
-        "user_ids": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "example": 1
-          }
-        },
-        "file": {
-          "description": "an attachment of app",
-          "example": "... contents of file ...",
-          "readOnly": false,
-          "type": "string"
+        "email": {
+          "$ref": "#/definitions/user/definitions/email"
         }
       },
       "links": [
         {
-          "description": "Create a new app.",
-          "href": "/apps",
+          "title": "Create",
+          "description": "Upload an icon file for user",
+          "method": "POST",
+          "href": "/users/{(#/definitions/album/definitions/id)}/icons",
+          "rel": "create",
+          "encType": "multipart/form-data",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "icon": {
+                "$ref": "#/definitions/album/definitions/icon"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "album": {
+      "title": "Album",
+      "type": "object",
+      "definitions": {
+        "id": {
+          "type": "string",
+          "example": "exampleuuid0123456789",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "filename": {
+          "description": "unique name of album",
+          "example": "example",
+          "pattern": "^[a-z][a-z0-9-]{3,50}$",
+          "readOnly": false,
+          "type": "string"
+        },
+        "private": {
+          "type": "boolean",
+          "description": "true if this resource is private use",
+          "example": false
+        },
+        "created_at": {
+          "type": "date-time",
+          "description": "When this resource was deleted at",
+          "example": null
+        },
+        "updated_at": {
+          "type": "date-time",
+          "description": "When this resource was deleted at",
+          "example": null
+        },
+        "deleted_at": {
+          "type": [
+            "date-time",
+            "null"
+          ],
+          "description": "When this resource was deleted at",
+          "example": null
+        },
+        "owner": {
+          "$ref": "#/definitions/user"
+        },
+        "liked_user_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/user/definitions/id"
+          }
+        },
+        "file": {
+          "type": "string",
+          "description": "an attachment of album",
+          "example": "... contents of file ...",
+          "readOnly": false
+        }
+      },
+      "links": [
+        {
+          "title": "Create",
+          "description": "Create a new album.",
+          "href": "/albums",
           "method": "POST",
           "rel": "create",
           "schema": {
             "properties": {
               "name": {
-                "$ref": "#/definitions/app/definitions/name"
+                "$ref": "#/definitions/album/definitions/name"
               }
             },
             "type": [
               "object"
             ]
-          },
-          "title": "Create"
+          }
         },
         {
-          "description": "Delete an existing app.",
-          "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fid)}",
-          "method": "DELETE",
-          "rel": "destroy",
-          "title": "Delete",
-          "mediaType": "null"
-        },
-        {
-          "description": "Info for existing app.",
-          "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fid)}",
+          "title": "List",
+          "description": "List existing albums.",
+          "href": "/albums",
           "method": "GET",
-          "rel": "self",
-          "title": "Info"
+          "rel": "instances"
         },
         {
-          "description": "List existing apps.",
-          "href": "/apps",
+          "title": "Info",
+          "description": "Info for existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
           "method": "GET",
-          "rel": "instances",
-          "title": "List"
+          "rel": "self"
         },
         {
-          "description": "Update an existing app.",
-          "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fid)}",
+          "title": "Update",
+          "description": "Update an existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
           "method": "PATCH",
           "rel": "update",
           "schema": {
             "properties": {
               "name": {
-                "$ref": "#/definitions/app/definitions/name"
+                "$ref": "#/definitions/album/definitions/name"
               }
             },
             "type": [
               "object"
             ]
-          },
-          "title": "Update"
+          }
         },
         {
-          "description": "Upload an attachment file for an app",
-          "href": "/apps/{(%23%2Fdefinitions%2Fapp%2Fdefinitions%2Fid)}/files",
+          "title": "Delete",
+          "description": "Delete an existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
+          "method": "DELETE",
+          "rel": "destroy",
+          "mediaType": "null"
+        },
+        {
+          "title": "Create",
+          "description": "Upload an attachment file for an album",
           "method": "POST",
+          "href": "/albums/{(#/definitions/album/definitions/id)}/files",
           "rel": "create",
           "encType": "multipart/form-data",
           "schema": {
+            "type": "object",
             "properties": {
               "file": {
-                "$ref": "#/definitions/app/definitions/file"
+                "$ref": "#/definitions/album/definitions/file"
               }
-            },
-            "type": [
-              "object"
-            ]
-          },
-          "title": "Create"
-        }
-      ],
-      "properties": {
-        "id": {
-          "$ref": "#/definitions/app/definitions/id"
-        },
-        "name": {
-          "$ref": "#/definitions/app/definitions/name"
-        },
-        "private": {
-          "$ref": "#/definitions/app/definitions/private"
-        },
-        "deleted_at": {
-          "$ref": "#/definitions/app/definitions/deleted_at"
-        },
-        "user_ids": {
-          "$ref": "#/definitions/app/definitions/user_ids"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/user"
+            }
           }
         }
-      }
-    },
-    "recipe": {
-      "type": "object",
-      "definitions": {
-        "name": {
-          "example": "Sushi"
-        }
-      },
-      "properties": {
-        "name": {
-          "$ref": "#/definitions/recipe/definitions/name"
-        },
-        "user": {
-          "$ref": "#/definitions/user"
-        }
-      },
-      "links": [
-        {
-          "title": "List",
-          "description": "List recipes",
-          "method": "GET",
-          "href": "/recipes",
-          "rel": "instances"
-        }
       ]
-    },
-    "user": {
-      "title": "User",
-      "type": "object",
-      "definitions": {
-        "name": {
-          "type": "string",
-          "example": "alice"
-        }
-      },
-      "properties": {
-        "name": {
-          "$ref": "#/definitions/user/definitions/name"
-        }
-      }
     }
   },
   "properties": {
-    "app": {
-      "$ref": "#/definitions/app"
-    },
-    "recipe": {
-      "$ref": "#/definitions/recipe"
-    },
     "user": {
       "$ref": "#/definitions/user"
+    },
+    "album": {
+      "$ref": "#/definitions/album"
     }
   },
   "links": [

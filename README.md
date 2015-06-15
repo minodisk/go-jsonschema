@@ -5,23 +5,33 @@ JSON Schema parser in Go
 ## Installation
 
 ```bash
-go get github.com/minodisk/go-json-schema
+go get github.com/minodisk/go-jsonschema
 ```
 
 ## Usage
 
 ```go
-import parser "github.com/minodisk/go-json-schema/parser"
+import "github.com/minodisk/go-jsonschema"
 
 func main() {
-  parser.Parse()
+  jsonString := `
+{
+}
+`
+  jsonschema.NewSchema(jsonString)
 }
 ```
 
+## Why in Go
+
+We need simple JSON Schema parser in Go.
+
 ## Support
 
+### JSON Schema
+
 - [json-schema-core](http://json-schema.org/latest/json-schema-core.html)
-  - [ ] ID string
+  - [ ] ID
 
 - [json-schema-validation](http://json-schema.org/latest/json-schema-validation.html)
   - 5. Validation keywords sorted by instance types
@@ -65,11 +75,30 @@ func main() {
     - [ ] Format
 
 - [json-schema-hypermedia](http://json-schema.org/latest/json-schema-hypermedia.html)
-  - [ ] Links     []Link
-  - [ ] Media     Media
-  - [ ] ReadOnly  bool
-  - [ ] PathStart string
+  - [ ] Links
+  - [ ] Media
+  - [ ] ReadOnly
+  - [ ] PathStart
 
-## Why in Go
+### Documentation tool
 
-We need simple JSON Schema parser in Go.
+- [ ] Title
+- [ ] Description
+- [ ] Properties
+- Link
+  - Request
+    - [ ] Queries
+    - Example
+      - [ ] Header
+      - Body
+        - [ ] Multipart
+          - [ ] Multi-files
+          - [ ] Multi-files as array
+  - Response
+    - Rel
+      - [ ] Instances
+    - EncType
+      - [ ] Null
+    - Example response
+      - [ ] Header
+      - [ ] Body
