@@ -208,12 +208,15 @@ Upload an attachment file for an app
 
 ```
 POST /apps/01234567-89ab-cdef-0123-456789abcdef/files HTTP/1.1
-Content-Type: multipart/form-data
+Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
 
-{
-  "file": "... contents of file ..."
-}
+-----BoundaryX
+Content-Disposition: form-data; name="[file]"
+
+... contents of file ...
+
+-----BoundaryX--
 ```
 
 ```

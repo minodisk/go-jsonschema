@@ -189,18 +189,6 @@ func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
 }
 
-// func (s Schema) ExampleJSON() (string, error) {
-// 	e, err := s.ExampleData()
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	j, err := json.MarshalIndent(e, "", "  ")
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return string(j), nil
-// }
-
 func (s Schema) ExampleData() (interface{}, error) {
 	switch {
 	default:

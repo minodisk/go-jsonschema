@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+
+	"github.com/minodisk/gojsa/multipart"
 )
 
 const (
@@ -104,7 +106,14 @@ func (l Link) QueryString() string {
 	return fmt.Sprintf("?%s", l.Schema.QueryString())
 }
 
+func (l Link) IsContentTypeMultipart() bool {
+	return l.EncType == "multipart/form-data"
+}
+
 func (l Link) RequestContentType() string {
+	if l.IsContentTypeMultipart() {
+		return fmt.Sprintf("%s; boundary=%s", l.EncType, multipart.Boundary)
+	}
 	return l.EncType
 }
 
@@ -122,8 +131,21 @@ func (l Link) RequestBody() string {
 		return ""
 	}
 
+	if l.IsContentTypeMultipart() {
+		s, err := multipart.Marshal(d)
+		if err != nil {
+			log.Println("fail to marshal as form data: %s", err)
+			return ""
+		}
+		log.Println("==========")
+		log.Println(s)
+		log.Println("==========")
+		return s
+	}
+
 	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
 	if err != nil {
+		log.Println("fail to marshal as JSON: %s", err)
 		return ""
 	}
 	return string(b)
