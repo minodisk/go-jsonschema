@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/minodisk/gojsa"
-	"github.com/minodisk/gojsa/tools/doc"
+	"github.com/minodisk/jsonschema"
+	"github.com/minodisk/jsonschema/tools/doc"
 )
 
 func TestMarkdown(t *testing.T) {
@@ -14,12 +14,12 @@ func TestMarkdown(t *testing.T) {
 	// if err != nil {
 	// 	t.Fatal(err)
 	// }
-	// s, err := gojsa.NewYAML(y)
+	// s, err := jsonschema.NewYAML(y)
 	j, err := ioutil.ReadFile("../../fixtures/schema.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	s, err := gojsa.NewJSON(j)
+	s, err := jsonschema.NewJSON(j)
 	if err != nil {
 		t.Fatal(err)
 	}

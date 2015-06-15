@@ -1,4 +1,4 @@
-package gojsa
+package jsonschema
 
 import "encoding/json"
 

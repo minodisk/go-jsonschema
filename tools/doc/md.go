@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/minodisk/gojsa"
+	"github.com/minodisk/jsonschema"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 	}
 )
 
-func Markdown(w io.Writer, s *gojsa.Schema, name, text string) error {
+func Markdown(w io.Writer, s *jsonschema.Schema, name, text string) error {
 	tmpl := template.Must(template.New(name).Funcs(funcMap).Parse(text))
 	// if err != nil {
 	// 	return err

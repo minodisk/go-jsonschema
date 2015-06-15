@@ -1,4 +1,4 @@
-package gojsa
+package jsonschema
 
 type Media struct {
 	Type           string

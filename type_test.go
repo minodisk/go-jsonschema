@@ -1,14 +1,14 @@
-package gojsa_test
+package jsonschema_test
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/minodisk/gojsa"
+	"github.com/minodisk/jsonschema"
 )
 
 func TestTypeInteger(t *testing.T) {
-	s := new(gojsa.Schema)
+	s := new(jsonschema.Schema)
 	js := `{
 		"type": "integer"
 	}`

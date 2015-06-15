@@ -1,8 +1,8 @@
-package gojsa_test
+package jsonschema_test
 
 // func TestSchemaOrBool(t *testing.T) {
 // 	var json string
-// 	var s gojsa.Schema
+// 	var s jsonschema.Schema
 // 	var err error
 //
 // 	json = `{
@@ -10,7 +10,7 @@ package gojsa_test
 // 			"id": "foo"
 // 		}
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -24,7 +24,7 @@ package gojsa_test
 // 	json = `{
 // 		"additionalItems": true
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -38,7 +38,7 @@ package gojsa_test
 // 	json = `{
 // 		"additionalItems": false
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -52,7 +52,7 @@ package gojsa_test
 //
 // func TestSchemaOrSchemas(t *testing.T) {
 // 	var json string
-// 	var s gojsa.Schema
+// 	var s jsonschema.Schema
 // 	var err error
 //
 // 	json = `{
@@ -60,7 +60,7 @@ package gojsa_test
 // 			"id": "foo"
 // 		}
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -81,7 +81,7 @@ package gojsa_test
 // 			}
 // 		]
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -98,7 +98,7 @@ package gojsa_test
 //
 // func TestSchemaOrStrings(t *testing.T) {
 // 	var json string
-// 	var s gojsa.Schema
+// 	var s jsonschema.Schema
 // 	var err error
 //
 // 	json = `{
@@ -106,7 +106,7 @@ package gojsa_test
 // 			"id": "foo"
 // 		}
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -123,7 +123,7 @@ package gojsa_test
 // 			"bar"
 // 		]
 // 	}`
-// 	s, err = gojsa.Parse(bytes.NewBufferString(json))
+// 	s, err = jsonschema.Parse(bytes.NewBufferString(json))
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -150,7 +150,7 @@ package gojsa_test
 // 		}
 // 	}`
 // 	buf := bytes.NewBufferString(json)
-// 	schema, err := gojsa.Parse(buf)
+// 	schema, err := jsonschema.Parse(buf)
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -181,14 +181,14 @@ package gojsa_test
 // 		}
 // 	}`
 // 	buf := bytes.NewBufferString(json)
-// 	gojsa.Parse(buf)
+// 	jsonschema.Parse(buf)
 // 	buf = bytes.NewBufferString(json)
-// 	gojsa.Parse(buf)
+// 	jsonschema.Parse(buf)
 //
 // 	// btpl, err := ioutil.ReadFile("schema.tpl.md")
 // 	// if err != nil {
 // 	// 	panic(err)
 // 	// }
 // 	// tpl := template.Must(template.New("mytemplate").Parse(string(btpl)))
-// 	// gojsa.Doc(os.Stdout, &r, tpl)
+// 	// jsonschema.Doc(os.Stdout, &r, tpl)
 // }

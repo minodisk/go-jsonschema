@@ -1,4 +1,4 @@
-package gojsa
+package jsonschema
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/minodisk/gojsa/multipart"
+	"github.com/minodisk/jsonschema/multipart"
 )
 
 const (
