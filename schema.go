@@ -74,7 +74,7 @@ type Schema struct {
 	root *Schema
 }
 
-func NewJSON(b []byte) (*Schema, error) {
+func New(b []byte) (*Schema, error) {
 	s := new(Schema)
 	if err := json.Unmarshal(b, s); err != nil {
 		return nil, err

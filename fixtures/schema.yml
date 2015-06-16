@@ -1,7 +1,6 @@
 ---
 $schema: http://json-schema.org/draft-04/hyper-schema
-type:
-- object
+type: object
 title: Example API
 description: A schema for a small example API.
 definitions:
@@ -21,6 +20,10 @@ definitions:
         type: string
         format: email
         example: gopher@example.com
+      icon:
+        type: string
+        format: uri
+        example: http://example.com/icon.png
     properties:
       id:
         $ref: "#/definitions/user/definitions/id"
@@ -39,7 +42,7 @@ definitions:
           type: object
           properties:
             icon:
-              $ref: "#/definitions/album/definitions/icon"
+              $ref: "#/definitions/user/definitions/icon"
   album:
     $schema: http://json-schema.org/draft-04/hyper-schema
     title: Album
@@ -50,16 +53,6 @@ definitions:
         example: exampleuuid0123456789
         format: uuid
         readOnly: true
-      filename:
-        description: unique name of album
-        example: example
-        pattern: "^[a-z][a-z0-9-]{3,50}$"
-        readOnly: false
-        type: string
-      private:
-        type: boolean
-        description: true if this resource is private use
-        example: false
       created_at:
         type: date-time
         description: When this resource was deleted at
@@ -74,6 +67,20 @@ definitions:
           - "null"
         description: When this resource was deleted at
         example: null
+      name:
+        type: string
+        description: Album name
+        example: my album
+      filename:
+        description: unique name of album
+        example: example
+        pattern: "^[a-z][a-z0-9-]{3,50}$"
+        readOnly: false
+        type: string
+      private:
+        type: boolean
+        description: true if this resource is private use
+        example: false
       owner:
         $ref: "#/definitions/user"
       liked_user_ids:
@@ -85,6 +92,25 @@ definitions:
         description: an attachment of album
         example: '... contents of file ...'
         readOnly: false
+    properties:
+      id:
+        $ref: "#/definitions/album/definitions/id"
+      created_at:
+        $ref: "#/definitions/album/definitions/created_at"
+      updated_at:
+        $ref: "#/definitions/album/definitions/updated_at"
+      deleted_at:
+        $ref: "#/definitions/album/definitions/deleted_at"
+      name:
+        $ref: "#/definitions/album/definitions/name"
+      filename:
+        $ref: "#/definitions/album/definitions/filename"
+      private:
+        $ref: "#/definitions/album/definitions/private"
+      owner:
+        $ref: "#/definitions/album/definitions/owner"
+      liked_user_ids:
+        $ref: "#/definitions/album/definitions/liked_user_ids"
     links:
       - title: Create
         description: Create a new album.

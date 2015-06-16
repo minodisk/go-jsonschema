@@ -1,12 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-04/hyper-schema",
-  "type": [
-    "object"
-  ],
+  "type": "object",
   "title": "Example API",
   "description": "A schema for a small example API.",
   "definitions": {
     "user": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
       "title": "User",
       "type": "object",
       "definitions": {
@@ -23,6 +22,11 @@
           "type": "string",
           "format": "email",
           "example": "gopher@example.com"
+        },
+        "icon": {
+          "type": "string",
+          "format": "uri",
+          "example": "http://example.com/icon.png"
         }
       },
       "properties": {
@@ -48,7 +52,7 @@
             "type": "object",
             "properties": {
               "icon": {
-                "$ref": "#/definitions/album/definitions/icon"
+                "$ref": "#/definitions/user/definitions/icon"
               }
             }
           }
@@ -56,6 +60,7 @@
       ]
     },
     "album": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
       "title": "Album",
       "type": "object",
       "definitions": {

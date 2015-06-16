@@ -1,61 +1,68 @@
 # Example API
 A schema for a small example API.
 
-* [App](#app)
- * [POST /apps](#post-apps)
- * [DELETE /apps/:id](#delete-appsid)
- * [GET /apps/:id](#get-appsid)
- * [GET /apps](#get-apps)
- * [PATCH /apps/:id](#patch-appsid)
- * [POST /apps/:id/files](#post-appsidfiles)
-* [Recipe](#recipe)
- * [GET /recipes](#get-recipes)
+* [Album](#album)
+ * [POST /albums](#post-albums)
+ * [GET /albums](#get-albums)
+ * [GET /albums/:id](#get-albumsid)
+ * [PATCH /albums/:id](#patch-albumsid)
+ * [DELETE /albums/:id](#delete-albumsid)
+ * [POST /albums/:id/files](#post-albumsidfiles)
 * [User](#user)
+ * [POST /users/:id/icons](#post-usersidicons)
 
-## App
-An app is a program to be deployed.
+## Album
 
 ### Properties
-* id
- * unique identifier of app
- * Example: `"01234567-89ab-cdef-0123-456789abcdef"`
- * Type: string
- * Format: uuid
- * ReadOnly: true
-* name
- * unique name of app
+
+* created_at
+ * When this resource was deleted at
+ * Type: date-time
+* deleted_at
+ * When this resource was deleted at
+ * Type: date-time, null
+* filename
+ * unique name of album
  * Example: `"example"`
  * Type: string
  * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+* id
+ * Example: `"exampleuuid0123456789"`
+ * Type: string
+ * Format: uuid
+ * ReadOnly: true
+* liked_user_ids
+ * Type: array
+* name
+ * Album name
+ * Example: `"my album"`
+ * Type: string
+* owner
+ * Type: 
 * private
  * true if this resource is private use
  * Example: `false`
  * Type: boolean
-* deleted_at
+* updated_at
  * When this resource was deleted at
- * Example: `nil`
- * Type: null
-* user_ids
- * Type: array
-* users
- * Type: array
+ * Type: date-time
 
-### POST /apps
-Create a new app.
+### POST /albums
+
+Create a new album.
 
 * name
- * unique name of app
- * Example: `"example"`
+ * Album name
+ * Example: `"my album"`
  * Type: string
- * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
 
 ```
-POST /apps HTTP/1.1
+POST /albums HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": "example"
+  "name": "my album"
 }
 ```
 
@@ -64,66 +71,27 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "example",
-  "private": false,
+  "created_at": "",
   "deleted_at": null,
-  "user_ids": [
-    1
+  "filename": "example",
+  "id": "exampleuuid0123456789",
+  "liked_user_ids": [
+    12345
   ],
-  "users": [
-    {
-      "name": "alice"
-    }
-  ]
+  "name": "my album",
+  "owner": "",
+  "private": false,
+  "updated_at": ""
 }
 ```
 
-### DELETE /apps/:id
-Delete an existing app.
+### GET /albums
+
+List existing albums.
+
 
 ```
-DELETE /apps/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
-Host: api.example.com
-```
-
-```
-HTTP/1.1 204 No Content
-```
-
-### GET /apps/:id
-Info for existing app.
-
-```
-GET /apps/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
-Host: api.example.com
-```
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "example",
-  "private": false,
-  "deleted_at": null,
-  "user_ids": [
-    1
-  ],
-  "users": [
-    {
-      "name": "alice"
-    }
-  ]
-}
-```
-
-### GET /apps
-List existing apps.
-
-```
-GET /apps HTTP/1.1
+GET /albums HTTP/1.1
 Host: api.example.com
 ```
 
@@ -133,38 +101,66 @@ Content-Type: application/json
 
 [
   {
-    "id": "01234567-89ab-cdef-0123-456789abcdef",
-    "name": "example",
-    "private": false,
+    "created_at": "",
     "deleted_at": null,
-    "user_ids": [
-      1
+    "filename": "example",
+    "id": "exampleuuid0123456789",
+    "liked_user_ids": [
+      12345
     ],
-    "users": [
-      {
-        "name": "alice"
-      }
-    ]
+    "name": "my album",
+    "owner": "",
+    "private": false,
+    "updated_at": ""
   }
 ]
 ```
 
-### PATCH /apps/:id
-Update an existing app.
+### GET /albums/:id
 
-* name
- * unique name of app
- * Example: `"example"`
- * Type: string
- * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+Info for existing album.
+
 
 ```
-PATCH /apps/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
+GET /albums/exampleuuid0123456789 HTTP/1.1
+Host: api.example.com
+```
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "created_at": "",
+  "deleted_at": null,
+  "filename": "example",
+  "id": "exampleuuid0123456789",
+  "liked_user_ids": [
+    12345
+  ],
+  "name": "my album",
+  "owner": "",
+  "private": false,
+  "updated_at": ""
+}
+```
+
+### PATCH /albums/:id
+
+Update an existing album.
+
+* name
+ * Album name
+ * Example: `"my album"`
+ * Type: string
+
+```
+PATCH /albums/exampleuuid0123456789 HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": "example"
+  "name": "my album"
 }
 ```
 
@@ -173,31 +169,45 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "example",
-  "private": false,
+  "created_at": "",
   "deleted_at": null,
-  "user_ids": [
-    1
+  "filename": "example",
+  "id": "exampleuuid0123456789",
+  "liked_user_ids": [
+    12345
   ],
-  "users": [
-    {
-      "name": "alice"
-    }
-  ]
+  "name": "my album",
+  "owner": "",
+  "private": false,
+  "updated_at": ""
 }
 ```
 
-### POST /apps/:id/files
-Upload an attachment file for an app
+### DELETE /albums/:id
+
+Delete an existing album.
+
+
+```
+DELETE /albums/exampleuuid0123456789 HTTP/1.1
+Host: api.example.com
+```
+
+```
+HTTP/1.1 204 No Content
+```
+
+### POST /albums/:id/files
+
+Upload an attachment file for an album
 
 * file
- * an attachment of app
+ * an attachment of album
  * Example: `"... contents of file ..."`
  * Type: string
 
 ```
-POST /apps/01234567-89ab-cdef-0123-456789abcdef/files HTTP/1.1
+POST /albums/exampleuuid0123456789/files HTTP/1.1
 Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
 
@@ -214,56 +224,66 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "example",
-  "private": false,
+  "created_at": "",
   "deleted_at": null,
-  "user_ids": [
-    1
+  "filename": "example",
+  "id": "exampleuuid0123456789",
+  "liked_user_ids": [
+    12345
   ],
-  "users": [
-    {
-      "name": "alice"
-    }
-  ]
+  "name": "my album",
+  "owner": "",
+  "private": false,
+  "updated_at": ""
 }
-```
-
-## Recipe
-
-
-### Properties
-* name
- * Example: `"Sushi"`
-* user
- * Type: object
-
-### GET /recipes
-List recipes
-
-```
-GET /recipes HTTP/1.1
-Host: api.example.com
-```
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-[
-  {
-    "name": "Sushi",
-    "user": {
-      "name": "alice"
-    }
-  }
-]
 ```
 
 ## User
 
-
 ### Properties
-* name
- * Example: `"alice"`
+
+* email
+ * Example: `"gopher@example.com"`
  * Type: string
+ * Format: email
+* id
+ * Example: `12345.000000`
+ * Type: integer
+ * ReadOnly: true
+* name
+ * Example: `"Gopher"`
+ * Type: string
+
+### POST /users/:id/icons
+
+Upload an icon file for user
+
+* icon
+ * Example: `"http://example.com/icon.png"`
+ * Type: string
+
+```
+POST /users/exampleuuid0123456789/icons HTTP/1.1
+Content-Type: multipart/form-data; boundary=---BoundaryX
+Host: api.example.com
+
+-----BoundaryX
+Content-Disposition: form-data; name="[icon]"
+
+http://example.com/icon.png
+
+-----BoundaryX--
+```
+
+```
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "email": "gopher@example.com",
+  "id": 12345,
+  "name": "Gopher"
+}
+```
+
+
