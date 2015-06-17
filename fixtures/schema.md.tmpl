@@ -28,7 +28,7 @@
 {{end}}{{if $property.Type}} * Type: {{$property.Type.String}}
 {{end}}{{if $property.Pattern}} * Pattern: `/{{$property.Pattern}}/`
 {{end}}{{end}}{{end}}
-```
+```http
 {{$link.Method}} {{$link.ExampleEndpoint}}{{$link.QueryString}} HTTP/1.1{{if $link.HasRequestBody}}
 Content-Type: {{$link.RequestContentType}}{{end}}
 Host: {{$schema.Host}}{{if $link.HasRequestBody}}
@@ -36,7 +36,7 @@ Host: {{$schema.Host}}{{if $link.HasRequestBody}}
 {{$link.RequestBody}}{{end}}
 ```
 
-```
+```http
 HTTP/1.1 {{$link.ResponseStatus}} {{$link.ResponseReasonPhrase}}{{if $link.HasResponseBody}}
 Content-Type: {{$link.ResponseContentType}}{{end}}{{if $link.HasResponseBody}}
 

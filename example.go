@@ -7,6 +7,20 @@ import (
 
 type Example struct {
 	value interface{}
+
+	isBoolean bool
+	boolean   bool
+
+	isInteger bool
+	integer   int64
+
+	isNumber bool
+	number   float64
+
+	isString bool
+	string   string
+
+	isNull bool
 }
 
 func (e *Example) UnmarshalJSON(data []byte) error {
@@ -14,6 +28,9 @@ func (e *Example) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (e *Example) UpdateType(t Type) {
 }
 
 func (e Example) Value() interface{} {

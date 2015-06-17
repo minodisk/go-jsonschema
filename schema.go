@@ -175,6 +175,8 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
+	s.Example.UpdateType(s.Type)
+
 	return nil
 }
 

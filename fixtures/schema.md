@@ -56,7 +56,7 @@ Create a new album.
  * Example: `"my album"`
  * Type: string
 
-```
+```http
 POST  HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
@@ -66,7 +66,7 @@ Host: api.example.com
 }
 ```
 
-```
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
 
@@ -90,12 +90,12 @@ Content-Type: application/json
 List existing albums.
 
 
-```
+```http
 GET  HTTP/1.1
 Host: api.example.com
 ```
 
-```
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -121,12 +121,12 @@ Content-Type: application/json
 Info for existing album.
 
 
-```
+```http
 GET  HTTP/1.1
 Host: api.example.com
 ```
 
-```
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -154,7 +154,7 @@ Update an existing album.
  * Example: `"my album"`
  * Type: string
 
-```
+```http
 PATCH  HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
@@ -164,7 +164,7 @@ Host: api.example.com
 }
 ```
 
-```
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -188,12 +188,12 @@ Content-Type: application/json
 Delete an existing album.
 
 
-```
+```http
 DELETE  HTTP/1.1
 Host: api.example.com
 ```
 
-```
+```http
 HTTP/1.1 204 No Content
 ```
 
@@ -206,7 +206,7 @@ Upload an attachment file for an album
  * Example: `"... contents of file ..."`
  * Type: string
 
-```
+```http
 POST  HTTP/1.1
 Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
@@ -219,7 +219,7 @@ Content-Disposition: form-data; name="[file]"
 -----BoundaryX--
 ```
 
-```
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
 
@@ -262,7 +262,7 @@ Upload an icon file for user
  * Example: `"http://example.com/icon.png"`
  * Type: string
 
-```
+```http
 POST  HTTP/1.1
 Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
@@ -275,7 +275,7 @@ http://example.com/icon.png
 -----BoundaryX--
 ```
 
-```
+```http
 HTTP/1.1 201 Created
 Content-Type: application/json
 

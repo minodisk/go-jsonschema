@@ -2,13 +2,17 @@ package jsonschema
 
 import "fmt"
 
-type TypeError struct {
-	value interface{}
-}
+type T string
 
-func (e TypeError) Error() string {
-	return fmt.Sprintf("unexpected type %T", e.value)
-}
+const (
+	TypeArray   T = "array"
+	TypeBoolean T = "boolean"
+	TypeInteger T = "integer"
+	TypeNumber  T = "number"
+	TypeNull    T = "null"
+	TypeObject  T = "object"
+	TypeString  T = "string"
+)
 
 type Type struct {
 	StringOrStrings
@@ -46,8 +50,8 @@ func (t Type) validate(o interface{}) bool {
 }
 
 func validateWith(t string, o interface{}) bool {
-	switch t {
-	case "integer":
+	switch T(t) {
+	case TypeInteger:
 		switch t := o.(type) {
 		default:
 			return false
@@ -60,4 +64,12 @@ func validateWith(t string, o interface{}) bool {
 		}
 	}
 	return false
+}
+
+type TypeError struct {
+	value interface{}
+}
+
+func (e TypeError) Error() string {
+	return fmt.Sprintf("unexpected type %T", e.value)
 }
