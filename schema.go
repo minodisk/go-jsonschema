@@ -3,7 +3,7 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"net/url"
 )
 
 type Schema struct {
@@ -86,6 +86,7 @@ func New(b []byte) (*Schema, error) {
 }
 
 func (s *Schema) initialize() (err error) {
+	s.root = s
 	schemas := make(map[string]*Schema)
 	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
@@ -96,35 +97,44 @@ func (s *Schema) initialize() (err error) {
 	return nil
 }
 
-func (s *Schema) Host() string {
-	if s.root == nil {
-		log.Printf("----> %+v", s.ID)
+func (s *Schema) RootEndpoint() *url.URL {
+	for _, link := range s.root.Links {
+		if link.Rel == "self" && link.HRef != nil && link.HRef.String() != "" {
+			if u, err := url.Parse(link.HRef.String()); err == nil {
+				return u
+			}
+		}
 	}
-	// if len(s.root.Links) > 0 {
-	// 	log.Println(s.root.Links[0].HRef)
-	// }
-	return "api.example.com"
+	return nil
+}
+
+func (s *Schema) Host() string {
+	u := s.RootEndpoint()
+	if u == nil {
+		return "api.example.com"
+	}
+	return u.Host
 }
 
 func (s *Schema) Collect(schemas *map[string]*Schema, p string) error {
 	if err := s.Definitions.Collect(schemas, p); err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
-	s.root = root
-
 	if s.Ref != "" {
 		schema := (*schemas)[s.Ref]
 		if schema == nil {
 			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}
 		*s = *schema
+		s.root = root
 		return nil
 	}
+
+	s.root = root
 
 	if err := s.AdditionalItems.Resolve(schemas, root); err != nil {
 		return err

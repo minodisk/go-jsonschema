@@ -51,16 +51,22 @@ func (s *SchemaOrSchemas) UnmarshalYAML(unmarshal func(interface{}) error) (err 
 	return fmt.Errorf("unexpected type")
 }
 
-func (s *SchemaOrSchemas) Collect(schemas *map[string]*Schema, p string) (err error) {
-	if s.IsSchema {
-		return s.Schema.Collect(schemas, p)
-	}
-	return nil
-}
+// func (s *SchemaOrSchemas) Collect(schemas *map[string]*Schema, p string) (err error) {
+// 	if s.IsSchema {
+// 		return s.Schema.Collect(schemas, p)
+// 	}
+// 	return nil
+// }
 
 func (s *SchemaOrSchemas) Resolve(schemas *map[string]*Schema, root *Schema) (err error) {
 	if s.IsSchema {
 		return s.Schema.Resolve(schemas, root)
+	} else {
+		for _, schema := range s.Schemas {
+			if err := schema.Resolve(schemas, root); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }

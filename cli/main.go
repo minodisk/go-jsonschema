@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/codegangsta/cli"
 	"github.com/minodisk/jsonschema/cli/doc"
@@ -13,26 +14,9 @@ const (
 )
 
 func main() {
-	// c := cli.NewCLI("jsonschema", version)
-	// c.Args = os.Args[1:]
-	// c.Commands = map[string]cli.CommandFactory{
-	// 	"doc": func() (cli.Command, error) {
-	// 		return &doc.Cli{}, nil
-	// 	},
-	// }
-	//
-	// exitStatus, err := c.Run()
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// os.Exit(exitStatus)
-
 	app := cli.NewApp()
 	app.Name = "jsonschema"
-	app.Usage = "fooooooooo"
-	app.Action = func(c *cli.Context) {
-		println("Hellow friends!")
-	}
+	app.Usage = "Tools for JSON Schema"
 
 	app.Commands = []cli.Command{
 		{
@@ -63,15 +47,20 @@ func main() {
 					Value: "markdown",
 					Usage: "the format of output document",
 				},
+				cli.BoolFlag{
+					Name:  "watch, w",
+					Usage: "run in changing related files",
+				},
 			},
 			Action: func(c *cli.Context) {
 				if err := doc.Generate(doc.Options{
-					Input:    c.Args()[0],
+					Input:    filepath.Clean(c.Args()[0]),
 					Encoding: doc.Encoding(c.String("encoding")),
-					Template: c.String("template"),
+					Template: filepath.Clean(c.String("template")),
 					Engine:   doc.Engine(c.String("engine")),
-					Output:   c.String("output"),
+					Output:   filepath.Clean(c.String("output")),
 					Format:   c.String("format"),
+					IsWatch:  c.Bool("watch"),
 				}); err != nil {
 					log.Println(err)
 				}

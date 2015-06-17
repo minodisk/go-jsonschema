@@ -11,7 +11,7 @@ definitions:
     definitions:
       id:
         type: integer
-        example: 12345
+        example: 512446121
         readOnly: true
       name:
         type: string

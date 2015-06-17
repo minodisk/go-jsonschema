@@ -4,7 +4,6 @@ import "net/url"
 
 type Properties struct {
 	SchemaMap
-	// Schemas map[string]*Schema
 }
 
 func (p *Properties) QueryString() string {

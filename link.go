@@ -59,9 +59,6 @@ func (l *Link) SetParent(s *Schema) {
 }
 
 func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
-	if err := l.HRef.Resolve(schemas); err != nil {
-		return err
-	}
 	if l.TargetSchema != nil {
 		if err := l.TargetSchema.Resolve(schemas, root); err != nil {
 			return err
@@ -128,9 +125,6 @@ func (l Link) RequestBody() string {
 			log.Println("fail to marshal as form data: %s", err)
 			return ""
 		}
-		log.Println("==========")
-		log.Println(s)
-		log.Println("==========")
 		return s
 	}
 

@@ -57,7 +57,7 @@ Create a new album.
  * Type: string
 
 ```
-POST /albums HTTP/1.1
+POST  HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
@@ -76,7 +76,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    12345
+    5.12446121e+08
   ],
   "name": "my album",
   "owner": "",
@@ -91,7 +91,7 @@ List existing albums.
 
 
 ```
-GET /albums HTTP/1.1
+GET  HTTP/1.1
 Host: api.example.com
 ```
 
@@ -106,7 +106,7 @@ Content-Type: application/json
     "filename": "example",
     "id": "exampleuuid0123456789",
     "liked_user_ids": [
-      12345
+      5.12446121e+08
     ],
     "name": "my album",
     "owner": "",
@@ -122,7 +122,7 @@ Info for existing album.
 
 
 ```
-GET /albums/exampleuuid0123456789 HTTP/1.1
+GET  HTTP/1.1
 Host: api.example.com
 ```
 
@@ -136,7 +136,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    12345
+    5.12446121e+08
   ],
   "name": "my album",
   "owner": "",
@@ -155,7 +155,7 @@ Update an existing album.
  * Type: string
 
 ```
-PATCH /albums/exampleuuid0123456789 HTTP/1.1
+PATCH  HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
@@ -174,7 +174,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    12345
+    5.12446121e+08
   ],
   "name": "my album",
   "owner": "",
@@ -189,7 +189,7 @@ Delete an existing album.
 
 
 ```
-DELETE /albums/exampleuuid0123456789 HTTP/1.1
+DELETE  HTTP/1.1
 Host: api.example.com
 ```
 
@@ -207,7 +207,7 @@ Upload an attachment file for an album
  * Type: string
 
 ```
-POST /albums/exampleuuid0123456789/files HTTP/1.1
+POST  HTTP/1.1
 Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
 
@@ -229,7 +229,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    12345
+    5.12446121e+08
   ],
   "name": "my album",
   "owner": "",
@@ -247,7 +247,7 @@ Content-Type: application/json
  * Type: string
  * Format: email
 * id
- * Example: `12345.000000`
+ * Example: `512446121.000000`
  * Type: integer
  * ReadOnly: true
 * name
@@ -263,7 +263,7 @@ Upload an icon file for user
  * Type: string
 
 ```
-POST /users/exampleuuid0123456789/icons HTTP/1.1
+POST  HTTP/1.1
 Content-Type: multipart/form-data; boundary=---BoundaryX
 Host: api.example.com
 
@@ -281,7 +281,7 @@ Content-Type: application/json
 
 {
   "email": "gopher@example.com",
-  "id": 12345,
+  "id": 5.12446121e+08,
   "name": "Gopher"
 }
 ```
