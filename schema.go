@@ -85,16 +85,6 @@ func New(b []byte) (*Schema, error) {
 	return s, nil
 }
 
-// func NewYAML(b []byte) (*Schema, error) {
-// 	s := new(Schema)
-// 	if err := yaml.Unmarshal(b, s); err != nil {
-// 		return nil, err
-// 	}
-// 	s.Resolve()
-//
-// 	return s, nil
-// }
-
 func (s *Schema) initialize() (err error) {
 	schemas := make(map[string]*Schema)
 	if err := s.Collect(&schemas, "#"); err != nil {
