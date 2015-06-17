@@ -54,15 +54,6 @@ func (l *Link) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// func NewLink(href, rel string) Link {
-// 	return Link{
-// 		HRef:    href,
-// 		Rel:     rel,
-// 		Method:  "GET",
-// 		EncType: "application/json",
-// 	}
-// }
-
 func (l *Link) SetParent(s *Schema) {
 	l.parent = s
 }
@@ -152,11 +143,6 @@ func (l Link) RequestBody() string {
 }
 
 func (l Link) HasResponseBody() bool {
-	// switch {
-	// case l.MediaType == "null":
-	// 	return false
-	// }
-	// return l.TargetSchema != nil
 	return l.MediaType != "null"
 }
 

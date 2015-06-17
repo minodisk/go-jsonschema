@@ -62,7 +62,6 @@ func Marshal(d interface{}) (string, error) {
 }
 
 func marshalPart(data interface{}) ([]byte, error) {
-	// buf := bytes.NewBuffer()
 	var buf bytes.Buffer
 	if err := partTmpl.Execute(&buf, data); err != nil {
 		return nil, err
