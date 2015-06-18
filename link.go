@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/minodisk/jsonschema/multipart"
 )
@@ -12,6 +13,15 @@ import (
 const (
 	examplePrefix = ""
 	exampleIndent = "  "
+
+	contentTypeJSON      = "application/json"
+	contentTypeMultipart = "multipart/form-data"
+
+	methodPost   = "POST"
+	methodGet    = "GET"
+	methodPut    = "PUT"
+	methodPatch  = "PATCH"
+	methodDelete = "DELETE"
 )
 
 var (
@@ -42,13 +52,14 @@ func (l *Link) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if tmp.Method == "" {
-		tmp.Method = "GET"
+		tmp.Method = methodGet
 	}
+	tmp.Method = strings.ToUpper(tmp.Method)
 	if tmp.EncType == "" {
-		tmp.EncType = "application/json"
+		tmp.EncType = contentTypeJSON
 	}
 	if tmp.MediaType == "" {
-		tmp.MediaType = "application/json"
+		tmp.MediaType = contentTypeJSON
 	}
 	*l = Link(tmp)
 	return nil
@@ -85,7 +96,7 @@ func (l Link) MethodEndpoint() string {
 }
 
 func (l Link) QueryString() string {
-	if l.Method != "GET" {
+	if l.Method != methodGet {
 		return ""
 	}
 	if l.Schema == nil {
@@ -95,7 +106,7 @@ func (l Link) QueryString() string {
 }
 
 func (l Link) IsContentTypeMultipart() bool {
-	return l.EncType == "multipart/form-data"
+	return l.EncType == contentTypeMultipart
 }
 
 func (l Link) RequestContentType() string {
@@ -171,7 +182,7 @@ func (l Link) ResponseBody() string {
 
 func (l Link) ResponseStatus() int {
 	switch {
-	case l.Method == "POST":
+	case l.Method == methodPost:
 		return 201
 	case !l.HasResponseBody():
 		return 204
@@ -182,7 +193,7 @@ func (l Link) ResponseStatus() int {
 
 func (l Link) ResponseReasonPhrase() string {
 	switch {
-	case l.Method == "POST":
+	case l.Method == methodPost:
 		return "Created"
 	case !l.HasResponseBody():
 		return "No Content"

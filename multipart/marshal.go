@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	Boundary = "---BoundaryX"
+	Boundary = "example_boundary"
 	part     = `--{{.boundary}}
-Content-Disposition: form-data; name="[{{.name}}]"
+Content-Disposition: form-data; name="{{.name}}"
 
 {{.content}}
 `

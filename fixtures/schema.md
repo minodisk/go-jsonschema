@@ -1,60 +1,60 @@
 # Example API
 A schema for a small example API.
 
-* [Album](#album)
- * [POST /albums](#post-albums)
- * [GET /albums](#get-albums)
- * [GET /albums/:id](#get-albumsid)
- * [PATCH /albums/:id](#patch-albumsid)
- * [DELETE /albums/:id](#delete-albumsid)
- * [POST /albums/:id/files](#post-albumsidfiles)
-* [User](#user)
- * [POST /users/:id/icons](#post-usersidicons)
+- [Album](#album)
+  - [POST /albums](#post-albums)
+  - [GET /albums](#get-albums)
+  - [GET /albums/:id](#get-albumsid)
+  - [PATCH /albums/:id](#patch-albumsid)
+  - [DELETE /albums/:id](#delete-albumsid)
+  - [POST /albums/:id/files](#post-albumsidfiles)
+- [User](#user)
+  - [POST /users/:id/icons](#post-usersidicons)
 
 ## Album
 
 ### Properties
 
-* created_at
- * When this resource was deleted at
- * Type: date-time
-* deleted_at
- * When this resource was deleted at
- * Type: date-time, null
-* filename
- * unique name of album
- * Example: `"example"`
- * Type: string
- * Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
-* id
- * Example: `"exampleuuid0123456789"`
- * Type: string
- * Format: uuid
- * ReadOnly: true
-* liked_user_ids
- * Type: array
-* name
- * Album name
- * Example: `"my album"`
- * Type: string
-* owner
- * Type: 
-* private
- * true if this resource is private use
- * Example: `false`
- * Type: boolean
-* updated_at
- * When this resource was deleted at
- * Type: date-time
+- created_at
+  - When this resource was deleted at
+  - Type: date-time
+- deleted_at
+  - When this resource was deleted at
+  - Type: date-time, null
+- filename
+  - unique name of album
+  - Example: `"example"`
+  - Type: string
+  - Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+- id
+  - Example: `"exampleuuid0123456789"`
+  - Type: string
+  - Format: uuid
+  - ReadOnly: true
+- liked_user_ids
+  - Type: array
+- name
+  - Album name
+  - Example: `"my album"`
+  - Type: string
+- owner
+  - Type: 
+- private
+  - true if this resource is private use
+  - Example: `false`
+  - Type: boolean
+- updated_at
+  - When this resource was deleted at
+  - Type: date-time
 
 ### POST /albums
 
 Create a new album.
 
-* name
- * Album name
- * Example: `"my album"`
- * Type: string
+- name
+  - Album name
+  - Example: `"my album"`
+  - Type: string
 
 ```http
 POST  HTTP/1.1
@@ -149,10 +149,10 @@ Content-Type: application/json
 
 Update an existing album.
 
-* name
- * Album name
- * Example: `"my album"`
- * Type: string
+- name
+  - Album name
+  - Example: `"my album"`
+  - Type: string
 
 ```http
 PATCH  HTTP/1.1
@@ -201,22 +201,22 @@ HTTP/1.1 204 No Content
 
 Upload an attachment file for an album
 
-* file
- * an attachment of album
- * Example: `"... contents of file ..."`
- * Type: string
+- file
+  - an attachment of album
+  - Example: `"... contents of file ..."`
+  - Type: string
 
 ```http
 POST  HTTP/1.1
-Content-Type: multipart/form-data; boundary=---BoundaryX
+Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
------BoundaryX
-Content-Disposition: form-data; name="[file]"
+--example_boundary
+Content-Disposition: form-data; name="file"
 
 ... contents of file ...
 
------BoundaryX--
+--example_boundary--
 ```
 
 ```http
@@ -242,37 +242,37 @@ Content-Type: application/json
 
 ### Properties
 
-* email
- * Example: `"gopher@example.com"`
- * Type: string
- * Format: email
-* id
- * Example: `512446121.000000`
- * Type: integer
- * ReadOnly: true
-* name
- * Example: `"Gopher"`
- * Type: string
+- email
+  - Example: `"gopher@example.com"`
+  - Type: string
+  - Format: email
+- id
+  - Example: `512446121.000000`
+  - Type: integer
+  - ReadOnly: true
+- name
+  - Example: `"Gopher"`
+  - Type: string
 
 ### POST /users/:id/icons
 
 Upload an icon file for user
 
-* icon
- * Example: `"http://example.com/icon.png"`
- * Type: string
+- icon
+  - Example: `"http://example.com/icon.png"`
+  - Type: string
 
 ```http
 POST  HTTP/1.1
-Content-Type: multipart/form-data; boundary=---BoundaryX
+Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
------BoundaryX
-Content-Disposition: form-data; name="[icon]"
+--example_boundary
+Content-Disposition: form-data; name="icon"
 
 http://example.com/icon.png
 
------BoundaryX--
+--example_boundary--
 ```
 
 ```http
