@@ -53,7 +53,7 @@ type Schema struct {
 	Description string
 	Default     interface{}
 	// 7. Semantic validation with "format"
-	Format string // "date-time" | "email" | "hostname" | "ipv4" | "ipv6" | "uri"
+	Format string
 
 	// JSON Hyper-Schema: Hypertext definitions for JSON Schema
 	// json-schema-hypermedia
