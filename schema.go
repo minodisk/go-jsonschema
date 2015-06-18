@@ -49,7 +49,7 @@ type Schema struct {
 	Not         *Schema
 	Definitions Definitions
 	// 6. Metadata keywords
-	Title       Title
+	Title       string
 	Description string
 	Default     interface{}
 	// 7. Semantic validation with "format"
@@ -175,17 +175,17 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
-	s.Example.UpdateType(s.Type)
+	// s.Example.UpdateType(s.Type)
 
 	return nil
 }
 
-func (s Schema) Validate(o interface{}) (err error) {
-	if err = s.Type.Validate(o); err != nil {
-		return err
-	}
-	return nil
-}
+// func (s Schema) Validate(o interface{}) (err error) {
+// 	if err = s.Type.Validate(o); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
@@ -196,12 +196,12 @@ func (s Schema) ExampleData() (interface{}, error) {
 	default:
 		return "", nil
 	case s.Example != nil:
-		return s.Example.Value(), nil
-	case s.Type.Include("array"):
+		return s.Example, nil
+	case s.Type.Is(TypeArray):
 		return s.Items.ExampleData()
-	case s.Type.Include("object"):
+	case s.Type.Is(TypeObject):
 		return s.Properties.ExampleData()
-	case s.Type.Include("null"):
+	case s.Type.Is(TypeNull):
 		return nil, nil
 	}
 }

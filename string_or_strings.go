@@ -3,7 +3,6 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 )
 
 type StringOrStrings struct {
@@ -37,24 +36,24 @@ func (s *StringOrStrings) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
-func (s *StringOrStrings) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
-	var str string
-	var strs []string
-	if err = unmarshal(&str); err == nil {
-		s.isString = true
-		s.string = str
-		return nil
-	}
-	if err = unmarshal(&strs); err == nil {
-		s.strings = strs
-		return nil
-	}
-	return fmt.Errorf("unexpected type")
-}
-
-func (t Type) String() string {
-	if t.isString {
-		return t.string
-	}
-	return strings.Join(t.strings, ", ")
-}
+// func (s *StringOrStrings) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+// 	var str string
+// 	var strs []string
+// 	if err = unmarshal(&str); err == nil {
+// 		s.isString = true
+// 		s.string = str
+// 		return nil
+// 	}
+// 	if err = unmarshal(&strs); err == nil {
+// 		s.strings = strs
+// 		return nil
+// 	}
+// 	return fmt.Errorf("unexpected type")
+// }
+//
+// func (t Type) String() string {
+// 	if t.isString {
+// 		return t.string
+// 	}
+// 	return strings.Join(t.strings, ", ")
+// }

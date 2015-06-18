@@ -1,13 +1,13 @@
 package jsonschema
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
 	"regexp"
 	"strings"
-
-	"github.com/minodisk/jsonschema/multipart"
+	"text/template"
 )
 
 const (
@@ -22,9 +22,17 @@ const (
 	methodPut    = "PUT"
 	methodPatch  = "PATCH"
 	methodDelete = "DELETE"
+
+	Boundary = "example_boundary"
+	part     = `--{{.boundary}}
+Content-Disposition: form-data; name="{{.name}}"
+
+{{.content}}
+`
 )
 
 var (
+	partTmpl      = template.Must(template.New("part").Parse(part))
 	rBraceBracket = regexp.MustCompile(`{\((.*)\)}`)
 )
 
@@ -32,7 +40,7 @@ type Link struct {
 	// http://json-schema.org/latest/json-schema-hypermedia.html
 	HRef         *HRef
 	Rel          string
-	Title        Title
+	Title        string
 	TargetSchema *Schema
 	MediaType    string
 	Method       string
@@ -111,7 +119,7 @@ func (l Link) IsContentTypeMultipart() bool {
 
 func (l Link) RequestContentType() string {
 	if l.IsContentTypeMultipart() {
-		return fmt.Sprintf("%s; boundary=%s", l.EncType, multipart.Boundary)
+		return fmt.Sprintf("%s; boundary=%s", l.EncType, Boundary)
 	}
 	return l.EncType
 }
@@ -131,9 +139,9 @@ func (l Link) RequestBody() string {
 	}
 
 	if l.IsContentTypeMultipart() {
-		s, err := multipart.Marshal(d)
+		s, err := multipartString(d)
 		if err != nil {
-			log.Println("fail to marshal as form data: %s", err)
+			log.Printf("fail to marshal as form data: %s", err)
 			return ""
 		}
 		return s
@@ -141,40 +149,7 @@ func (l Link) RequestBody() string {
 
 	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
 	if err != nil {
-		log.Println("fail to marshal as JSON: %s", err)
-		return ""
-	}
-	return string(b)
-}
-
-func (l Link) HasResponseBody() bool {
-	return l.MediaType != "null"
-}
-
-func (l Link) ResponseBody() string {
-	if !l.HasResponseBody() {
-		return ""
-	}
-
-	var d interface{}
-	var err error
-	if l.TargetSchema != nil {
-		d, err = l.TargetSchema.ExampleData()
-	} else {
-		d, err = l.parent.ExampleData()
-	}
-	if err != nil {
-		log.Println("fail to create example data: %s", err)
-		return ""
-	}
-
-	if l.Rel == "instances" {
-		d = []interface{}{d}
-	}
-
-	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
-	if err != nil {
-		log.Println("fail to marshal as JSON: %s", err)
+		log.Printf("fail to marshal as JSON: %s", err)
 		return ""
 	}
 	return string(b)
@@ -204,4 +179,86 @@ func (l Link) ResponseReasonPhrase() string {
 
 func (l Link) ResponseContentType() string {
 	return l.MediaType
+}
+
+func (l Link) HasResponseBody() bool {
+	return l.MediaType != "null"
+}
+
+func (l Link) ResponseBody() string {
+	if !l.HasResponseBody() {
+		return ""
+	}
+
+	var d interface{}
+	var err error
+	if l.TargetSchema != nil {
+		d, err = l.TargetSchema.ExampleData()
+	} else {
+		d, err = l.parent.ExampleData()
+	}
+	if err != nil {
+		log.Printf("fail to create example data: %s", err)
+		return ""
+	}
+
+	if l.Rel == "instances" {
+		d = []interface{}{d}
+	}
+
+	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
+	if err != nil {
+		log.Printf("fail to marshal as JSON: %s", err)
+		return ""
+	}
+	return string(b)
+}
+
+func multipartString(data interface{}) (string, error) {
+	var str string
+	switch d := data.(type) {
+	default:
+		return "", fmt.Errorf("unsuported data type: %+v", d)
+	case map[string]interface{}:
+		for name, content := range d {
+			switch c := content.(type) {
+			default:
+				return "", fmt.Errorf("unsupported content type: %+v", c)
+			case *Example:
+				b, err := marshalPart(map[string]interface{}{
+					"boundary": Boundary,
+					"name":     name,
+					"content":  content,
+				})
+				if err != nil {
+					return "", err
+				}
+				str = string(b)
+			case []interface{}:
+				n := fmt.Sprintf("%s[]", name)
+				results := []string{}
+				for _, v := range c {
+					b, err := marshalPart(map[string]interface{}{
+						"boundary": Boundary,
+						"name":     n,
+						"content":  v,
+					})
+					if err != nil {
+						return "", err
+					}
+					results = append(results, string(b))
+				}
+				str = strings.Join(results, "")
+			}
+		}
+		return fmt.Sprintf("%s\n--%s--", str, Boundary), nil
+	}
+}
+
+func marshalPart(data interface{}) ([]byte, error) {
+	var buf bytes.Buffer
+	if err := partTmpl.Execute(&buf, data); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }

@@ -9,7 +9,7 @@ type Properties struct {
 func (p *Properties) QueryString() string {
 	v := url.Values{}
 	for name, schema := range p.Schemas {
-		v.Set(name, schema.Example.String())
+		v.Set(name, schema.Example.RawString())
 	}
 	return v.Encode()
 }
@@ -19,7 +19,7 @@ func (p *Properties) ExampleData() (map[string]interface{}, error) {
 	for name, schema := range p.Schemas {
 		if schema != nil {
 			if schema.Example != nil {
-				m[name] = schema.Example.Value()
+				m[name] = schema.Example
 			} else {
 				v, err := schema.ExampleData()
 				if err != nil {

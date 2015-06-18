@@ -1,7 +1,7 @@
 # {{.Title}}
 {{.Description}}
 
-{{range $name, $schema := .Properties.Schemas}}- [{{$schema.Title.DocString}}]({{urlHash $schema.Title.DocString}})
+{{range $name, $schema := .Properties.Schemas}}- [{{$schema.Title}}]({{urlHash $schema.Title}})
 {{range $i, $link := $schema.Links}}  - [{{$link.MethodEndpoint}}]({{urlHash $link.MethodEndpoint}})
 {{end}}{{end}}
 {{range $name, $schema := .Properties.Schemas}}## {{$schema.Title}}
@@ -12,8 +12,8 @@
 
 {{range $name, $property := $schema.Properties.Schemas}}- {{$name}}
 {{if $property.Description}}  - {{$property.Description}}
-{{end}}{{if $property.Example}}  - Example: `{{$property.Example.TypedString}}`
-{{end}}{{if $property.Type}}  - Type: {{$property.Type.String}}
+{{end}}{{if $property.Example}}  - Example: `{{$property.Example}}`
+{{end}}{{if $property.Type}}  - Type: {{$property.Type}}
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`
 {{end}}{{if $property.Format}}  - Format: {{$property.Format}}
 {{end}}{{if $property.ReadOnly}}  - ReadOnly: {{$property.ReadOnly}}
@@ -24,8 +24,8 @@
 
 {{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}- {{$name}}
 {{if $property.Description}}  - {{$property.Description}}
-{{end}}{{if $property.Example}}  - Example: `{{$property.Example.TypedString}}`
-{{end}}{{if $property.Type}}  - Type: {{$property.Type.String}}
+{{end}}{{if $property.Example}}  - Example: `{{$property.Example}}`
+{{end}}{{if $property.Type}}  - Type: {{$property.Type}}
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`
 {{end}}{{end}}{{end}}
 ```http

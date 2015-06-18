@@ -76,7 +76,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    5.12446121e+08
+    512446121
   ],
   "name": "my album",
   "owner": "",
@@ -106,7 +106,7 @@ Content-Type: application/json
     "filename": "example",
     "id": "exampleuuid0123456789",
     "liked_user_ids": [
-      5.12446121e+08
+      512446121
     ],
     "name": "my album",
     "owner": "",
@@ -136,7 +136,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    5.12446121e+08
+    512446121
   ],
   "name": "my album",
   "owner": "",
@@ -174,7 +174,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    5.12446121e+08
+    512446121
   ],
   "name": "my album",
   "owner": "",
@@ -214,7 +214,7 @@ Host: api.example.com
 --example_boundary
 Content-Disposition: form-data; name="file"
 
-... contents of file ...
+"... contents of file ..."
 
 --example_boundary--
 ```
@@ -229,7 +229,7 @@ Content-Type: application/json
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
-    5.12446121e+08
+    512446121
   ],
   "name": "my album",
   "owner": "",
@@ -247,7 +247,7 @@ Content-Type: application/json
   - Type: string
   - Format: email
 - id
-  - Example: `512446121.000000`
+  - Example: `512446121`
   - Type: integer
   - ReadOnly: true
 - name
@@ -270,7 +270,7 @@ Host: api.example.com
 --example_boundary
 Content-Disposition: form-data; name="icon"
 
-http://example.com/icon.png
+"http://example.com/icon.png"
 
 --example_boundary--
 ```
@@ -281,7 +281,7 @@ Content-Type: application/json
 
 {
   "email": "gopher@example.com",
-  "id": 5.12446121e+08,
+  "id": 512446121,
   "name": "Gopher"
 }
 ```

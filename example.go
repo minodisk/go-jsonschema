@@ -3,66 +3,48 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 type Example struct {
-	value interface{}
-
-	isBoolean bool
-	boolean   bool
-
-	isInteger bool
-	integer   int64
-
-	isNumber bool
-	number   float64
-
-	isString bool
-	string   string
-
-	isNull bool
+	raw interface{}
 }
 
 func (e *Example) UnmarshalJSON(data []byte) error {
-	if err := json.Unmarshal(data, &e.value); err != nil {
+	if err := json.Unmarshal(data, &e.raw); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (e *Example) UpdateType(t Type) {
-}
-
-func (e Example) Value() interface{} {
-	return e.value
+func (e *Example) MarshalJSON() ([]byte, error) {
+	return []byte(e.String()), nil
 }
 
 func (e Example) String() string {
-	switch v := e.value.(type) {
+	if r, ok := e.raw.(string); ok {
+		return fmt.Sprintf("\"%s\"", r)
+	}
+	return e.RawString()
+}
+
+func (e Example) RawString() string {
+	switch v := e.raw.(type) {
 	default:
 		return ""
-	case nil:
-		return "null"
+	case []interface{}, map[string]interface{}:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return ""
+		}
+		return string(b)
 	case string:
 		return v
 	case float64:
-		return fmt.Sprintf("%f", v)
+		return strconv.FormatFloat(v, 'f', -1, 64)
 	case bool:
-		return fmt.Sprintf("%t", v)
-	}
-}
-
-func (e Example) TypedString() string {
-	switch v := e.value.(type) {
-	default:
-		return ""
+		return strconv.FormatBool(v)
 	case nil:
 		return "null"
-	case string:
-		return fmt.Sprintf("\"%s\"", v)
-	case float64:
-		return fmt.Sprintf("%f", v)
-	case bool:
-		return fmt.Sprintf("%t", v)
 	}
 }
