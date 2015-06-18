@@ -17,10 +17,12 @@ A schema for a small example API.
 
 - created_at
   - When this resource was deleted at
-  - Type: date-time
+  - Type: string
+  - Format: date-time
 - deleted_at
   - When this resource was deleted at
-  - Type: date-time, null
+  - Type: string, null
+  - Format: date-time
 - filename
   - unique name of album
   - Example: `"example"`
@@ -38,14 +40,15 @@ A schema for a small example API.
   - Example: `"my album"`
   - Type: string
 - owner
-  - Type: 
+  - Type: object
 - private
   - true if this resource is private use
   - Example: `false`
   - Type: boolean
 - updated_at
   - When this resource was deleted at
-  - Type: date-time
+  - Type: string
+  - Format: date-time
 
 ### POST /albums
 
@@ -79,7 +82,11 @@ Content-Type: application/json
     512446121
   ],
   "name": "my album",
-  "owner": "",
+  "owner": {
+    "email": "gopher@example.com",
+    "id": 512446121,
+    "name": "Gopher"
+  },
   "private": false,
   "updated_at": ""
 }
@@ -109,7 +116,11 @@ Content-Type: application/json
       512446121
     ],
     "name": "my album",
-    "owner": "",
+    "owner": {
+      "email": "gopher@example.com",
+      "id": 512446121,
+      "name": "Gopher"
+    },
     "private": false,
     "updated_at": ""
   }
@@ -139,7 +150,11 @@ Content-Type: application/json
     512446121
   ],
   "name": "my album",
-  "owner": "",
+  "owner": {
+    "email": "gopher@example.com",
+    "id": 512446121,
+    "name": "Gopher"
+  },
   "private": false,
   "updated_at": ""
 }
@@ -177,7 +192,11 @@ Content-Type: application/json
     512446121
   ],
   "name": "my album",
-  "owner": "",
+  "owner": {
+    "email": "gopher@example.com",
+    "id": 512446121,
+    "name": "Gopher"
+  },
   "private": false,
   "updated_at": ""
 }
@@ -232,7 +251,11 @@ Content-Type: application/json
     512446121
   ],
   "name": "my album",
-  "owner": "",
+  "owner": {
+    "email": "gopher@example.com",
+    "id": 512446121,
+    "name": "Gopher"
+  },
   "private": false,
   "updated_at": ""
 }

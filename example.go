@@ -10,6 +10,19 @@ type Example struct {
 	raw interface{}
 }
 
+func NewDefaultExample(t *Type) (*Example, error) {
+	if t.Is(TypeNull) {
+		return &Example{nil}, nil
+	} else if t.Is(TypeBoolean) {
+		return &Example{false}, nil
+	} else if t.Is(TypeNumber) || t.Is(TypeInteger) {
+		return &Example{0}, nil
+	} else if t.Is(TypeString) {
+		return &Example{""}, nil
+	}
+	return nil, fmt.Errorf("no default example: %s", t.String())
+}
+
 func (e *Example) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &e.raw); err != nil {
 		return err

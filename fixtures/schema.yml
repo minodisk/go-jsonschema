@@ -54,17 +54,20 @@ definitions:
         format: uuid
         readOnly: true
       created_at:
-        type: date-time
+        type: string
+        format: date-time
         description: When this resource was deleted at
         example:
       updated_at:
-        type: date-time
+        type: string
+        format: date-time
         description: When this resource was deleted at
         example:
       deleted_at:
         type:
-          - date-time
+          - string
           - "null"
+        format: date-time
         description: When this resource was deleted at
         example: null
       name:

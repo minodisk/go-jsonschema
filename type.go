@@ -22,9 +22,9 @@ type Type struct {
 	types []PrimitiveType
 }
 
-func (t *Type) UnmarshalJSON(data []byte) (err error) {
+func (t *Type) UnmarshalJSON(data []byte) error {
 	var obj interface{}
-	if err = json.Unmarshal(data, &obj); err != nil {
+	if err := json.Unmarshal(data, &obj); err != nil {
 		return err
 	}
 	switch o := obj.(type) {

@@ -42,7 +42,7 @@ type Schema struct {
 	Dependencies         SchemaOrStrings   // Schema or []string
 	// 5.5. Validation keywords for any instance type
 	Enum        []interface{}
-	Type        Type    // string or []string
+	Type        *Type   // string or []string
 	AllOf       Schemas //[]*Schema
 	AnyOf       Schemas //[]*Schema
 	OneOf       Schemas //[]*Schema
@@ -130,7 +130,7 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}
 		*s = *schema
-		s.root = root
+		s.Resolve(schemas, root)
 		return nil
 	}
 
@@ -175,33 +175,28 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
-	// s.Example.UpdateType(s.Type)
-
 	return nil
 }
-
-// func (s Schema) Validate(o interface{}) (err error) {
-// 	if err = s.Type.Validate(o); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
 
 func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
 }
 
 func (s Schema) ExampleData() (interface{}, error) {
-	switch {
-	default:
-		return "", nil
-	case s.Example != nil:
-		return s.Example, nil
-	case s.Type.Is(TypeArray):
-		return s.Items.ExampleData()
-	case s.Type.Is(TypeObject):
-		return s.Properties.ExampleData()
-	case s.Type.Is(TypeNull):
-		return nil, nil
+	if s.Type == nil {
+		return nil, fmt.Errorf("can't create example with no type: %+v", s)
 	}
+	if s.Type.Is(TypeArray) {
+		return s.Items.ExampleData()
+	}
+	if s.Type.Is(TypeObject) {
+		return s.Properties.ExampleData()
+	}
+	if s.Example != nil {
+		return s.Example, nil
+	}
+	if s.Example == nil {
+		return NewDefaultExample(s.Type)
+	}
+	return "", nil
 }
