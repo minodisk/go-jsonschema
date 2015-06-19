@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/codegangsta/cli"
-	"github.com/minodisk/jsonschema/cli/doc"
+	"github.com/minodisk/go-jsonschema/cli/doc"
 )
 
 const (

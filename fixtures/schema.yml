@@ -170,5 +170,5 @@ properties:
   album:
     $ref: "#/definitions/album"
 links:
-  - href: https://api.example.com
-    rel: self
+- href: https://api.example.com
+  rel: self

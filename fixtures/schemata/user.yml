@@ -1,0 +1,39 @@
+---
+$schema: http://json-schema.org/draft-04/hyper-schema
+title: User
+type: object
+definitions:
+  id:
+    type: integer
+    example: 512446121
+    readOnly: true
+  name:
+    type: string
+    example: Gopher
+  email:
+    type: string
+    format: email
+    example: gopher@example.com
+  icon:
+    type: string
+    format: uri
+    example: http://example.com/icon.png
+properties:
+  id:
+    $ref: "#/definitions/user/definitions/id"
+  name:
+    $ref: "#/definitions/user/definitions/name"
+  email:
+    $ref: "#/definitions/user/definitions/email"
+links:
+  - title: Create
+    description: Upload an icon file for user
+    method: POST
+    href: "/users/{(#/definitions/album/definitions/id)}/icons"
+    rel: create
+    encType: multipart/form-data
+    schema:
+      type: object
+      properties:
+        icon:
+          $ref: "#/definitions/user/definitions/icon"

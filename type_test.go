@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/minodisk/jsonschema"
+	"github.com/minodisk/go-jsonschema"
 )
 
 func TestTypeInteger(t *testing.T) {

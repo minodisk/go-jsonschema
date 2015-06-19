@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/minodisk/jsonschema/format"
+	"github.com/minodisk/go-jsonschema/format"
 )
 
 type Schema struct {

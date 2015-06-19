@@ -13,10 +13,10 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/minodisk/go-jsonschema"
+
 	"gopkg.in/fsnotify.v1"
 	"gopkg.in/yaml.v2"
-
-	"github.com/minodisk/jsonschema"
 )
 
 type Encoding string

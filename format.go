@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/minodisk/jsonschema/format"
+	"github.com/minodisk/go-jsonschema/format"
 )
 
 type Format struct {
