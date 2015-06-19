@@ -16,7 +16,7 @@ func NewDefaultExample(t *Type) (*Example, error) {
 	} else if t.Is(TypeBoolean) {
 		return &Example{false}, nil
 	} else if t.Is(TypeNumber) || t.Is(TypeInteger) {
-		return &Example{0}, nil
+		return &Example{0.0}, nil
 	} else if t.Is(TypeString) {
 		return &Example{""}, nil
 	}
@@ -30,7 +30,7 @@ func (e *Example) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (e Example) MarshalJSON() ([]byte, error) {
+func (e *Example) MarshalJSON() ([]byte, error) {
 	return []byte(e.String()), nil
 }
 
@@ -63,6 +63,10 @@ func (e Example) RawString() string {
 		return string(b)
 	case string:
 		return v
+	// case int:
+	// 	i := int64(v)
+	// 	log.Println("->", i)
+	// 	return strconv.FormatInt(i, 10)
 	case float64:
 		return strconv.FormatFloat(v, 'f', -1, 64)
 	case bool:
