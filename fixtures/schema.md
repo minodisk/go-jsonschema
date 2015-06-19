@@ -17,10 +17,12 @@ A schema for a small example API.
 
 - created_at
   - When this resource was deleted at
+  - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
 - deleted_at
   - When this resource was deleted at
+  - Example: `"2006-01-02 15:04:06"`
   - Type: string, null
   - Format: date-time
 - filename
@@ -47,6 +49,7 @@ A schema for a small example API.
   - Type: boolean
 - updated_at
   - When this resource was deleted at
+  - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
 
@@ -74,8 +77,8 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "",
-  "deleted_at": null,
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
@@ -88,7 +91,7 @@ Content-Type: application/json
     "name": "Gopher"
   },
   "private": false,
-  "updated_at": ""
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -108,8 +111,8 @@ Content-Type: application/json
 
 [
   {
-    "created_at": "",
-    "deleted_at": null,
+    "created_at": "2006-01-02 15:04:06",
+    "deleted_at": "2006-01-02 15:04:06",
     "filename": "example",
     "id": "exampleuuid0123456789",
     "liked_user_ids": [
@@ -122,7 +125,7 @@ Content-Type: application/json
       "name": "Gopher"
     },
     "private": false,
-    "updated_at": ""
+    "updated_at": "2006-01-02 15:04:06"
   }
 ]
 ```
@@ -142,8 +145,8 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "",
-  "deleted_at": null,
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
@@ -156,7 +159,7 @@ Content-Type: application/json
     "name": "Gopher"
   },
   "private": false,
-  "updated_at": ""
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -184,8 +187,8 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "",
-  "deleted_at": null,
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
@@ -198,7 +201,7 @@ Content-Type: application/json
     "name": "Gopher"
   },
   "private": false,
-  "updated_at": ""
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -243,8 +246,8 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "",
-  "deleted_at": null,
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
   "filename": "example",
   "id": "exampleuuid0123456789",
   "liked_user_ids": [
@@ -257,7 +260,7 @@ Content-Type: application/json
     "name": "Gopher"
   },
   "private": false,
-  "updated_at": ""
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 

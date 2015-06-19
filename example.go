@@ -7,7 +7,7 @@ import (
 )
 
 type Example struct {
-	raw interface{}
+	value interface{}
 }
 
 func NewDefaultExample(t *Type) (*Example, error) {
@@ -24,25 +24,35 @@ func NewDefaultExample(t *Type) (*Example, error) {
 }
 
 func (e *Example) UnmarshalJSON(data []byte) error {
-	if err := json.Unmarshal(data, &e.raw); err != nil {
+	if err := json.Unmarshal(data, &e.value); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (e *Example) MarshalJSON() ([]byte, error) {
+func (e Example) MarshalJSON() ([]byte, error) {
 	return []byte(e.String()), nil
 }
 
+func (e *Example) Initialize(def interface{}) {
+	if !e.IsDefined() {
+		e.value = def
+	}
+}
+
+func (e *Example) IsDefined() bool {
+	return e.value != nil
+}
+
 func (e Example) String() string {
-	if r, ok := e.raw.(string); ok {
+	if r, ok := e.value.(string); ok {
 		return fmt.Sprintf("\"%s\"", r)
 	}
 	return e.RawString()
 }
 
 func (e Example) RawString() string {
-	switch v := e.raw.(type) {
+	switch v := e.value.(type) {
 	default:
 		return ""
 	case []interface{}, map[string]interface{}:

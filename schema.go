@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+
+	"github.com/minodisk/jsonschema/format"
 )
 
 type Schema struct {
@@ -53,7 +55,7 @@ type Schema struct {
 	Description string
 	Default     interface{}
 	// 7. Semantic validation with "format"
-	Format string
+	Format *Format
 
 	// JSON Hyper-Schema: Hypertext definitions for JSON Schema
 	// json-schema-hypermedia
@@ -71,7 +73,8 @@ type Schema struct {
 	Schema string `json:"$schema"`
 	Ref    string `json:"$ref"`
 
-	root *Schema
+	root        *Schema
+	definitions *format.Definitions
 }
 
 func New(b []byte) (*Schema, error) {
@@ -87,6 +90,7 @@ func New(b []byte) (*Schema, error) {
 
 func (s *Schema) initialize() (err error) {
 	s.root = s
+	s.definitions = format.NewDefinitions()
 	schemas := make(map[string]*Schema)
 	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
@@ -175,6 +179,30 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
+	if s.Example != nil {
+		return nil
+	}
+	if s.Format != nil {
+		if err := s.Format.Resolve(schemas, root); err != nil {
+			return err
+		}
+		e, err := s.Format.ExampleData()
+		if err != nil {
+			return err
+		}
+		s.Example = e
+		return nil
+	}
+
+	if s.Type != nil {
+		e, err := NewDefaultExample(s.Type)
+		if err != nil {
+			return nil
+		}
+		s.Example = e
+		return nil
+	}
+
 	return nil
 }
 
@@ -183,20 +211,28 @@ func (s Schema) QueryString() string {
 }
 
 func (s Schema) ExampleData() (interface{}, error) {
-	if s.Type == nil {
-		return nil, fmt.Errorf("can't create example with no type: %+v", s)
+	// if s.Example != nil {
+	// 	return s.Example, nil
+	// }
+
+	if s.Type != nil {
+		if s.Type.Is(TypeArray) {
+			return s.Items.ExampleData()
+		}
+		if s.Type.Is(TypeObject) {
+			return s.Properties.ExampleData()
+		}
 	}
-	if s.Type.Is(TypeArray) {
-		return s.Items.ExampleData()
-	}
-	if s.Type.Is(TypeObject) {
-		return s.Properties.ExampleData()
-	}
-	if s.Example != nil {
-		return s.Example, nil
-	}
-	if s.Example == nil {
-		return NewDefaultExample(s.Type)
-	}
-	return "", nil
+
+	// if s.Format != nil {
+	// 	return s.Format.ExampleData()
+	// }
+
+	// if s.Type != nil {
+	// 	return NewDefaultExample(s.Type)
+	// }
+	// log.Printf("%T: %+v", s.Example, s.Example)
+	return s.Example, nil
+
+	// return nil, fmt.Errorf("can't create example with no type: %+v", s)
 }

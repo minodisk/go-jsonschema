@@ -18,15 +18,15 @@ func (p *Properties) ExampleData() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	for name, schema := range p.Schemas {
 		if schema != nil {
-			if schema.Example != nil {
-				m[name] = schema.Example
-			} else {
-				v, err := schema.ExampleData()
-				if err != nil {
-					return nil, err
-				}
-				m[name] = v
+			// if schema.Example != nil {
+			m[name] = schema.Example
+			// } else {
+			v, err := schema.ExampleData()
+			if err != nil {
+				return nil, err
 			}
+			m[name] = v
+			// }
 		}
 	}
 	return m, nil

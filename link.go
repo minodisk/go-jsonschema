@@ -141,7 +141,7 @@ func (l Link) RequestBody() string {
 	if l.IsContentTypeMultipart() {
 		s, err := multipartString(d)
 		if err != nil {
-			log.Printf("fail to marshal as form data: %s", err)
+			log.Printf("can't create a response body as multipart: %s", err)
 			return ""
 		}
 		return s
@@ -149,7 +149,7 @@ func (l Link) RequestBody() string {
 
 	b, err := json.MarshalIndent(d, examplePrefix, exampleIndent)
 	if err != nil {
-		log.Printf("fail to marshal as JSON: %s", err)
+		log.Printf("can't create a response body as JSON: %s", err)
 		return ""
 	}
 	return string(b)
@@ -218,12 +218,12 @@ func multipartString(data interface{}) (string, error) {
 	var str string
 	switch d := data.(type) {
 	default:
-		return "", fmt.Errorf("unsuported data type: %+v", d)
+		return "", fmt.Errorf("unsupported data type: %T", d)
 	case map[string]interface{}:
 		for name, content := range d {
 			switch c := content.(type) {
 			default:
-				return "", fmt.Errorf("unsupported content type: %+v", c)
+				return "", fmt.Errorf("unsupported content type: %T", c)
 			case *Example:
 				b, err := marshalPart(map[string]interface{}{
 					"boundary": Boundary,
