@@ -7,8 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/aryann/difflib"
 	"github.com/minodisk/go-jsonschema/cli/combine"
 )
@@ -24,21 +22,18 @@ func TestCombine(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	b, err := ioutil.ReadFile("../../fixtures/schema.yml")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var tmp interface{}
-	if err := yaml.Unmarshal(b, &tmp); err != nil {
-		t.Fatal(err)
-	}
-	e, err := yaml.Marshal(tmp)
+	e, err := ioutil.ReadFile("../../fixtures/schema.yml")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	diff := difflib.Diff(strings.Split(string(e), "\n"), strings.Split(string(a), "\n"))
-	for _, d := range diff {
-		fmt.Println(d)
+	expected := string(e)
+	actual := string(a)
+	if expected != actual {
+		diff := difflib.Diff(strings.Split(expected, "\n"), strings.Split(actual, "\n"))
+		for _, d := range diff {
+			fmt.Println(d)
+		}
+		t.Fail()
 	}
 }

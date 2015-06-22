@@ -14,8 +14,8 @@ const (
 )
 
 type Data struct {
-	Schema      string      `json:"$schema"`
-	Type        interface{} `json:"type"`
+	Schema      string `yaml:"$schema"`
+	Type        interface{}
 	Title       string
 	Description string
 	Links       []map[string]string
