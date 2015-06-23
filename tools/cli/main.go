@@ -62,7 +62,7 @@ func main() {
 				if err := doc.Generate(doc.Options{
 					Template: filepath.Clean(c.String("template")),
 					Engine:   doc.Engine(c.String("engine")),
-					Output:   filepath.Clean(c.String("output")),
+					Output:   c.String("output"),
 					Format:   c.String("format"),
 					IsWatch:  c.Bool("watch"),
 					Meta:     filepath.Clean(c.String("meta")),

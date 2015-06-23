@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -15,8 +14,7 @@ import (
 	"github.com/minodisk/go-jsonschema"
 	"github.com/minodisk/go-jsonschema/tools/combine"
 	"github.com/minodisk/go-jsonschema/tools/encoding"
-
-	"gopkg.in/fsnotify.v1"
+	"github.com/minodisk/go-jsonschema/tools/watcher"
 )
 
 type Engine string
@@ -47,61 +45,13 @@ func Generate(o Options) error {
 		return err
 	}
 	if o.IsWatch {
-		return watch(o)
-	}
-	return nil
-}
-
-func watch(o Options) error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-	defer watcher.Close()
-
-	done := make(chan bool)
-	filenames := []string{o.Input, o.Template}
-	dirs := make(map[string]bool)
-	for i, filename := range filenames {
-		filename = filepath.Clean(filename)
-		filenames[i] = filename
-		dir := filepath.Dir(filename)
-		dirs[dir] = true
-	}
-
-	go func() {
-		for {
-			select {
-			case event := <-watcher.Events:
-				if event.Op&fsnotify.Create == fsnotify.Create || event.Op&fsnotify.Write == fsnotify.Write {
-					if in(filenames, event.Name) {
-						log.Printf("[watcher] detect modified: %s", event.Name)
-						if err := generate(o); err != nil {
-							log.Printf("fail to generate: %s", err)
-						}
-					}
-				}
-			case err := <-watcher.Errors:
-				log.Printf("[watcher] error: %s", err)
+		return watcher.Watch([]string{o.Input, o.Template}, func(filename string) {
+			if err := generate(o); err != nil {
+				log.Printf("fail to generate: %s", err)
 			}
-		}
-	}()
-	for dir, _ := range dirs {
-		log.Printf("[watcher] watch dir: %s", dir)
-		watcher.Add(dir)
+		})
 	}
-
-	<-done
 	return nil
-}
-
-func in(arr []string, elem string) bool {
-	for _, e := range arr {
-		if e == elem {
-			return true
-		}
-	}
-	return false
 }
 
 func generate(o Options) error {
