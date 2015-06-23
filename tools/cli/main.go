@@ -79,8 +79,7 @@ func main() {
 			Flags: []cli.Flag{
 				meta,
 				cli.StringFlag{
-					Name: "output, o",
-					// Value: "schema.json",
+					Name:  "output, o",
 					Usage: "the path of the output file",
 				},
 				cli.StringFlag{
