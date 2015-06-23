@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"strings"
 
@@ -21,7 +20,6 @@ type Options struct {
 }
 
 func Run(o Options) (err error) {
-	log.Printf("%+v", o)
 	b, err := Combine(o.Input, o.Meta, o.Encoding)
 	if err != nil {
 		return err

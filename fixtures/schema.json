@@ -1,0 +1,246 @@
+{
+  "Schema": "",
+  "Type": "object",
+  "Title": "Example Schemata",
+  "Description": "Schemata for go-jsonschema.",
+  "Links": [
+    {
+      "href": "https://api.example.com",
+      "rel": "self"
+    }
+  ],
+  "Definitions": {
+    "album": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "definitions": {
+        "created_at": {
+          "description": "When this resource was deleted at",
+          "example": null,
+          "format": "date-time",
+          "type": "string"
+        },
+        "deleted_at": {
+          "description": "When this resource was deleted at",
+          "example": null,
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "file": {
+          "description": "an attachment of album",
+          "example": "... contents of file ...",
+          "readOnly": false,
+          "type": "string"
+        },
+        "filename": {
+          "description": "unique name of album",
+          "example": "example",
+          "pattern": "^[a-z][a-z0-9-]{3,50}$",
+          "readOnly": false,
+          "type": "string"
+        },
+        "id": {
+          "example": "exampleuuid0123456789",
+          "format": "uuid",
+          "readOnly": true,
+          "type": "string"
+        },
+        "liked_user_ids": {
+          "items": {
+            "$ref": "#/definitions/user/definitions/id"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Album name",
+          "example": "my album",
+          "type": "string"
+        },
+        "owner": {
+          "$ref": "#/definitions/user"
+        },
+        "private": {
+          "description": "true if this resource is private use",
+          "example": false,
+          "type": "boolean"
+        },
+        "updated_at": {
+          "description": "When this resource was deleted at",
+          "example": null,
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "description": "Create a new album.",
+          "href": "/albums",
+          "method": "POST",
+          "rel": "create",
+          "schema": {
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/album/definitions/name"
+              }
+            },
+            "type": [
+              "object"
+            ]
+          },
+          "title": "Create"
+        },
+        {
+          "description": "List existing albums.",
+          "href": "/albums",
+          "method": "GET",
+          "rel": "instances",
+          "title": "List"
+        },
+        {
+          "description": "Info for existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
+          "method": "GET",
+          "rel": "self",
+          "title": "Info"
+        },
+        {
+          "description": "Update an existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
+          "method": "PATCH",
+          "rel": "update",
+          "schema": {
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/album/definitions/name"
+              }
+            },
+            "type": [
+              "object"
+            ]
+          },
+          "title": "Update"
+        },
+        {
+          "description": "Delete an existing album.",
+          "href": "/albums/{(#/definitions/album/definitions/id)}",
+          "mediaType": "null",
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete"
+        },
+        {
+          "description": "Upload an attachment file for an album",
+          "encType": "multipart/form-data",
+          "href": "/albums/{(#/definitions/album/definitions/id)}/files",
+          "method": "POST",
+          "rel": "create",
+          "schema": {
+            "properties": {
+              "file": {
+                "$ref": "#/definitions/album/definitions/file"
+              }
+            },
+            "type": "object"
+          },
+          "title": "Create"
+        }
+      ],
+      "properties": {
+        "created_at": {
+          "$ref": "#/definitions/album/definitions/created_at"
+        },
+        "deleted_at": {
+          "$ref": "#/definitions/album/definitions/deleted_at"
+        },
+        "filename": {
+          "$ref": "#/definitions/album/definitions/filename"
+        },
+        "id": {
+          "$ref": "#/definitions/album/definitions/id"
+        },
+        "liked_user_ids": {
+          "$ref": "#/definitions/album/definitions/liked_user_ids"
+        },
+        "name": {
+          "$ref": "#/definitions/album/definitions/name"
+        },
+        "owner": {
+          "$ref": "#/definitions/album/definitions/owner"
+        },
+        "private": {
+          "$ref": "#/definitions/album/definitions/private"
+        },
+        "updated_at": {
+          "$ref": "#/definitions/album/definitions/updated_at"
+        }
+      },
+      "title": "Album",
+      "type": "object"
+    },
+    "user": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "definitions": {
+        "email": {
+          "example": "gopher@example.com",
+          "format": "email",
+          "type": "string"
+        },
+        "icon": {
+          "example": "http://example.com/icon.png",
+          "format": "uri",
+          "type": "string"
+        },
+        "id": {
+          "example": 512446121,
+          "readOnly": true,
+          "type": "integer"
+        },
+        "name": {
+          "example": "Gopher",
+          "type": "string"
+        }
+      },
+      "links": [
+        {
+          "description": "Upload an icon file for user",
+          "encType": "multipart/form-data",
+          "href": "/users/{(#/definitions/album/definitions/id)}/icons",
+          "method": "POST",
+          "rel": "create",
+          "schema": {
+            "properties": {
+              "icon": {
+                "$ref": "#/definitions/user/definitions/icon"
+              }
+            },
+            "type": "object"
+          },
+          "title": "Create"
+        }
+      ],
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/user/definitions/email"
+        },
+        "id": {
+          "$ref": "#/definitions/user/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/user/definitions/name"
+        }
+      },
+      "title": "User",
+      "type": "object"
+    }
+  },
+  "Properties": {
+    "album": {
+      "$ref": "#/definitions/album"
+    },
+    "user": {
+      "$ref": "#/definitions/user"
+    }
+  }
+}
