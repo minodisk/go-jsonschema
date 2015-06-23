@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"os"
 	"regexp"
 	"strings"
 	"text/template"
@@ -14,6 +13,7 @@ import (
 	"github.com/minodisk/go-jsonschema"
 	"github.com/minodisk/go-jsonschema/tools/combine"
 	"github.com/minodisk/go-jsonschema/tools/encoding"
+	"github.com/minodisk/go-jsonschema/tools/utils"
 	"github.com/minodisk/go-jsonschema/tools/watcher"
 )
 
@@ -31,21 +31,22 @@ var (
 )
 
 type Options struct {
+	Input    string
+	Meta     string
 	Template string
 	Engine   Engine
 	Output   string
 	Format   string
 	IsWatch  bool
-	Meta     string
-	Input    string
 }
 
 func Generate(o Options) error {
-	if err := generate(o); err != nil {
+	err := generate(o)
+	if err != nil {
 		return err
 	}
 	if o.IsWatch {
-		return watcher.Watch([]string{o.Input, o.Template}, func(filename string) {
+		return watcher.Watch([]string{o.Input, o.Meta, o.Template}, func(filename string) {
 			if err := generate(o); err != nil {
 				log.Printf("fail to generate: %s", err)
 			}
@@ -55,7 +56,7 @@ func Generate(o Options) error {
 }
 
 func generate(o Options) error {
-	mode, err := fileMode(o.Input)
+	mode, err := utils.FileMode(o.Input)
 	if err != nil {
 		return err
 	}
@@ -118,20 +119,6 @@ func generate(o Options) error {
 	}
 
 	return nil
-}
-
-func fileMode(p string) (*os.FileMode, error) {
-	f, err := os.Open(p)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	s, err := f.Stat()
-	if err != nil {
-		return nil, err
-	}
-	m := s.Mode()
-	return &m, nil
 }
 
 func Markdown(w io.Writer, s *jsonschema.Schema, name, text string) error {

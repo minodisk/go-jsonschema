@@ -60,13 +60,13 @@ func main() {
 			},
 			Action: func(c *cli.Context) {
 				if err := doc.Generate(doc.Options{
+					Input:    filepath.Clean(c.Args()[0]),
 					Template: filepath.Clean(c.String("template")),
 					Engine:   doc.Engine(c.String("engine")),
 					Output:   c.String("output"),
 					Format:   c.String("format"),
 					IsWatch:  c.Bool("watch"),
 					Meta:     filepath.Clean(c.String("meta")),
-					Input:    filepath.Clean(c.Args()[0]),
 				}); err != nil {
 					log.Println(err)
 				}
@@ -95,6 +95,7 @@ func main() {
 					Meta:     filepath.Clean(c.String("meta")),
 					Output:   c.String("output"),
 					Encoding: encoding.Encoding(c.String("encoding")),
+					IsWatch:  c.Bool("watch"),
 				}); err != nil {
 					log.Println(err)
 				}

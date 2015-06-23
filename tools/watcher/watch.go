@@ -4,6 +4,8 @@ import (
 	"log"
 	"path/filepath"
 
+	"github.com/minodisk/go-jsonschema/tools/utils"
+
 	"gopkg.in/fsnotify.v1"
 )
 
@@ -19,7 +21,16 @@ func Watch(filenames []string, callback func(filename string)) error {
 	for i, filename := range filenames {
 		filename = filepath.Clean(filename)
 		filenames[i] = filename
-		dir := filepath.Dir(filename)
+		mode, err := utils.FileMode(filename)
+		if err != nil {
+			return err
+		}
+		var dir string
+		if mode.IsDir() {
+			dir = filename
+		} else {
+			dir = filepath.Dir(filename)
+		}
 		dirs[dir] = true
 	}
 
@@ -27,6 +38,7 @@ func Watch(filenames []string, callback func(filename string)) error {
 		for {
 			select {
 			case event := <-watcher.Events:
+				log.Println(event)
 				if event.Op&fsnotify.Create == fsnotify.Create || event.Op&fsnotify.Write == fsnotify.Write {
 					if in(filenames, event.Name) {
 						log.Printf("[watcher] detect modified: %s", event.Name)

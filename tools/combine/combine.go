@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"path/filepath"
 	"strings"
 
 	"github.com/minodisk/go-jsonschema/tools/encoding"
+	"github.com/minodisk/go-jsonschema/tools/watcher"
 
 	"gopkg.in/yaml.v2"
 )
@@ -17,9 +19,25 @@ type Options struct {
 	Meta     string
 	Output   string
 	Encoding encoding.Encoding
+	IsWatch  bool
 }
 
 func Run(o Options) (err error) {
+	err = run(o)
+	if err != nil {
+		return err
+	}
+	if o.IsWatch {
+		return watcher.Watch([]string{o.Meta, o.Input}, func(filename string) {
+			if err := run(o); err != nil {
+				log.Printf("fail to run: %s", err)
+			}
+		})
+	}
+	return nil
+}
+
+func run(o Options) (err error) {
 	b, err := Combine(o.Input, o.Meta, o.Encoding)
 	if err != nil {
 		return err
