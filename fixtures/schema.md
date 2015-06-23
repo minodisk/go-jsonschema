@@ -1,5 +1,5 @@
-# Example API
-A schema for a small example API.
+# Example Schemata
+Schemata for go-jsonschema.
 
 - [Album](#album)
   - [POST /albums](#post-albums)
@@ -93,9 +93,7 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06"
 }
-```
-
-### GET /albums
+```### GET /albums
 
 List existing albums.
 
@@ -128,9 +126,7 @@ Content-Type: application/json
     "updated_at": "2006-01-02 15:04:06"
   }
 ]
-```
-
-### GET /albums/:id
+```### GET /albums/:id
 
 Info for existing album.
 
@@ -161,9 +157,7 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06"
 }
-```
-
-### PATCH /albums/:id
+```### PATCH /albums/:id
 
 Update an existing album.
 
@@ -203,9 +197,7 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06"
 }
-```
-
-### DELETE /albums/:id
+```### DELETE /albums/:id
 
 Delete an existing album.
 
@@ -217,9 +209,7 @@ Host: api.example.com
 
 ```http
 HTTP/1.1 204 No Content
-```
-
-### POST /albums/:id/files
+```### POST /albums/:id/files
 
 Upload an attachment file for an album
 
@@ -262,9 +252,7 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06"
 }
-```
-
-## User
+```## User
 
 ### Properties
 
@@ -311,5 +299,3 @@ Content-Type: application/json
   "name": "Gopher"
 }
 ```
-
-

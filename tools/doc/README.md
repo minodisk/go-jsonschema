@@ -2,16 +2,6 @@
 
 ## Usage
 
-```bash
-jsonschema -o schema.md schema.json
-```
-
-## Help
-
-```bash
-jsonschema help
-```
-
 ## Support
 
 - [ ] Title

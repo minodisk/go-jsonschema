@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/minodisk/go-jsonschema/tools/doc"
 	"github.com/minodisk/jsonschema"
-	"github.com/minodisk/jsonschema/tools/doc"
 )
 
 func TestMarkdown(t *testing.T) {

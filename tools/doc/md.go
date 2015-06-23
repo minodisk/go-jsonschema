@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"regexp"
 	"strconv"
@@ -14,26 +15,24 @@ import (
 	"text/template"
 
 	"github.com/minodisk/go-jsonschema"
+	"github.com/minodisk/go-jsonschema/tools/combine"
+	"github.com/minodisk/go-jsonschema/tools/encoding"
 
 	"gopkg.in/fsnotify.v1"
 	"gopkg.in/yaml.v2"
 )
 
-type Encoding string
 type Engine string
 
 const (
-	JSONEncoding Encoding = "json"
-	YAMLEncoding Encoding = "yaml"
-
 	TextTemplateEngine Engine = "text/template"
 )
 
 var (
-	extEncodingMap = map[string]Encoding{
-		".json": JSONEncoding,
-		".yml":  YAMLEncoding,
-		".yaml": YAMLEncoding,
+	extEncodingMap = map[string]encoding.Encoding{
+		".json": encoding.JSONEncoding,
+		".yml":  encoding.YAMLEncoding,
+		".yaml": encoding.YAMLEncoding,
 	}
 
 	rHashIgnorance = regexp.MustCompile(`[:\/]`)
@@ -43,13 +42,13 @@ var (
 )
 
 type Options struct {
-	Input    string
-	Encoding Encoding
 	Template string
 	Engine   Engine
 	Output   string
 	Format   string
 	IsWatch  bool
+	Meta     string
+	Input    string
 }
 
 func stringMap(input interface{}) (interface{}, error) {
@@ -151,25 +150,38 @@ func in(arr []string, elem string) bool {
 }
 
 func generate(o Options) error {
-	b, err := ioutil.ReadFile(o.Input)
+	mode, err := fileMode(o.Input)
 	if err != nil {
 		return err
 	}
-	log.Printf("[doc] read schema file: %s", o.Input)
-
-	if o.Encoding == "" {
-		ext := path.Ext(o.Input)
-		encoding := extEncodingMap[ext]
-		if encoding == "" {
-			encoding = JSONEncoding
+	var b []byte
+	var enc encoding.Encoding
+	if mode.IsDir() {
+		enc = encoding.JSONEncoding
+		b, err = combine.Combine(o.Input, o.Meta, enc)
+		if err != nil {
+			return err
 		}
-		o.Encoding = encoding
+		log.Printf("[doc] read schema files in '%s'", o.Input)
+	} else {
+		var ok bool
+		ext := path.Ext(o.Input)
+		enc, ok = extEncodingMap[ext]
+		if !ok {
+			return fmt.Errorf("unsupported ext '%s'", ext)
+		}
+		b, err = ioutil.ReadFile(o.Input)
+		if err != nil {
+			return err
+		}
+		log.Printf("[doc] read schema file '%s'", o.Input)
 	}
-	switch o.Encoding {
+
+	switch enc {
 	default:
-		return fmt.Errorf("unsupported encoding %s", o.Encoding)
-	case JSONEncoding:
-	case YAMLEncoding:
+		return fmt.Errorf("unsupported encoding '%s'", enc)
+	case encoding.JSONEncoding:
+	case encoding.YAMLEncoding:
 		var i interface{}
 		if err := yaml.Unmarshal(b, &i); err != nil {
 			return err
@@ -211,6 +223,20 @@ func generate(o Options) error {
 	}
 
 	return nil
+}
+
+func fileMode(p string) (*os.FileMode, error) {
+	f, err := os.Open(p)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	s, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+	m := s.Mode()
+	return &m, nil
 }
 
 func Markdown(w io.Writer, s *jsonschema.Schema, name, text string) error {

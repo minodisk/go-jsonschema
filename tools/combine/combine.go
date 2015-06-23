@@ -6,34 +6,41 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/minodisk/go-jsonschema/tools/encoding"
+
 	"gopkg.in/yaml.v2"
 )
 
-const (
-	DefaultMetaFilename = "_meta.yml"
-)
-
-type Data struct {
-	Schema      string `yaml:"$schema"`
-	Type        interface{}
-	Title       string
-	Description string
-	Links       []map[string]string
-	Definitions map[string]interface{}
-	Properties  map[string]map[string]interface{}
+type Options struct {
+	Input    string
+	Meta     string
+	Output   string
+	Encoding encoding.Encoding
 }
 
-// func Combine(dir string, meta string, dest string) {
-// }
+func Run(o Options) (err error) {
+	b, err := Combine(o.Input, o.Meta, o.Encoding)
+	if err != nil {
+		return err
+	}
 
-func Combine(dirname string, meta string) ([]byte, error) {
-	d, err := filepath.Abs(dirname)
+	if o.Output == "" {
+		fmt.Println(string(b))
+		return nil
+	}
+
+	return ioutil.WriteFile(o.Output, b, 0644)
+}
+
+func Combine(input string, meta string, enc encoding.Encoding) (combined []byte, err error) {
+	d, err := filepath.Abs(input)
 	if err != nil {
 		return nil, err
 	}
 
-	if meta == "" {
-		meta = filepath.Join(d, DefaultMetaFilename)
+	meta, err = filepath.Abs(meta)
+	if err != nil {
+		return nil, err
 	}
 
 	files := map[string][]byte{}
@@ -45,10 +52,17 @@ func Combine(dirname string, meta string) ([]byte, error) {
 		return nil, fmt.Errorf("meta file is required: %s", meta)
 	}
 	delete(files, meta)
-	// var data map[string]interface{}
 
-	// data := new(Data)
-	var data Data
+	var data struct {
+		Schema      string `yaml:"$schema"`
+		Type        interface{}
+		Title       string
+		Description string
+		Links       []map[string]string
+		Definitions map[string]interface{}
+		Properties  map[string]map[string]interface{}
+	}
+
 	if err := yaml.Unmarshal(b, &data); err != nil {
 		return nil, err
 	}
@@ -71,11 +85,11 @@ func Combine(dirname string, meta string) ([]byte, error) {
 		data.Properties[id]["$ref"] = fmt.Sprintf("#/definitions/%s", id)
 	}
 
-	out, err := yaml.Marshal(data)
+	combined, err = yaml.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return combined, nil
 }
 
 func readFiles(dirname string, files *map[string][]byte) error {

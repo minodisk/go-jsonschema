@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/aryann/difflib"
-	"github.com/minodisk/go-jsonschema/cli/combine"
 )
 
 func TestMain(m *testing.M) {
