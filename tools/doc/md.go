@@ -2,15 +2,13 @@ package doc
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
+	"path/filepath"
 	"regexp"
-	"strconv"
 	"strings"
 	"text/template"
 
@@ -19,7 +17,6 @@ import (
 	"github.com/minodisk/go-jsonschema/tools/encoding"
 
 	"gopkg.in/fsnotify.v1"
-	"gopkg.in/yaml.v2"
 )
 
 type Engine string
@@ -29,12 +26,6 @@ const (
 )
 
 var (
-	extEncodingMap = map[string]encoding.Encoding{
-		".json": encoding.JSONEncoding,
-		".yml":  encoding.YAMLEncoding,
-		".yaml": encoding.YAMLEncoding,
-	}
-
 	rHashIgnorance = regexp.MustCompile(`[:\/]`)
 	funcMap        = template.FuncMap{
 		"urlHash": urlHash,
@@ -49,42 +40,6 @@ type Options struct {
 	IsWatch  bool
 	Meta     string
 	Input    string
-}
-
-func stringMap(input interface{}) (interface{}, error) {
-	switch i := input.(type) {
-	default:
-		return i, nil
-	case map[interface{}]interface{}:
-		output := make(map[string]interface{})
-		var oKey string
-		for key, val := range i {
-			switch k := key.(type) {
-			default:
-				return nil, fmt.Errorf("unsupported key type %T", k)
-			case int:
-				oKey = strconv.Itoa(k)
-			case string:
-				oKey = k
-			}
-			oVal, err := stringMap(val)
-			if err != nil {
-				return nil, err
-			}
-			output[oKey] = oVal
-		}
-		return output, nil
-	case []interface{}:
-		output := make([]interface{}, len(i))
-		for index, val := range i {
-			oVal, err := stringMap(val)
-			if err != nil {
-				return nil, err
-			}
-			output[index] = oVal
-		}
-		return output, nil
-	}
 }
 
 func Generate(o Options) error {
@@ -108,9 +63,9 @@ func watch(o Options) error {
 	filenames := []string{o.Input, o.Template}
 	dirs := make(map[string]bool)
 	for i, filename := range filenames {
-		filename = path.Clean(filename)
+		filename = filepath.Clean(filename)
 		filenames[i] = filename
-		dir := path.Dir(filename)
+		dir := filepath.Dir(filename)
 		dirs[dir] = true
 	}
 
@@ -154,23 +109,21 @@ func generate(o Options) error {
 	if err != nil {
 		return err
 	}
-	var b []byte
+	var src []byte
 	var enc encoding.Encoding
 	if mode.IsDir() {
 		enc = encoding.JSONEncoding
-		b, err = combine.Combine(o.Input, o.Meta, enc)
+		src, err = combine.Combine(o.Input, o.Meta, enc)
 		if err != nil {
 			return err
 		}
 		log.Printf("[doc] read schema files in '%s'", o.Input)
 	} else {
-		var ok bool
-		ext := path.Ext(o.Input)
-		enc, ok = extEncodingMap[ext]
-		if !ok {
-			return fmt.Errorf("unsupported ext '%s'", ext)
+		enc, err = encoding.NewWithFilename(o.Input)
+		if err != nil {
+			return err
 		}
-		b, err = ioutil.ReadFile(o.Input)
+		src, err = ioutil.ReadFile(o.Input)
 		if err != nil {
 			return err
 		}
@@ -182,31 +135,23 @@ func generate(o Options) error {
 		return fmt.Errorf("unsupported encoding '%s'", enc)
 	case encoding.JSONEncoding:
 	case encoding.YAMLEncoding:
-		var i interface{}
-		if err := yaml.Unmarshal(b, &i); err != nil {
-			return err
-		}
-		i, err := stringMap(i)
-		if err != nil {
-			return err
-		}
-		b, err = json.Marshal(i)
+		src, err = encoding.YAMLToJSON(src)
 		if err != nil {
 			return err
 		}
 	}
 
-	schema, err := jsonschema.New(b)
+	schema, err := jsonschema.New(src)
 	if err != nil {
 		return err
 	}
 
-	b, err = ioutil.ReadFile(o.Template)
+	tmpl, err := ioutil.ReadFile(o.Template)
 	if err != nil {
 		return err
 	}
+	template := string(tmpl)
 	log.Printf("[doc] read template file: %s", o.Template)
-	template := string(b)
 
 	var buf bytes.Buffer
 	switch o.Engine {

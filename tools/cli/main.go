@@ -79,8 +79,8 @@ func main() {
 			Flags: []cli.Flag{
 				meta,
 				cli.StringFlag{
-					Name:  "output, o",
-					Value: "schema.json",
+					Name: "output, o",
+					// Value: "schema.json",
 					Usage: "the path of the output file",
 				},
 				cli.StringFlag{
@@ -94,7 +94,7 @@ func main() {
 				if err := combine.Run(combine.Options{
 					Input:    filepath.Clean(c.Args()[0]),
 					Meta:     filepath.Clean(c.String("meta")),
-					Output:   filepath.Clean(c.String("output")),
+					Output:   c.String("output"),
 					Encoding: encoding.Encoding(c.String("encoding")),
 				}); err != nil {
 					log.Println(err)

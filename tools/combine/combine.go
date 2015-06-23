@@ -1,8 +1,10 @@
 package combine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"path/filepath"
 	"strings"
 
@@ -19,6 +21,7 @@ type Options struct {
 }
 
 func Run(o Options) (err error) {
+	log.Printf("%+v", o)
 	b, err := Combine(o.Input, o.Meta, o.Encoding)
 	if err != nil {
 		return err
@@ -53,8 +56,8 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	}
 	delete(files, meta)
 
-	var data struct {
-		Schema      string `yaml:"$schema"`
+	var schema struct {
+		Schema      string `yaml:"$schema",json:"$schema"`
 		Type        interface{}
 		Title       string
 		Description string
@@ -63,33 +66,55 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 		Properties  map[string]map[string]interface{}
 	}
 
-	if err := yaml.Unmarshal(b, &data); err != nil {
+	metaEnc, err := encoding.NewWithFilename(meta)
+	if err != nil {
 		return nil, err
 	}
-	data.Definitions = make(map[string]interface{})
-	data.Properties = make(map[string]map[string]interface{})
-	for filename, b := range files {
-		var d map[string]interface{}
-		if err := yaml.Unmarshal(b, &d); err != nil {
+	switch metaEnc {
+	default:
+		return nil, fmt.Errorf("unsupported encoding '%s'", metaEnc)
+	case encoding.JSONEncoding:
+		if err := json.Unmarshal(b, &schema); err != nil {
 			return nil, err
 		}
-		i, ok := d["id"]
+	case encoding.YAMLEncoding:
+		if err := yaml.Unmarshal(b, &schema); err != nil {
+			return nil, err
+		}
+	}
+
+	schema.Definitions = make(map[string]interface{})
+	schema.Properties = make(map[string]map[string]interface{})
+
+	for filename, b := range files {
+		var s interface{}
+		if err := yaml.Unmarshal(b, &s); err != nil {
+			return nil, err
+		}
+		subSchema, err := encoding.KeyValueMap(s)
+		if err != nil {
+			return nil, err
+		}
+		i, ok := subSchema.(map[string]interface{})["id"]
 		var id string
 		if ok {
 			id = i.(string)
 		} else {
 			id = strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
 		}
-		data.Definitions[id] = d
-		data.Properties[id] = make(map[string]interface{})
-		data.Properties[id]["$ref"] = fmt.Sprintf("#/definitions/%s", id)
+		schema.Definitions[id] = subSchema
+		schema.Properties[id] = make(map[string]interface{})
+		schema.Properties[id]["$ref"] = fmt.Sprintf("#/definitions/%s", id)
 	}
 
-	combined, err = yaml.Marshal(data)
-	if err != nil {
-		return nil, err
+	switch enc {
+	default:
+		return nil, fmt.Errorf("unsupported encoding '%s'", enc)
+	case encoding.JSONEncoding:
+		return json.MarshalIndent(schema, "", "  ")
+	case encoding.YAMLEncoding:
+		return yaml.Marshal(schema)
 	}
-	return combined, nil
 }
 
 func readFiles(dirname string, files *map[string][]byte) error {
