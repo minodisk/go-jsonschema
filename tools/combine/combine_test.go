@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/aryann/difflib"
+	"github.com/minodisk/go-jsonschema/tools/combine"
+	"github.com/minodisk/go-jsonschema/tools/encoding"
 )
 
 func TestMain(m *testing.M) {
@@ -16,7 +18,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestCombine(t *testing.T) {
-	a, err := combine.Combine("../../fixtures/schemata", "")
+	a, err := combine.Combine("../../fixtures/schemata/yaml", "../../fixtures/schemata/yaml/_meta.yml", encoding.JSON)
 	if err != nil {
 		t.Fatal(err)
 	}

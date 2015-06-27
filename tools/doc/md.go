@@ -63,7 +63,7 @@ func generate(o Options) error {
 	var src []byte
 	var enc encoding.Encoding
 	if mode.IsDir() {
-		enc = encoding.JSONEncoding
+		enc = encoding.JSON
 		src, err = combine.Combine(o.Input, o.Meta, enc)
 		if err != nil {
 			return err
@@ -84,8 +84,8 @@ func generate(o Options) error {
 	switch enc {
 	default:
 		return fmt.Errorf("unsupported encoding '%s'", enc)
-	case encoding.JSONEncoding:
-	case encoding.YAMLEncoding:
+	case encoding.JSON:
+	case encoding.YAML:
 		src, err = encoding.YAMLToJSON(src)
 		if err != nil {
 			return err
@@ -104,19 +104,27 @@ func generate(o Options) error {
 	template := string(tmpl)
 	log.Printf("[doc] read template file: %s", o.Template)
 
+	// Transform
 	var buf bytes.Buffer
 	switch o.Engine {
 	case TextTemplateEngine:
 		if err := Markdown(&buf, schema, "tmp", template); err != nil {
 			return err
 		}
-		if err := ioutil.WriteFile(o.Output, buf.Bytes(), 0644); err != nil {
-			return err
-		}
-		log.Printf("[doc] write document file: %s", o.Output)
 	default:
 		return fmt.Errorf("unsupported engine %s", string(o.Engine))
 	}
+
+	// Output
+	b := buf.Bytes()
+	if o.Output == "" {
+		fmt.Print(string(b))
+		return nil
+	}
+	if err := ioutil.WriteFile(o.Output, b, 0644); err != nil {
+		return err
+	}
+	log.Printf("[doc] write document file: %s", o.Output)
 
 	return nil
 }

@@ -36,8 +36,8 @@ func main() {
 			Usage: "generate docuemnt from schema.json",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "output, o",
-					Value: "schema.md",
+					Name: "output, o",
+					// Value: "schema.md",
 					Usage: "the path of the output file",
 				},
 				cli.StringFlag{

@@ -8,15 +8,15 @@ import (
 type Encoding string
 
 const (
-	JSONEncoding Encoding = "json"
-	YAMLEncoding Encoding = "yaml"
+	JSON Encoding = "json"
+	YAML Encoding = "yaml"
 )
 
 var (
 	extEncodingMap = map[string]Encoding{
-		".json": JSONEncoding,
-		".yml":  YAMLEncoding,
-		".yaml": YAMLEncoding,
+		".json": JSON,
+		".yml":  YAML,
+		".yaml": YAML,
 	}
 )
 

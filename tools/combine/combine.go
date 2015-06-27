@@ -89,11 +89,11 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	switch metaEnc {
 	default:
 		return nil, fmt.Errorf("unsupported encoding '%s'", metaEnc)
-	case encoding.JSONEncoding:
+	case encoding.JSON:
 		if err := json.Unmarshal(b, &schema); err != nil {
 			return nil, err
 		}
-	case encoding.YAMLEncoding:
+	case encoding.YAML:
 		if err := yaml.Unmarshal(b, &schema); err != nil {
 			return nil, err
 		}
@@ -126,9 +126,9 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	switch enc {
 	default:
 		return nil, fmt.Errorf("unsupported encoding '%s'", enc)
-	case encoding.JSONEncoding:
+	case encoding.JSON:
 		return json.MarshalIndent(schema, "", "  ")
-	case encoding.YAMLEncoding:
+	case encoding.YAML:
 		return yaml.Marshal(schema)
 	}
 }
