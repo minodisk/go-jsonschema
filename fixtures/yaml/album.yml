@@ -5,39 +5,34 @@ type: object
 definitions:
   id:
     type: string
-    example: exampleuuid0123456789
+    example: 942b46e5-893b-41ba-88da-d6aef7dddc31
     format: uuid
     readOnly: true
   created_at:
     type: string
     format: date-time
-    description: When this resource was deleted at
-    example:
+    description: When this resource was deleted at.
   updated_at:
     type: string
     format: date-time
-    description: When this resource was deleted at
-    example:
+    description: When this resource was deleted at.
   deleted_at:
-    type:
-      - string
-      - "null"
+    type: string
     format: date-time
-    description: When this resource was deleted at
-    example: null
+    description: When this resource was deleted at.
   name:
     type: string
-    description: Album name
+    description: The name of this album.
     example: my album
-  filename:
-    description: unique name of album
-    example: example
-    pattern: "^[a-z][a-z0-9-]{3,50}$"
-    readOnly: false
-    type: string
+  # filename:
+  #   type: string
+  #   description: Unique name of this album.
+  #   example: example
+  #   pattern: "^[a-z][a-z0-9-]{3,50}$"
+  #   readOnly: false
   private:
     type: boolean
-    description: true if this resource is private use
+    description: true if this resource is private use.
     example: false
   owner:
     $ref: "#/definitions/user"
@@ -47,7 +42,7 @@ definitions:
       $ref: "#/definitions/user/definitions/id"
   file:
     type: string
-    description: an attachment of album
+    description: an attachment of album.
     example: '... contents of file ...'
     readOnly: false
 properties:
@@ -61,8 +56,8 @@ properties:
     $ref: "#/definitions/album/definitions/deleted_at"
   name:
     $ref: "#/definitions/album/definitions/name"
-  filename:
-    $ref: "#/definitions/album/definitions/filename"
+  # filename:
+  #   $ref: "#/definitions/album/definitions/filename"
   private:
     $ref: "#/definitions/album/definitions/private"
   owner:
@@ -81,13 +76,13 @@ links:
           $ref: "#/definitions/album/definitions/name"
       type:
       - object
-  - title: List
+  - title: ReadList
     description: List existing albums.
     href: "/albums"
     method: GET
     rel: instances
-  - title: Info
-    description: Info for existing album.
+  - title: Read
+    description: Read an existing album.
     href: "/albums/{(#/definitions/album/definitions/id)}"
     method: GET
     rel: self
@@ -109,7 +104,7 @@ links:
     rel: destroy
     mediaType: 'null'
   - title: Create
-    description: Upload an attachment file for an album
+    description: Upload an attachment file for an album.
     method: POST
     href: "/albums/{(#/definitions/album/definitions/id)}/files"
     rel: create

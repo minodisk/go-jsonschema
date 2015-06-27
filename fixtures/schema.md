@@ -16,39 +16,34 @@ Schemata for go-jsonschema.
 ### Properties
 
 - created_at
-  - When this resource was deleted at
+  - When this resource was deleted at.
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
 - deleted_at
-  - When this resource was deleted at
+  - When this resource was deleted at.
   - Example: `"2006-01-02 15:04:06"`
-  - Type: string, null
-  - Format: date-time
-- filename
-  - unique name of album
-  - Example: `"example"`
   - Type: string
-  - Pattern: `/^[a-z][a-z0-9-]{3,50}$/`
+  - Format: date-time
 - id
-  - Example: `"exampleuuid0123456789"`
+  - Example: `"942b46e5-893b-41ba-88da-d6aef7dddc31"`
   - Type: string
   - Format: uuid
   - ReadOnly: true
 - liked_user_ids
   - Type: array
 - name
-  - Album name
+  - The name of this album.
   - Example: `"my album"`
   - Type: string
 - owner
   - Type: object
 - private
-  - true if this resource is private use
+  - true if this resource is private use.
   - Example: `false`
   - Type: boolean
 - updated_at
-  - When this resource was deleted at
+  - When this resource was deleted at.
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
@@ -58,7 +53,7 @@ Schemata for go-jsonschema.
 Create a new album.
 
 - name
-  - Album name
+  - The name of this album.
   - Example: `"my album"`
   - Type: string
 
@@ -79,8 +74,7 @@ Content-Type: application/json
 {
   "created_at": "2006-01-02 15:04:06",
   "deleted_at": "2006-01-02 15:04:06",
-  "filename": "example",
-  "id": "exampleuuid0123456789",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
     512446121
   ],
@@ -111,8 +105,7 @@ Content-Type: application/json
   {
     "created_at": "2006-01-02 15:04:06",
     "deleted_at": "2006-01-02 15:04:06",
-    "filename": "example",
-    "id": "exampleuuid0123456789",
+    "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
     "liked_user_ids": [
       512446121
     ],
@@ -128,7 +121,7 @@ Content-Type: application/json
 ]
 ```### GET /albums/:id
 
-Info for existing album.
+Read an existing album.
 
 
 ```http
@@ -143,8 +136,7 @@ Content-Type: application/json
 {
   "created_at": "2006-01-02 15:04:06",
   "deleted_at": "2006-01-02 15:04:06",
-  "filename": "example",
-  "id": "exampleuuid0123456789",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
     512446121
   ],
@@ -162,7 +154,7 @@ Content-Type: application/json
 Update an existing album.
 
 - name
-  - Album name
+  - The name of this album.
   - Example: `"my album"`
   - Type: string
 
@@ -183,8 +175,7 @@ Content-Type: application/json
 {
   "created_at": "2006-01-02 15:04:06",
   "deleted_at": "2006-01-02 15:04:06",
-  "filename": "example",
-  "id": "exampleuuid0123456789",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
     512446121
   ],
@@ -211,10 +202,10 @@ Host: api.example.com
 HTTP/1.1 204 No Content
 ```### POST /albums/:id/files
 
-Upload an attachment file for an album
+Upload an attachment file for an album.
 
 - file
-  - an attachment of album
+  - an attachment of album.
   - Example: `"... contents of file ..."`
   - Type: string
 
@@ -238,8 +229,7 @@ Content-Type: application/json
 {
   "created_at": "2006-01-02 15:04:06",
   "deleted_at": "2006-01-02 15:04:06",
-  "filename": "example",
-  "id": "exampleuuid0123456789",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
     512446121
   ],

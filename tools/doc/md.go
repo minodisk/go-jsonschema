@@ -14,7 +14,7 @@ import (
 	"github.com/minodisk/go-jsonschema/tools/combine"
 	"github.com/minodisk/go-jsonschema/tools/encoding"
 	"github.com/minodisk/go-jsonschema/tools/utils"
-	"github.com/minodisk/go-jsonschema/tools/watcher"
+	"github.com/minodisk/go-watcher"
 )
 
 type Engine string
@@ -40,17 +40,32 @@ type Options struct {
 	IsWatch  bool
 }
 
-func Generate(o Options) error {
-	err := generate(o)
+func Generate(o Options) (err error) {
+	err = generate(o)
 	if err != nil {
 		return err
 	}
 	if o.IsWatch {
-		return watcher.Watch([]string{o.Input, o.Meta, o.Template}, func(filename string) {
-			if err := generate(o); err != nil {
-				log.Printf("fail to generate: %s", err)
+		done := make(chan int)
+		w := watcher.New()
+		go func() {
+			for {
+				select {
+				case <-w.Events:
+					err = generate(o)
+					if err != nil {
+						log.Println("Generation Error:", err)
+					}
+				case err := <-w.Errors:
+					log.Println("Error:", err)
+				}
 			}
-		})
+		}()
+		err = w.Watch([]string{o.Input, o.Meta, o.Template})
+		if err != nil {
+			return err
+		}
+		<-done
 	}
 	return nil
 }

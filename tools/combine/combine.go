@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/minodisk/go-jsonschema/tools/encoding"
-	"github.com/minodisk/go-jsonschema/tools/watcher"
+	"github.com/minodisk/go-watcher"
 
 	"gopkg.in/yaml.v2"
 )
@@ -28,11 +28,26 @@ func Run(o Options) (err error) {
 		return err
 	}
 	if o.IsWatch {
-		return watcher.Watch([]string{o.Meta, o.Input}, func(filename string) {
-			if err := run(o); err != nil {
-				log.Printf("fail to run: %s", err)
+		done := make(chan int)
+		w := watcher.New()
+		go func() {
+			for {
+				select {
+				case <-w.Events:
+					err = run(o)
+					if err != nil {
+						log.Println("Running error:", err)
+					}
+				case err := <-w.Errors:
+					log.Println("Error:", err)
+				}
 			}
-		})
+		}()
+		err = w.Watch([]string{o.Input, o.Meta})
+		if err != nil {
+			return err
+		}
+		<-done
 	}
 	return nil
 }
