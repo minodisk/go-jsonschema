@@ -2,7 +2,7 @@
 $schema: http://json-schema.org/draft-04/hyper-schema
 type: object
 title: Example Schemata
-description: Schemata for go-jsonschema.
+description: Example schemata for go-jsonschema.
 links:
-  - href: https://api.example.com
-    rel: self
+- href: https://api.example.com
+  rel: self

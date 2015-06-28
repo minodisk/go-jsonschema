@@ -1,8 +1,9 @@
-# jsonschema
+# go-jsonschema
 
 JSON Schema parser and validator in Go.
 
-- [Document Generator](cli/doc/README.md)
+- [Document Generator](tools/doc/README.md)
+- [Source Combiner](tools/combine/README.md)
 - Struct Generator
 
 ## Installation

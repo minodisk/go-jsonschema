@@ -4,7 +4,8 @@
 {{range $name, $schema := .Properties.Schemas}}- [{{$schema.Title}}]({{urlHash $schema.Title}})
 {{range $i, $link := $schema.Links}}  - [{{$link.MethodEndpoint}}]({{urlHash $link.MethodEndpoint}})
 {{end}}{{end}}
-{{range $name, $schema := .Properties.Schemas}}## {{$schema.Title}}
+{{range $name, $schema := .Properties.Schemas}}
+## {{$schema.Title}}
 
 {{if $schema.Description}}{{$schema.Description}}
 
@@ -17,8 +18,9 @@
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`
 {{end}}{{if $property.Format}}  - Format: {{$property.Format}}
 {{end}}{{if $property.ReadOnly}}  - ReadOnly: {{$property.ReadOnly}}
-{{end}}{{end}}
-{{range $i, $link := $schema.Links}}### {{$link.MethodEndpoint}}
+{{end}}{{end}}{{range $i, $link := $schema.Links}}
+
+### {{$link.MethodEndpoint}}
 
 {{if $link.Description}}{{$link.Description}}
 
