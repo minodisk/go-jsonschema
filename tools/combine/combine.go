@@ -88,13 +88,13 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	delete(files, meta)
 
 	var schema struct {
-		Schema      string `yaml:"$schema",json:"$schema"`
-		Type        interface{}
-		Title       string
-		Description string
-		Links       []map[string]string
-		Definitions map[string]interface{}
-		Properties  map[string]map[string]interface{}
+		Schema      string                            `yaml:"$schema" json:"$schema"`
+		Type        interface{}                       `json:"type"`
+		Title       string                            `json:"title"`
+		Description string                            `json:"description"`
+		Links       []map[string]string               `json:"links"`
+		Definitions map[string]interface{}            `json:"definitions"`
+		Properties  map[string]map[string]interface{} `json:"properties"`
 	}
 
 	metaEnc, err := encoding.NewWithFilename(meta)
