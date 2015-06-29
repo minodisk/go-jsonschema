@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/codegangsta/cli"
 	"github.com/minodisk/go-jsonschema/tools/combine"
@@ -26,7 +25,6 @@ func main() {
 	}
 	meta := cli.StringFlag{
 		Name:  "meta, m",
-		Value: "meta.yml",
 		Usage: "meta file",
 	}
 
@@ -36,13 +34,11 @@ func main() {
 			Usage: "generate docuemnt from schema.json",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name: "output, o",
-					// Value: "schema.md",
+					Name:  "output, o",
 					Usage: "the path of the output file",
 				},
 				cli.StringFlag{
 					Name:  "template, t",
-					Value: "schema.md.tmpl",
 					Usage: "template filename",
 				},
 				cli.StringFlag{
@@ -60,13 +56,13 @@ func main() {
 			},
 			Action: func(c *cli.Context) {
 				if err := doc.Generate(doc.Options{
-					Input:    filepath.Clean(c.Args()[0]),
-					Template: filepath.Clean(c.String("template")),
+					Input:    c.Args()[0],
+					Template: c.String("template"),
 					Engine:   doc.Engine(c.String("engine")),
 					Output:   c.String("output"),
 					Format:   c.String("format"),
 					IsWatch:  c.Bool("watch"),
-					Meta:     filepath.Clean(c.String("meta")),
+					Meta:     c.String("meta"),
 				}); err != nil {
 					log.Println(err)
 				}
@@ -91,8 +87,8 @@ func main() {
 			},
 			Action: func(c *cli.Context) {
 				if err := combine.Run(combine.Options{
-					Input:    filepath.Clean(c.Args()[0]),
-					Meta:     filepath.Clean(c.String("meta")),
+					Input:    c.Args()[0],
+					Meta:     c.String("meta"),
 					Output:   c.String("output"),
 					Encoding: encoding.Encoding(c.String("encoding")),
 					IsWatch:  c.Bool("watch"),

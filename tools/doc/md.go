@@ -70,7 +70,7 @@ func Generate(o Options) (err error) {
 	return nil
 }
 
-func generate(o Options) error {
+func generate(o Options) (err error) {
 	mode, err := utils.FileMode(o.Input)
 	if err != nil {
 		return err
@@ -112,12 +112,21 @@ func generate(o Options) error {
 		return err
 	}
 
-	tmpl, err := ioutil.ReadFile(o.Template)
-	if err != nil {
-		return err
+	var t []byte
+	if o.Template == "" {
+		t, err = Asset("fixtures/schema.md.tmpl")
+		if err != nil {
+			return err
+		}
+		log.Printf("[doc] use default template")
+	} else {
+		t, err = ioutil.ReadFile(o.Template)
+		if err != nil {
+			return err
+		}
+		log.Printf("[doc] read template file: %s", o.Template)
 	}
-	template := string(tmpl)
-	log.Printf("[doc] read template file: %s", o.Template)
+	template := string(t)
 
 	// Transform
 	var buf bytes.Buffer
