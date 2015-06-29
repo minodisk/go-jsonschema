@@ -27,7 +27,7 @@ Example schemata for go-jsonschema.
   - Format: date-time
   - ReadOnly: true
 - deleted_at
-  - when album was deleted at
+  - when album was deleted
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
@@ -92,9 +92,12 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06",
   "user": {
+    "created_at": "2006-01-02 15:04:06",
     "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
     "id": 512446121,
-    "name": "Gopher"
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -125,9 +128,12 @@ Content-Type: application/json
     "private": false,
     "updated_at": "2006-01-02 15:04:06",
     "user": {
+      "created_at": "2006-01-02 15:04:06",
       "email": "gopher@example.com",
+      "icon": "http://example.com/icon.png",
       "id": 512446121,
-      "name": "Gopher"
+      "name": "Gopher",
+      "updated_at": "2006-01-02 15:04:06"
     }
   }
 ]
@@ -158,9 +164,12 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06",
   "user": {
+    "created_at": "2006-01-02 15:04:06",
     "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
     "id": 512446121,
-    "name": "Gopher"
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -199,9 +208,12 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06",
   "user": {
+    "created_at": "2006-01-02 15:04:06",
     "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
     "id": 512446121,
-    "name": "Gopher"
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -257,9 +269,12 @@ Content-Type: application/json
   "private": false,
   "updated_at": "2006-01-02 15:04:06",
   "user": {
+    "created_at": "2006-01-02 15:04:06",
     "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
     "id": 512446121,
-    "name": "Gopher"
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -267,11 +282,22 @@ Content-Type: application/json
 
 ### Properties
 
+- created_at
+  - when user was created
+  - Example: `"2006-01-02 15:04:06"`
+  - Type: string
+  - Format: date-time
+  - ReadOnly: true
 - email
   - unique email address of user
   - Example: `"gopher@example.com"`
   - Type: string
   - Format: email
+- icon
+  - user icon
+  - Example: `"http://example.com/icon.png"`
+  - Type: string
+  - Format: uri
 - id
   - unique identifier of user
   - Example: `512446121`
@@ -281,6 +307,12 @@ Content-Type: application/json
   - name of user
   - Example: `"Gopher"`
   - Type: string
+- updated_at
+  - when user was updated
+  - Example: `"2006-01-02 15:04:06"`
+  - Type: string
+  - Format: date-time
+  - ReadOnly: true
 
 
 ### POST /users
@@ -298,9 +330,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
+  "created_at": "2006-01-02 15:04:06",
   "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
   "id": 512446121,
-  "name": "Gopher"
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -319,9 +354,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
+  "created_at": "2006-01-02 15:04:06",
   "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
   "id": 512446121,
-  "name": "Gopher"
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -340,9 +378,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
+  "created_at": "2006-01-02 15:04:06",
   "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
   "id": 512446121,
-  "name": "Gopher"
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -351,7 +392,8 @@ Content-Type: application/json
 Upload an icon file for user.
 
 - icon
-  - Example: `"http://example.com/icon.png"`
+  - user icon
+  - Example: `"... contents of file ..."`
   - Type: string
 
 ```http
@@ -362,7 +404,7 @@ Host: api.example.com
 --example_boundary
 Content-Disposition: form-data; name="icon"
 
-"http://example.com/icon.png"
+"... contents of file ..."
 
 --example_boundary--
 ```
@@ -372,9 +414,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
+  "created_at": "2006-01-02 15:04:06",
   "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
   "id": 512446121,
-  "name": "Gopher"
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -393,8 +438,11 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
+  "created_at": "2006-01-02 15:04:06",
   "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
   "id": 512446121,
-  "name": "Gopher"
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```

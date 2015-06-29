@@ -20,7 +20,7 @@ definitions:
     format: date-time
     readOnly: true
   deleted_at:
-    description: when album was deleted at
+    description: when album was deleted
     type: string
     format: date-time
   name:
@@ -61,52 +61,50 @@ properties:
   liked_user_ids:
     $ref: "#/definitions/album/definitions/liked_user_ids"
 links:
-  - title: Create
-    description: Create a new album.
-    href: "/albums"
-    method: POST
-    rel: create
-    schema:
-      properties:
-        name:
-          $ref: "#/definitions/album/definitions/name"
-      type:
-      - object
-  - title: List
-    description: List existing albums.
-    href: "/albums"
-    method: GET
-    rel: instances
-  - title: Read
-    description: Read an existing album.
-    href: "/albums/{(#/definitions/album/definitions/album_id)}"
-    method: GET
-    rel: self
-  - title: Update
-    description: Update an existing album.
-    href: "/albums/{(#/definitions/album/definitions/album_id)}"
-    method: PATCH
-    rel: update
-    schema:
-      properties:
-        name:
-          $ref: "#/definitions/album/definitions/name"
-      type:
-      - object
-  - title: Delete
-    description: Delete an existing album.
-    href: "/albums/{(#/definitions/album/definitions/album_id)}"
-    method: DELETE
-    rel: destroy
-    mediaType: 'null'
-  - title: Create
-    description: Upload an attachment file for an album.
-    method: POST
-    href: "/albums/{(#/definitions/album/definitions/album_id)}/files"
-    rel: create
-    encType: multipart/form-data
-    schema:
-      type: object
-      properties:
-        file:
-          $ref: "#/definitions/album/definitions/file"
+- title: Create
+  description: Create a new album.
+  href: "/albums"
+  method: POST
+  rel: create
+  schema:
+    type: object
+    properties:
+      name:
+        $ref: "#/definitions/album/definitions/name"
+- title: List
+  description: List existing albums.
+  href: "/albums"
+  method: GET
+  rel: instances
+- title: Read
+  description: Read an existing album.
+  href: "/albums/{(#/definitions/album/definitions/album_id)}"
+  method: GET
+  rel: self
+- title: Update
+  description: Update an existing album.
+  href: "/albums/{(#/definitions/album/definitions/album_id)}"
+  method: PATCH
+  rel: update
+  schema:
+    type: object
+    properties:
+      name:
+        $ref: "#/definitions/album/definitions/name"
+- title: Delete
+  description: Delete an existing album.
+  href: "/albums/{(#/definitions/album/definitions/album_id)}"
+  method: DELETE
+  rel: destroy
+  mediaType: 'null'
+- title: Create
+  description: Upload an attachment file for an album.
+  method: POST
+  href: "/albums/{(#/definitions/album/definitions/album_id)}/files"
+  rel: create
+  encType: multipart/form-data
+  schema:
+    type: object
+    properties:
+      file:
+        $ref: "#/definitions/album/definitions/file"

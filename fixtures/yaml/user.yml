@@ -28,16 +28,27 @@ definitions:
     type: string
     format: email
   icon:
+    description: user icon
     type: string
     example: http://example.com/icon.png
     format: uri
+  file:
+    description: user icon
+    example: ... contents of file ...
+    type: string
 properties:
   id:
     $ref: "#/definitions/user/definitions/user_id"
+  created_at:
+    $ref: "#/definitions/user/definitions/created_at"
+  updated_at:
+    $ref: "#/definitions/user/definitions/updated_at"
   name:
     $ref: "#/definitions/user/definitions/name"
   email:
     $ref: "#/definitions/user/definitions/email"
+  icon:
+    $ref: "#/definitions/user/definitions/icon"
 links:
 - title: Create
   description: Create a user.
@@ -61,7 +72,7 @@ links:
     type: object
     properties:
       icon:
-        $ref: "#/definitions/user/definitions/icon"
+        $ref: "#/definitions/user/definitions/file"
 - title: Delete
   description: Delete user.
   method: DELETE
