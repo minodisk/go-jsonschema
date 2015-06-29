@@ -1,13 +1,10 @@
 package combine_test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 	"testing"
 
-	"github.com/aryann/difflib"
 	"github.com/minodisk/go-jsonschema/tools/combine"
 	"github.com/minodisk/go-jsonschema/tools/encoding"
 )
@@ -18,7 +15,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestCombine(t *testing.T) {
-	a, err := combine.Combine("../../fixtures/schemata/yaml", "../../fixtures/schemata/yaml/_meta.yml", encoding.JSON)
+	a, err := combine.Combine("../../fixtures/yaml", "../../fixtures/yaml/_meta.yml", encoding.YAML)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,10 +28,6 @@ func TestCombine(t *testing.T) {
 	expected := string(e)
 	actual := string(a)
 	if expected != actual {
-		diff := difflib.Diff(strings.Split(expected, "\n"), strings.Split(actual, "\n"))
-		for _, d := range diff {
-			fmt.Println(d)
-		}
 		t.Fail()
 	}
 }

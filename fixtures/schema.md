@@ -35,6 +35,7 @@ Example schemata for go-jsonschema.
   - Format: uuid
   - ReadOnly: true
 - **liked_user_ids**: list of users' id who liked album
+  - Example: `null`
   - Type: array
 - **name**: name of album
   - Example: `"my album"`
@@ -47,7 +48,8 @@ Example schemata for go-jsonschema.
   - Type: string
   - Format: date-time
   - ReadOnly: true
-- **user**  - Type: object
+- **user**  - Example: `null`
+  - Type: object
 
 
 ### POST /albums
@@ -64,7 +66,7 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": "my album"
+  "name": {}
 }
 ```
 
@@ -73,22 +75,22 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "deleted_at": "2006-01-02 15:04:06",
-  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
+  "created_at": {},
+  "deleted_at": {},
+  "id": {},
   "liked_user_ids": [
-    512446121
+    {}
   ],
-  "name": "my album",
-  "private": false,
-  "updated_at": "2006-01-02 15:04:06",
+  "name": {},
+  "private": {},
+  "updated_at": {},
   "user": {
-    "created_at": "2006-01-02 15:04:06",
-    "email": "gopher@example.com",
-    "icon": "http://example.com/icon.png",
-    "id": 512446121,
-    "name": "Gopher",
-    "updated_at": "2006-01-02 15:04:06"
+    "created_at": {},
+    "email": {},
+    "icon": {},
+    "id": {},
+    "name": {},
+    "updated_at": {}
   }
 }
 ```
@@ -109,22 +111,22 @@ Content-Type: application/json
 
 [
   {
-    "created_at": "2006-01-02 15:04:06",
-    "deleted_at": "2006-01-02 15:04:06",
-    "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
+    "created_at": {},
+    "deleted_at": {},
+    "id": {},
     "liked_user_ids": [
-      512446121
+      {}
     ],
-    "name": "my album",
-    "private": false,
-    "updated_at": "2006-01-02 15:04:06",
+    "name": {},
+    "private": {},
+    "updated_at": {},
     "user": {
-      "created_at": "2006-01-02 15:04:06",
-      "email": "gopher@example.com",
-      "icon": "http://example.com/icon.png",
-      "id": 512446121,
-      "name": "Gopher",
-      "updated_at": "2006-01-02 15:04:06"
+      "created_at": {},
+      "email": {},
+      "icon": {},
+      "id": {},
+      "name": {},
+      "updated_at": {}
     }
   }
 ]
@@ -145,22 +147,22 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "deleted_at": "2006-01-02 15:04:06",
-  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
+  "created_at": {},
+  "deleted_at": {},
+  "id": {},
   "liked_user_ids": [
-    512446121
+    {}
   ],
-  "name": "my album",
-  "private": false,
-  "updated_at": "2006-01-02 15:04:06",
+  "name": {},
+  "private": {},
+  "updated_at": {},
   "user": {
-    "created_at": "2006-01-02 15:04:06",
-    "email": "gopher@example.com",
-    "icon": "http://example.com/icon.png",
-    "id": 512446121,
-    "name": "Gopher",
-    "updated_at": "2006-01-02 15:04:06"
+    "created_at": {},
+    "email": {},
+    "icon": {},
+    "id": {},
+    "name": {},
+    "updated_at": {}
   }
 }
 ```
@@ -179,7 +181,7 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": "my album"
+  "name": {}
 }
 ```
 
@@ -188,22 +190,22 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "deleted_at": "2006-01-02 15:04:06",
-  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
+  "created_at": {},
+  "deleted_at": {},
+  "id": {},
   "liked_user_ids": [
-    512446121
+    {}
   ],
-  "name": "my album",
-  "private": false,
-  "updated_at": "2006-01-02 15:04:06",
+  "name": {},
+  "private": {},
+  "updated_at": {},
   "user": {
-    "created_at": "2006-01-02 15:04:06",
-    "email": "gopher@example.com",
-    "icon": "http://example.com/icon.png",
-    "id": 512446121,
-    "name": "Gopher",
-    "updated_at": "2006-01-02 15:04:06"
+    "created_at": {},
+    "email": {},
+    "icon": {},
+    "id": {},
+    "name": {},
+    "updated_at": {}
   }
 }
 ```
@@ -235,12 +237,7 @@ POST /albums/942b46e5-893b-41ba-88da-d6aef7dddc31/files HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
---example_boundary
-Content-Disposition: form-data; name="file"
 
-... contents of file ...
-
---example_boundary--
 ```
 
 ```http
@@ -248,22 +245,22 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "deleted_at": "2006-01-02 15:04:06",
-  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
+  "created_at": {},
+  "deleted_at": {},
+  "id": {},
   "liked_user_ids": [
-    512446121
+    {}
   ],
-  "name": "my album",
-  "private": false,
-  "updated_at": "2006-01-02 15:04:06",
+  "name": {},
+  "private": {},
+  "updated_at": {},
   "user": {
-    "created_at": "2006-01-02 15:04:06",
-    "email": "gopher@example.com",
-    "icon": "http://example.com/icon.png",
-    "id": 512446121,
-    "name": "Gopher",
-    "updated_at": "2006-01-02 15:04:06"
+    "created_at": {},
+    "email": {},
+    "icon": {},
+    "id": {},
+    "name": {},
+    "updated_at": {}
   }
 }
 ```
@@ -327,9 +324,9 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "name": "Gopher"
+  "email": {},
+  "icon": {},
+  "name": {}
 }
 ```
 
@@ -338,12 +335,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "id": 512446121,
-  "name": "Gopher",
-  "updated_at": "2006-01-02 15:04:06"
+  "created_at": {},
+  "email": {},
+  "icon": {},
+  "id": {},
+  "name": {},
+  "updated_at": {}
 }
 ```
 
@@ -362,12 +359,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "id": 512446121,
-  "name": "Gopher",
-  "updated_at": "2006-01-02 15:04:06"
+  "created_at": {},
+  "email": {},
+  "icon": {},
+  "id": {},
+  "name": {},
+  "updated_at": {}
 }
 ```
 
@@ -386,12 +383,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "id": 512446121,
-  "name": "Gopher",
-  "updated_at": "2006-01-02 15:04:06"
+  "created_at": {},
+  "email": {},
+  "icon": {},
+  "id": {},
+  "name": {},
+  "updated_at": {}
 }
 ```
 
@@ -408,12 +405,7 @@ POST /users/512446121/icons HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
---example_boundary
-Content-Disposition: form-data; name="icon"
 
-... contents of file ...
-
---example_boundary--
 ```
 
 ```http
@@ -421,12 +413,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": "2006-01-02 15:04:06",
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "id": 512446121,
-  "name": "Gopher",
-  "updated_at": "2006-01-02 15:04:06"
+  "created_at": {},
+  "email": {},
+  "icon": {},
+  "id": {},
+  "name": {},
+  "updated_at": {}
 }
 ```
 

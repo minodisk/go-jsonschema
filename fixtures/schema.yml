@@ -30,7 +30,7 @@ definitions:
         readOnly: false
         type: string
       liked_user_ids:
-        description: id list of users who like album
+        description: list of users' id who liked album
         items:
           $ref: '#/definitions/user/definitions/user_id'
         type: array
