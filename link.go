@@ -236,7 +236,7 @@ func multipartString(data interface{}) (string, error) {
 				b, err := marshalPart(map[string]interface{}{
 					"boundary": Boundary,
 					"name":     name,
-					"content":  content,
+					"content":  c.RawString(),
 				})
 				if err != nil {
 					return "", err

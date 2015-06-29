@@ -249,7 +249,7 @@ Host: api.example.com
 --example_boundary
 Content-Disposition: form-data; name="file"
 
-"... contents of file ..."
+... contents of file ...
 
 --example_boundary--
 ```
@@ -435,7 +435,7 @@ Host: api.example.com
 --example_boundary
 Content-Disposition: form-data; name="icon"
 
-"... contents of file ..."
+... contents of file ...
 
 --example_boundary--
 ```

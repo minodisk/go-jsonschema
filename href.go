@@ -3,7 +3,6 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/url"
 	"path"
 )
@@ -33,7 +32,6 @@ func (h *HRef) Resolve(schemas *map[string]*Schema) error {
 		schema := (*schemas)[s]
 		return schema.Example.RawString()
 	})
-	log.Println(h.example)
 	return nil
 }
 
