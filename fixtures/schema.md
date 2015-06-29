@@ -68,7 +68,7 @@ Create a new album.
   - Type: string
 
 ```http
-POST  HTTP/1.1
+POST /albums HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
@@ -108,7 +108,7 @@ List existing albums.
 
 
 ```http
-GET  HTTP/1.1
+GET /albums HTTP/1.1
 Host: api.example.com
 ```
 
@@ -145,7 +145,7 @@ Read an existing album.
 
 
 ```http
-GET  HTTP/1.1
+GET /albums/942b46e5-893b-41ba-88da-d6aef7dddc31 HTTP/1.1
 Host: api.example.com
 ```
 
@@ -184,7 +184,7 @@ Update an existing album.
   - Type: string
 
 ```http
-PATCH  HTTP/1.1
+PATCH /albums/942b46e5-893b-41ba-88da-d6aef7dddc31 HTTP/1.1
 Content-Type: application/json
 Host: api.example.com
 
@@ -224,7 +224,7 @@ Delete an existing album.
 
 
 ```http
-DELETE  HTTP/1.1
+DELETE /albums/942b46e5-893b-41ba-88da-d6aef7dddc31 HTTP/1.1
 Host: api.example.com
 ```
 
@@ -242,7 +242,7 @@ Upload an attachment file for an album.
   - Type: string
 
 ```http
-POST  HTTP/1.1
+POST /albums/942b46e5-893b-41ba-88da-d6aef7dddc31/files HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
@@ -319,10 +319,41 @@ Content-Type: application/json
 
 Create a user.
 
+- created_at
+  - when user was created
+  - Example: `"2006-01-02 15:04:06"`
+  - Type: string
+- email
+  - unique email address of user
+  - Example: `"gopher@example.com"`
+  - Type: string
+- icon
+  - user icon
+  - Example: `"http://example.com/icon.png"`
+  - Type: string
+- id
+  - unique identifier of user
+  - Example: `512446121`
+  - Type: integer
+- name
+  - name of user
+  - Example: `"Gopher"`
+  - Type: string
+- updated_at
+  - when user was updated
+  - Example: `"2006-01-02 15:04:06"`
+  - Type: string
 
 ```http
-POST  HTTP/1.1
+POST /users HTTP/1.1
+Content-Type: application/json
 Host: api.example.com
+
+{
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "name": "Gopher"
+}
 ```
 
 ```http
@@ -345,7 +376,7 @@ Read users list.
 
 
 ```http
-GET  HTTP/1.1
+GET /users HTTP/1.1
 Host: api.example.com
 ```
 
@@ -369,7 +400,7 @@ Read user.
 
 
 ```http
-GET  HTTP/1.1
+GET /users/512446121 HTTP/1.1
 Host: api.example.com
 ```
 
@@ -397,7 +428,7 @@ Upload an icon file for user.
   - Type: string
 
 ```http
-POST  HTTP/1.1
+POST /users/512446121/icons HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
@@ -429,7 +460,7 @@ Delete user.
 
 
 ```http
-DELETE  HTTP/1.1
+DELETE /users/512446121 HTTP/1.1
 Host: api.example.com
 ```
 
