@@ -434,15 +434,5 @@ Host: api.example.com
 ```
 
 ```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "created_at": "2006-01-02 15:04:06",
-  "email": "gopher@example.com",
-  "icon": "http://example.com/icon.png",
-  "id": 512446121,
-  "name": "Gopher",
-  "updated_at": "2006-01-02 15:04:06"
-}
+HTTP/1.1 204 No Content
 ```

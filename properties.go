@@ -14,20 +14,21 @@ func (p *Properties) QueryString() string {
 	return v.Encode()
 }
 
-func (p *Properties) ExampleData() (map[string]interface{}, error) {
+func (p *Properties) ExampleData(includesReadOnly bool) (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	for name, schema := range p.Schemas {
-		if schema != nil {
-			// if schema.Example != nil {
-			m[name] = schema.Example
-			// } else {
-			v, err := schema.ExampleData()
-			if err != nil {
-				return nil, err
-			}
-			m[name] = v
-			// }
+		if schema == nil {
+			continue
 		}
+		if !includesReadOnly && schema.ReadOnly {
+			continue
+		}
+		m[name] = schema.Example
+		v, err := schema.ExampleData(includesReadOnly)
+		if err != nil {
+			return nil, err
+		}
+		m[name] = v
 	}
 	return m, nil
 }

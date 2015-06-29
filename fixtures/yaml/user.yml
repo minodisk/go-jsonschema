@@ -54,6 +54,8 @@ links:
   description: Create a user.
   method: POST
   href: /users
+  schema:
+    $ref: "#/definitions/user"
 - title: ReadList
   description: Read users list.
   method: GET
@@ -77,3 +79,4 @@ links:
   description: Delete user.
   method: DELETE
   href: "/users/{(#/definitions/user/definitions/user_id)}"
+  mediaType: "null"

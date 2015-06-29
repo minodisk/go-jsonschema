@@ -133,7 +133,7 @@ func (l Link) RequestBody() string {
 		return ""
 	}
 
-	d, err := l.Schema.ExampleData()
+	d, err := l.Schema.ExampleData(false)
 	if err != nil {
 		return ""
 	}
@@ -193,9 +193,9 @@ func (l Link) ResponseBody() string {
 	var d interface{}
 	var err error
 	if l.TargetSchema != nil {
-		d, err = l.TargetSchema.ExampleData()
+		d, err = l.TargetSchema.ExampleData(true)
 	} else {
-		d, err = l.parent.ExampleData()
+		d, err = l.parent.ExampleData(true)
 	}
 	if err != nil {
 		log.Printf("fail to create example data: %s", err)

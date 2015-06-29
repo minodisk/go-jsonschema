@@ -210,17 +210,17 @@ func (s Schema) QueryString() string {
 	return s.Properties.QueryString()
 }
 
-func (s Schema) ExampleData() (interface{}, error) {
+func (s Schema) ExampleData(includesReadOnly bool) (interface{}, error) {
 	// if s.Example != nil {
 	// 	return s.Example, nil
 	// }
 
 	if s.Type != nil {
 		if s.Type.Is(TypeArray) {
-			return s.Items.ExampleData()
+			return s.Items.ExampleData(includesReadOnly)
 		}
 		if s.Type.Is(TypeObject) {
-			return s.Properties.ExampleData()
+			return s.Properties.ExampleData(includesReadOnly)
 		}
 	}
 
