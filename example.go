@@ -10,17 +10,17 @@ type Example struct {
 	value interface{}
 }
 
-func NewDefaultExample(t *Type) (*Example, error) {
+func NewDefaultExample(t *Type) (Example, error) {
 	if t.Is(TypeNull) {
-		return &Example{nil}, nil
+		return Example{nil}, nil
 	} else if t.Is(TypeBoolean) {
-		return &Example{false}, nil
+		return Example{false}, nil
 	} else if t.Is(TypeNumber) || t.Is(TypeInteger) {
-		return &Example{0.0}, nil
+		return Example{0.0}, nil
 	} else if t.Is(TypeString) {
-		return &Example{""}, nil
+		return Example{""}, nil
 	}
-	return nil, fmt.Errorf("no default example: %s", t.String())
+	return Example{}, fmt.Errorf("no default example: %s", t.String())
 }
 
 func (e *Example) UnmarshalJSON(data []byte) error {
@@ -34,11 +34,15 @@ func (e *Example) MarshalJSON() ([]byte, error) {
 	return []byte(e.String()), nil
 }
 
-func (e *Example) Initialize(def interface{}) {
-	if !e.IsDefined() {
-		e.value = def
-	}
+func (e *Example) HasValue() bool {
+	return e.value != nil
 }
+
+// func (e *Example) Initialize(def interface{}) {
+// 	if !e.IsDefined() {
+// 		e.value = def
+// 	}
+// }
 
 func (e *Example) IsDefined() bool {
 	return e.value != nil

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"regexp"
 	"strings"
 	"text/template"
 )
@@ -32,8 +31,7 @@ Content-Disposition: form-data; name="{{.name}}"
 )
 
 var (
-	partTmpl      = template.Must(template.New("part").Parse(part))
-	rBraceBracket = regexp.MustCompile(`{\((.*)\)}`)
+	partTmpl = template.Must(template.New("part").Parse(part))
 )
 
 type Link struct {

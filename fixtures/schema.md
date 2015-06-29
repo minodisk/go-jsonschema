@@ -20,50 +20,41 @@ Example schemata for go-jsonschema.
 
 ### Properties
 
-- created_at
-  - when album was created
+- **created_at**: when album was created
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
   - ReadOnly: true
-- deleted_at
-  - when album was deleted
+- **deleted_at**: when album was deleted
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
-- id
-  - unique identifier of album
+- **id**: unique identifier of album
   - Example: `"942b46e5-893b-41ba-88da-d6aef7dddc31"`
   - Type: string
   - Format: uuid
   - ReadOnly: true
-- liked_user_ids
-  - id list of users who like album
+- **liked_user_ids**: list of users' id who liked album
   - Type: array
-- name
-  - name of album
+- **name**: name of album
   - Example: `"my album"`
   - Type: string
-- private
-  - whether to be private
+- **private**: whether to be private
   - Example: `false`
   - Type: boolean
-- updated_at
-  - when album was updated
+- **updated_at**: when album was updated
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
   - ReadOnly: true
-- user
-  - Type: object
+- **user**  - Type: object
 
 
 ### POST /albums
 
 Create a new album.
 
-- name
-  - name of album
+- **name**: name of album
   - Example: `"my album"`
   - Type: string
 
@@ -178,8 +169,7 @@ Content-Type: application/json
 
 Update an existing album.
 
-- name
-  - name of album
+- **name**: name of album
   - Example: `"my album"`
   - Type: string
 
@@ -236,8 +226,7 @@ HTTP/1.1 204 No Content
 
 Upload an attachment file for an album.
 
-- file
-  - attachment of album
+- **file**: attachment of album
   - Example: `"... contents of file ..."`
   - Type: string
 
@@ -282,33 +271,27 @@ Content-Type: application/json
 
 ### Properties
 
-- created_at
-  - when user was created
+- **created_at**: when user was created
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
   - ReadOnly: true
-- email
-  - unique email address of user
+- **email**: unique email address of user
   - Example: `"gopher@example.com"`
   - Type: string
   - Format: email
-- icon
-  - user icon
+- **icon**: user icon
   - Example: `"http://example.com/icon.png"`
   - Type: string
   - Format: uri
-- id
-  - unique identifier of user
+- **id**: unique identifier of user
   - Example: `512446121`
   - Type: integer
   - ReadOnly: true
-- name
-  - name of user
+- **name**: name of user
   - Example: `"Gopher"`
   - Type: string
-- updated_at
-  - when user was updated
+- **updated_at**: when user was updated
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
   - Format: date-time
@@ -319,28 +302,22 @@ Content-Type: application/json
 
 Create a user.
 
-- created_at
-  - when user was created
+- **created_at**: when user was created
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
-- email
-  - unique email address of user
+- **email**: unique email address of user
   - Example: `"gopher@example.com"`
   - Type: string
-- icon
-  - user icon
+- **icon**: user icon
   - Example: `"http://example.com/icon.png"`
   - Type: string
-- id
-  - unique identifier of user
+- **id**: unique identifier of user
   - Example: `512446121`
   - Type: integer
-- name
-  - name of user
+- **name**: name of user
   - Example: `"Gopher"`
   - Type: string
-- updated_at
-  - when user was updated
+- **updated_at**: when user was updated
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
 
@@ -422,8 +399,7 @@ Content-Type: application/json
 
 Upload an icon file for user.
 
-- icon
-  - user icon
+- **icon**: user icon
   - Example: `"... contents of file ..."`
   - Type: string
 

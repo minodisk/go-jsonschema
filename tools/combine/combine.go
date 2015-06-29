@@ -67,7 +67,7 @@ func run(o Options) (err error) {
 }
 
 func Combine(input string, meta string, enc encoding.Encoding) (combined []byte, err error) {
-	d, err := filepath.Abs(input)
+	dir, err := filepath.Abs(input)
 	if err != nil {
 		return nil, err
 	}
@@ -78,14 +78,14 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	}
 
 	files := map[string][]byte{}
-	if err := readFiles(d, &files); err != nil {
+	if err := readFiles(dir, &files); err != nil {
 		return nil, err
 	}
-	b, ok := files[meta]
-	if !ok {
-		return nil, fmt.Errorf("meta file is required: %s", meta)
+	_, ok := files[meta]
+	if ok {
+		delete(files, meta)
+		// return nil, fmt.Errorf("meta file is required: %s", meta)
 	}
-	delete(files, meta)
 
 	var schema struct {
 		Schema      string                            `yaml:"$schema" json:"$schema"`
@@ -97,6 +97,10 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 		Properties  map[string]map[string]interface{} `json:"properties"`
 	}
 
+	data, err := ioutil.ReadFile(meta)
+	if err != nil {
+		return nil, fmt.Errorf("meta file is required: %s", meta)
+	}
 	metaEnc, err := encoding.NewWithFilename(meta)
 	if err != nil {
 		return nil, err
@@ -105,11 +109,11 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	default:
 		return nil, fmt.Errorf("unsupported encoding '%s'", metaEnc)
 	case encoding.JSON:
-		if err := json.Unmarshal(b, &schema); err != nil {
+		if err := json.Unmarshal(data, &schema); err != nil {
 			return nil, err
 		}
 	case encoding.YAML:
-		if err := yaml.Unmarshal(b, &schema); err != nil {
+		if err := yaml.Unmarshal(data, &schema); err != nil {
 			return nil, err
 		}
 	}

@@ -30,10 +30,10 @@ func (f *Format) String() string {
 	return f.value
 }
 
-func (f *Format) ExampleData() (*Example, error) {
+func (f *Format) ExampleData() (Example, error) {
 	d, ok := f.definitions.FindDefinition(f.value)
 	if !ok {
-		return nil, fmt.Errorf("no format definition: %s", f.value)
+		return Example{}, fmt.Errorf("no format definition: %s", f.value)
 	}
-	return &Example{d.Example}, nil
+	return Example{d.Example}, nil
 }

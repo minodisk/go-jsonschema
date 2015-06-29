@@ -34,7 +34,7 @@ definitions:
   user:
     $ref: "#/definitions/user"
   liked_user_ids:
-    description: id list of users who like album
+    description: list of users' id who liked album
     type: array
     items:
       $ref: "#/definitions/user/definitions/user_id"

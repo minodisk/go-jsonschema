@@ -5,6 +5,11 @@ import (
 	"fmt"
 	"net/url"
 	"path"
+	"regexp"
+)
+
+var (
+	rBraceBracket = regexp.MustCompile(`{\((.*?)\)}`)
 )
 
 type HRef struct {

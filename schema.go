@@ -63,8 +63,8 @@ type Schema struct {
 	// 4.1. links
 	Links []*Link `json:"links"`
 	// 4.3. media
-	Media   Media    `json:"media"`
-	Example *Example `json:"example"`
+	Media   Media   `json:"media"`
+	Example Example `json:"example"`
 	// 4.4. readOnly
 	ReadOnly bool `json:"readOnly"`
 	// 4.5. pathStart
@@ -185,7 +185,10 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
-	if s.Example != nil {
+	// if s.Example != nil {
+	// 	return nil
+	// }
+	if s.Example.HasValue() {
 		return nil
 	}
 	if s.Format != nil {
