@@ -12,69 +12,70 @@ type Schema struct {
 	// JSON Schema: core definitions and terminology
 	// json-schema-core
 	// See http://json-schema.org/latest/json-schema-core.html
-	ID string
+	ID string `json:"id"`
 
 	// JSON Schema: interactive and non interactive validation
 	// json-schema-validation
 	// See http://json-schema.org/latest/json-schema-validation.html
 	// 5.   Validation keywords sorted by instance types
 	// 5.1. Validation keywords for numeric instances (number and integer)
-	MultipleOf       float64
-	Maximum          float64
-	ExclusiveMaximum bool
-	Minimum          float64
-	ExclusiveMinimum bool
+	MultipleOf       float64 `json:"multipleOf"`
+	Maximum          float64 `json:"maximum"`
+	ExclusiveMaximum bool    `json:"exclusiveMaximum"`
+	Minimum          float64 `json:"minimum"`
+	ExclusiveMinimum bool    `json:"exclusiveMinimum"`
 	// 5.2. Validation keywords for strings
-	MaxLength int
-	MinLength int
-	Pattern   string // regexp
+	MaxLength int    `json:"max_length"`
+	MinLength int    `json:"min_length"`
+	Pattern   string `json:"pattern"`
 	// 5.3. Validation keywords for arrays
-	AdditionalItems SchemaOrBool // Schema or bool
-	Items           Items        // Schema or []Schema
-	MaxItems        int
-	MinItems        int
-	UniqueItems     bool
+	AdditionalItems SchemaOrBool `json:"additionalItems"` // Schema or bool
+	Items           Items        `json:"items"`           // Schema or []Schema
+	MaxItems        int          `json:"maxItems"`
+	MinItems        int          `json:"minItems"`
+	UniqueItems     bool         `json:"uniqueItems"`
 	// 5.4. Validation keywords for objects
-	MaxProperties        int
-	MinProperties        int
-	Required             []string
-	AdditionalProperties SchemaOrBool // Schema or bool
-	Properties           Properties
-	PatternProperties    map[string]string // regexp
-	Dependencies         SchemaOrStrings   // Schema or []string
+	MaxProperties        int               `json:"maxProperties"`
+	MinProperties        int               `json:"minProperties"`
+	Required             []string          `json:"required"`
+	AdditionalProperties SchemaOrBool      `json:"additionalProperties"` // Schema or bool
+	Properties           Properties        `json:"properties"`
+	PatternProperties    map[string]string `json:"patternProperties"` // regexp
+	Dependencies         SchemaOrStrings   `json:"dependencies"`      // Schema or []string
 	// 5.5. Validation keywords for any instance type
-	Enum        []interface{}
-	Type        *Type   // string or []string
-	AllOf       Schemas //[]*Schema
-	AnyOf       Schemas //[]*Schema
-	OneOf       Schemas //[]*Schema
-	Not         *Schema
-	Definitions Definitions
+	Enum        []interface{} `json:"enum"`
+	Type        *Type         `json:"type"`  // string or []string
+	AllOf       Schemas       `json:"allOf"` //[]*Schema
+	AnyOf       Schemas       `json:"anyOf"` //[]*Schema
+	OneOf       Schemas       `json:"oneOf"` //[]*Schema
+	Not         *Schema       `json:"not"`
+	Definitions Definitions   `json:"definitions"`
 	// 6. Metadata keywords
-	Title       string
-	Description string
-	Default     interface{}
+	Title       string      `json:"title"`
+	Description string      `json:"description"`
+	Default     interface{} `json:"default"`
 	// 7. Semantic validation with "format"
-	Format *Format
+	Format *Format `json:"format"`
 
 	// JSON Hyper-Schema: Hypertext definitions for JSON Schema
 	// json-schema-hypermedia
 	// See http://json-schema.org/latest/json-schema-hypermedia.html
 	// 4.1. links
-	Links []*Link
+	Links []*Link `json:"links"`
 	// 4.3. media
-	Media   Media
-	Example *Example
+	Media   Media    `json:"media"`
+	Example *Example `json:"example"`
 	// 4.4. readOnly
-	ReadOnly bool
+	ReadOnly bool `json:"readOnly"`
 	// 4.5. pathStart
-	PathStart string
+	PathStart string `json:"pathStart"`
 
 	Schema string `json:"$schema"`
 	Ref    string `json:"$ref"`
 
 	root        *Schema
 	definitions *format.Definitions
+	isResolved  bool
 }
 
 func New(b []byte) (*Schema, error) {
@@ -91,7 +92,7 @@ func New(b []byte) (*Schema, error) {
 func (s *Schema) initialize() (err error) {
 	s.root = s
 	s.definitions = format.NewDefinitions()
-	schemas := make(map[string]*Schema)
+	schemas := map[string]*Schema{}
 	if err := s.Collect(&schemas, "#"); err != nil {
 		return err
 	}
@@ -128,16 +129,21 @@ func (s *Schema) Collect(schemas *map[string]*Schema, p string) error {
 }
 
 func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
+	if s.isResolved {
+		return nil
+	}
+
 	if s.Ref != "" {
 		schema := (*schemas)[s.Ref]
 		if schema == nil {
 			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}
+		schema.Resolve(schemas, root)
 		*s = *schema
-		s.Resolve(schemas, root)
 		return nil
 	}
 
+	s.isResolved = true
 	s.root = root
 
 	if err := s.AdditionalItems.Resolve(schemas, root); err != nil {
