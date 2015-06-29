@@ -3,12 +3,12 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"path"
 )
 
 type HRef struct {
-	id      int
 	value   string
 	example string
 }
@@ -28,14 +28,14 @@ func (h *HRef) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// func (h *HRef) Resolve(schemas *map[string]*Schema) error {
-// 	h.example = h.replaceBraceBracket(func(s string) string {
-// 		schema := (*schemas)[s]
-// 		return schema.Example.String()
-// 	})
-// 	h.id = rand.Int()
-// 	return nil
-// }
+func (h *HRef) Resolve(schemas *map[string]*Schema) error {
+	h.example = h.replaceBraceBracket(func(s string) string {
+		schema := (*schemas)[s]
+		return schema.Example.RawString()
+	})
+	log.Println(h.example)
+	return nil
+}
 
 func (h HRef) String() string {
 	return h.value
