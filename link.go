@@ -77,14 +77,22 @@ func (l *Link) SetParent(s *Schema) {
 	l.parent = s
 }
 
-func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) error {
+func (l *Link) Resolve(schemas *map[string]*Schema, root *Schema) (err error) {
 	if l.TargetSchema != nil {
-		if err := l.TargetSchema.Resolve(schemas, root); err != nil {
+		err = l.TargetSchema.Resolve(schemas, root)
+		if err != nil {
 			return err
 		}
 	}
 	if l.Schema != nil {
-		if err := l.Schema.Resolve(schemas, root); err != nil {
+		err = l.Schema.Resolve(schemas, root)
+		if err != nil {
+			return err
+		}
+	}
+	if l.HRef != nil {
+		err = l.HRef.Resolve(schemas)
+		if err != nil {
 			return err
 		}
 	}
