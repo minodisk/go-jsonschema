@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"strconv"
 )
 
@@ -32,7 +31,6 @@ func (e *Example) UnmarshalJSON(data []byte) error {
 }
 
 func (e Example) MarshalJSON() ([]byte, error) {
-	log.Printf("%T", e.value)
 	return json.Marshal(e.value)
 }
 
