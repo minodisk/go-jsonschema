@@ -1,8 +1,10 @@
 package jsonschema
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -24,27 +26,21 @@ func NewDefaultExample(t *Type) (Example, error) {
 }
 
 func (e *Example) UnmarshalJSON(data []byte) error {
-	if err := json.Unmarshal(data, &e.value); err != nil {
-		return err
-	}
-	return nil
+	d := json.NewDecoder(bytes.NewBuffer(data))
+	d.UseNumber()
+	return d.Decode(&e.value)
 }
 
-func (e *Example) MarshalJSON() ([]byte, error) {
-	return []byte(e.String()), nil
+func (e Example) MarshalJSON() ([]byte, error) {
+	log.Printf("%T", e.value)
+	return json.Marshal(e.value)
 }
 
-func (e *Example) HasValue() bool {
+func (e Example) HasValue() bool {
 	return e.value != nil
 }
 
-// func (e *Example) Initialize(def interface{}) {
-// 	if !e.IsDefined() {
-// 		e.value = def
-// 	}
-// }
-
-func (e *Example) IsDefined() bool {
+func (e Example) IsDefined() bool {
 	return e.value != nil
 }
 
@@ -67,12 +63,8 @@ func (e Example) RawString() string {
 		return string(b)
 	case string:
 		return v
-	// case int:
-	// 	i := int64(v)
-	// 	log.Println("->", i)
-	// 	return strconv.FormatInt(i, 10)
-	case float64:
-		return strconv.FormatFloat(v, 'f', -1, 64)
+	case json.Number:
+		return v.String()
 	case bool:
 		return strconv.FormatBool(v)
 	case nil:

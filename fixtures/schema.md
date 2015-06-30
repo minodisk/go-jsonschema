@@ -66,7 +66,7 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": {}
+  "name": "my album"
 }
 ```
 
@@ -75,22 +75,22 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "deleted_at": {},
-  "id": {},
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
-    {}
+    512446121
   ],
-  "name": {},
-  "private": {},
-  "updated_at": {},
+  "name": "my album",
+  "private": false,
+  "updated_at": "2006-01-02 15:04:06",
   "user": {
-    "created_at": {},
-    "email": {},
-    "icon": {},
-    "id": {},
-    "name": {},
-    "updated_at": {}
+    "created_at": "2006-01-02 15:04:06",
+    "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
+    "id": 512446121,
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -111,22 +111,22 @@ Content-Type: application/json
 
 [
   {
-    "created_at": {},
-    "deleted_at": {},
-    "id": {},
+    "created_at": "2006-01-02 15:04:06",
+    "deleted_at": "2006-01-02 15:04:06",
+    "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
     "liked_user_ids": [
-      {}
+      512446121
     ],
-    "name": {},
-    "private": {},
-    "updated_at": {},
+    "name": "my album",
+    "private": false,
+    "updated_at": "2006-01-02 15:04:06",
     "user": {
-      "created_at": {},
-      "email": {},
-      "icon": {},
-      "id": {},
-      "name": {},
-      "updated_at": {}
+      "created_at": "2006-01-02 15:04:06",
+      "email": "gopher@example.com",
+      "icon": "http://example.com/icon.png",
+      "id": 512446121,
+      "name": "Gopher",
+      "updated_at": "2006-01-02 15:04:06"
     }
   }
 ]
@@ -147,22 +147,22 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "deleted_at": {},
-  "id": {},
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
-    {}
+    512446121
   ],
-  "name": {},
-  "private": {},
-  "updated_at": {},
+  "name": "my album",
+  "private": false,
+  "updated_at": "2006-01-02 15:04:06",
   "user": {
-    "created_at": {},
-    "email": {},
-    "icon": {},
-    "id": {},
-    "name": {},
-    "updated_at": {}
+    "created_at": "2006-01-02 15:04:06",
+    "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
+    "id": 512446121,
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -181,7 +181,7 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "name": {}
+  "name": "my album"
 }
 ```
 
@@ -190,22 +190,22 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "deleted_at": {},
-  "id": {},
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
-    {}
+    512446121
   ],
-  "name": {},
-  "private": {},
-  "updated_at": {},
+  "name": "my album",
+  "private": false,
+  "updated_at": "2006-01-02 15:04:06",
   "user": {
-    "created_at": {},
-    "email": {},
-    "icon": {},
-    "id": {},
-    "name": {},
-    "updated_at": {}
+    "created_at": "2006-01-02 15:04:06",
+    "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
+    "id": 512446121,
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -237,7 +237,12 @@ POST /albums/942b46e5-893b-41ba-88da-d6aef7dddc31/files HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
+--example_boundary
+Content-Disposition: form-data; name="file"
 
+... contents of file ...
+
+--example_boundary--
 ```
 
 ```http
@@ -245,22 +250,22 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "deleted_at": {},
-  "id": {},
+  "created_at": "2006-01-02 15:04:06",
+  "deleted_at": "2006-01-02 15:04:06",
+  "id": "942b46e5-893b-41ba-88da-d6aef7dddc31",
   "liked_user_ids": [
-    {}
+    512446121
   ],
-  "name": {},
-  "private": {},
-  "updated_at": {},
+  "name": "my album",
+  "private": false,
+  "updated_at": "2006-01-02 15:04:06",
   "user": {
-    "created_at": {},
-    "email": {},
-    "icon": {},
-    "id": {},
-    "name": {},
-    "updated_at": {}
+    "created_at": "2006-01-02 15:04:06",
+    "email": "gopher@example.com",
+    "icon": "http://example.com/icon.png",
+    "id": 512446121,
+    "name": "Gopher",
+    "updated_at": "2006-01-02 15:04:06"
   }
 }
 ```
@@ -324,9 +329,9 @@ Content-Type: application/json
 Host: api.example.com
 
 {
-  "email": {},
-  "icon": {},
-  "name": {}
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "name": "Gopher"
 }
 ```
 
@@ -335,12 +340,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "email": {},
-  "icon": {},
-  "id": {},
-  "name": {},
-  "updated_at": {}
+  "created_at": "2006-01-02 15:04:06",
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "id": 512446121,
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -359,12 +364,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "email": {},
-  "icon": {},
-  "id": {},
-  "name": {},
-  "updated_at": {}
+  "created_at": "2006-01-02 15:04:06",
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "id": 512446121,
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -383,12 +388,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "email": {},
-  "icon": {},
-  "id": {},
-  "name": {},
-  "updated_at": {}
+  "created_at": "2006-01-02 15:04:06",
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "id": 512446121,
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 
@@ -405,7 +410,12 @@ POST /users/512446121/icons HTTP/1.1
 Content-Type: multipart/form-data; boundary=example_boundary
 Host: api.example.com
 
+--example_boundary
+Content-Disposition: form-data; name="icon"
 
+... contents of file ...
+
+--example_boundary--
 ```
 
 ```http
@@ -413,12 +423,12 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "created_at": {},
-  "email": {},
-  "icon": {},
-  "id": {},
-  "name": {},
-  "updated_at": {}
+  "created_at": "2006-01-02 15:04:06",
+  "email": "gopher@example.com",
+  "icon": "http://example.com/icon.png",
+  "id": 512446121,
+  "name": "Gopher",
+  "updated_at": "2006-01-02 15:04:06"
 }
 ```
 

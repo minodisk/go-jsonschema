@@ -185,12 +185,10 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		}
 	}
 
-	// if s.Example != nil {
-	// 	return nil
-	// }
 	if s.Example.HasValue() {
 		return nil
 	}
+
 	if s.Format != nil {
 		if err := s.Format.Resolve(schemas, root); err != nil {
 			return err

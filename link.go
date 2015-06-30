@@ -230,7 +230,7 @@ func multipartString(data interface{}) (string, error) {
 			switch c := content.(type) {
 			default:
 				return "", fmt.Errorf("unsupported content type: %T", c)
-			case *Example:
+			case Example:
 				b, err := marshalPart(map[string]interface{}{
 					"boundary": Boundary,
 					"name":     name,
