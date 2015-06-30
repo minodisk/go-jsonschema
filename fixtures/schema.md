@@ -90,6 +90,7 @@ Content-Type: application/json
     "icon": "http://example.com/icon.png",
     "id": 512446121,
     "name": "Gopher",
+    "screen_name": "gopher-1030",
     "updated_at": "2006-01-02 15:04:06"
   }
 }
@@ -126,6 +127,7 @@ Content-Type: application/json
       "icon": "http://example.com/icon.png",
       "id": 512446121,
       "name": "Gopher",
+      "screen_name": "gopher-1030",
       "updated_at": "2006-01-02 15:04:06"
     }
   }
@@ -162,6 +164,7 @@ Content-Type: application/json
     "icon": "http://example.com/icon.png",
     "id": 512446121,
     "name": "Gopher",
+    "screen_name": "gopher-1030",
     "updated_at": "2006-01-02 15:04:06"
   }
 }
@@ -205,6 +208,7 @@ Content-Type: application/json
     "icon": "http://example.com/icon.png",
     "id": 512446121,
     "name": "Gopher",
+    "screen_name": "gopher-1030",
     "updated_at": "2006-01-02 15:04:06"
   }
 }
@@ -265,6 +269,7 @@ Content-Type: application/json
     "icon": "http://example.com/icon.png",
     "id": 512446121,
     "name": "Gopher",
+    "screen_name": "gopher-1030",
     "updated_at": "2006-01-02 15:04:06"
   }
 }
@@ -293,6 +298,10 @@ Content-Type: application/json
 - **name**: name of user
   - Example: `"Gopher"`
   - Type: string
+- **screen_name**: screen name of user
+  - Example: `"gopher-1030"`
+  - Type: string
+  - Pattern: `/^[a-z0-9-_]{5,30}$/`
 - **updated_at**: when user was updated
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
@@ -319,6 +328,10 @@ Create a user.
 - **name**: name of user
   - Example: `"Gopher"`
   - Type: string
+- **screen_name**: screen name of user
+  - Example: `"gopher-1030"`
+  - Type: string
+  - Pattern: `/^[a-z0-9-_]{5,30}$/`
 - **updated_at**: when user was updated
   - Example: `"2006-01-02 15:04:06"`
   - Type: string
@@ -331,7 +344,8 @@ Host: api.example.com
 {
   "email": "gopher@example.com",
   "icon": "http://example.com/icon.png",
-  "name": "Gopher"
+  "name": "Gopher",
+  "screen_name": "gopher-1030"
 }
 ```
 
@@ -345,6 +359,7 @@ Content-Type: application/json
   "icon": "http://example.com/icon.png",
   "id": 512446121,
   "name": "Gopher",
+  "screen_name": "gopher-1030",
   "updated_at": "2006-01-02 15:04:06"
 }
 ```
@@ -369,6 +384,7 @@ Content-Type: application/json
   "icon": "http://example.com/icon.png",
   "id": 512446121,
   "name": "Gopher",
+  "screen_name": "gopher-1030",
   "updated_at": "2006-01-02 15:04:06"
 }
 ```
@@ -393,6 +409,7 @@ Content-Type: application/json
   "icon": "http://example.com/icon.png",
   "id": 512446121,
   "name": "Gopher",
+  "screen_name": "gopher-1030",
   "updated_at": "2006-01-02 15:04:06"
 }
 ```
@@ -428,6 +445,7 @@ Content-Type: application/json
   "icon": "http://example.com/icon.png",
   "id": 512446121,
   "name": "Gopher",
+  "screen_name": "gopher-1030",
   "updated_at": "2006-01-02 15:04:06"
 }
 ```

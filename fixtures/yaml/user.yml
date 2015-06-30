@@ -22,6 +22,11 @@ definitions:
     description: name of user
     example: Gopher
     type: string
+  screen_name:
+    description: screen name of user
+    example: gopher-1030
+    type: string
+    pattern: ^[a-z0-9-_]{5,30}$
   email:
     description: unique email address of user
     example: gopher@example.com
@@ -45,6 +50,8 @@ properties:
     $ref: "#/definitions/user/definitions/updated_at"
   name:
     $ref: "#/definitions/user/definitions/name"
+  screen_name:
+    $ref: "#/definitions/user/definitions/screen_name"
   email:
     $ref: "#/definitions/user/definitions/email"
   icon:
