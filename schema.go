@@ -138,7 +138,10 @@ func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
 		if schema == nil {
 			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}
-		schema.Resolve(schemas, root)
+		err := schema.Resolve(schemas, root)
+		if err != nil {
+			return err
+		}
 		*s = *schema
 		return nil
 	}
