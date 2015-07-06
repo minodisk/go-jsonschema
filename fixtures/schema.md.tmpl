@@ -11,7 +11,8 @@
 
 {{end}}### Properties
 
-{{range $name, $property := $schema.Properties.Schemas}}- **{{$name}}**{{if $property.Description}}: {{$property.Description}}
+{{range $name, $property := $schema.Properties.Schemas}}- **{{$name}}**
+{{if $property.Description}}  - {{insertHead $property.Description "    "}}
 {{end}}{{if $property.Example}}  - Example: `{{$property.Example}}`
 {{end}}{{if $property.Type}}  - Type: {{$property.Type}}
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`
@@ -23,7 +24,8 @@
 
 {{if $link.Description}}{{$link.Description}}
 
-{{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}- **{{$name}}**{{if $property.Description}}: {{$property.Description}}
+{{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}- **{{$name}}**
+{{if $property.Description}}  - {{insertHead $property.Description "    "}}
 {{end}}{{if $property.Example}}  - Example: `{{$property.Example}}`
 {{end}}{{if $property.Type}}  - Type: {{$property.Type}}
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`

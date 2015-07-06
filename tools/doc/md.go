@@ -26,7 +26,8 @@ const (
 var (
 	rHashIgnorance = regexp.MustCompile(`[:\/]`)
 	funcMap        = template.FuncMap{
-		"urlHash": urlHash,
+		"urlHash":    urlHash,
+		"insertHead": insertHead,
 	}
 )
 
@@ -163,4 +164,8 @@ func urlHash(str string) string {
 	u = rHashIgnorance.ReplaceAllString(u, "")
 	u = strings.ToLower(u)
 	return fmt.Sprintf("#%s", u)
+}
+
+func insertHead(str, pad string) string {
+	return strings.Join(strings.Split(str, "\n"), "\n"+pad)
 }
