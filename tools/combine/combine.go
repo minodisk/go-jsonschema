@@ -6,12 +6,18 @@ import (
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/minodisk/go-jsonschema/tools/encoding"
 	"github.com/minodisk/go-watcher"
 
 	"gopkg.in/yaml.v2"
+)
+
+var (
+	rSlash  = regexp.MustCompile("\\/")
+	rSymbol = regexp.MustCompile("[\\s!<>#%@&='\"`:;,\\.\\*\\+\\(\\)\\{\\}\\[\\]\\|\\?\\^\\$]+")
 )
 
 type Options struct {
@@ -67,7 +73,7 @@ func run(o Options) (err error) {
 }
 
 func Combine(input string, meta string, enc encoding.Encoding) (combined []byte, err error) {
-	dir, err := filepath.Abs(input)
+	root, err := filepath.Abs(input)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +84,7 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 	}
 
 	files := map[string][]byte{}
-	if err := readFiles(dir, &files); err != nil {
+	if err := readFiles(root, &files); err != nil {
 		return nil, err
 	}
 	_, ok := files[meta]
@@ -140,7 +146,12 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 		if ok {
 			id = i.(string)
 		} else {
-			id = strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
+			id, err = filepath.Rel(root, strings.TrimSuffix(filename, filepath.Ext(filename)))
+			if err != nil {
+				return nil, err
+			}
+			id = rSlash.ReplaceAllString(id, "-")
+			id = rSymbol.ReplaceAllString(id, "")
 		}
 		schema.Definitions[id] = subSchemaMap
 		schema.Properties[id] = make(map[string]interface{})
