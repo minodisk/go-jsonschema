@@ -130,14 +130,19 @@ func Combine(input string, meta string, enc encoding.Encoding) (combined []byte,
 		if err != nil {
 			return nil, err
 		}
-		i, ok := subSchema.(map[string]interface{})["id"]
+		subSchemaMap, ok := subSchema.(map[string]interface{})
+		if !ok {
+			log.Printf("ignore %s: invalid schema", filename)
+			continue
+		}
+		i, ok := subSchemaMap["id"]
 		var id string
 		if ok {
 			id = i.(string)
 		} else {
 			id = strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
 		}
-		schema.Definitions[id] = subSchema
+		schema.Definitions[id] = subSchemaMap
 		schema.Properties[id] = make(map[string]interface{})
 		schema.Properties[id]["$ref"] = fmt.Sprintf("#/definitions/%s", id)
 	}
