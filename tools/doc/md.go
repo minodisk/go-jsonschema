@@ -42,32 +42,39 @@ type Options struct {
 }
 
 func Generate(o Options) (err error) {
-	err = generate(o)
-	if err != nil {
-		return err
-	}
-	if o.IsWatch {
-		done := make(chan int)
-		w := watcher.New()
-		go func() {
-			for {
-				select {
-				case <-w.Events:
-					err = generate(o)
-					if err != nil {
-						log.Println("Generation Error:", err)
-					}
-				case err := <-w.Errors:
-					log.Println("Error:", err)
-				}
-			}
-		}()
-		err = w.Watch([]string{o.Input, o.Meta, o.Template})
+	if !o.IsWatch {
+		err = generate(o)
 		if err != nil {
 			return err
 		}
-		<-done
+		return nil
 	}
+	done := make(chan int)
+	w := watcher.New()
+	go func() {
+		for {
+			select {
+			case <-w.Events:
+				err = generate(o)
+				if err != nil {
+					log.Println("Generation Error:", err)
+				}
+			case err := <-w.Errors:
+				log.Println("Error:", err)
+			}
+		}
+	}()
+	err = w.Watch([]string{o.Input, o.Meta, o.Template})
+	if err != nil {
+		return err
+	}
+	go func() {
+		err = generate(o)
+		if err != nil {
+			log.Println("Generation Error:", err)
+		}
+	}()
+	<-done
 	return nil
 }
 
