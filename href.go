@@ -3,6 +3,7 @@ package jsonschema
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"path"
 	"regexp"
@@ -22,10 +23,10 @@ func (h *HRef) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &s); err != nil {
 		return err
 	}
-	h.value = rBraceBracket.ReplaceAllStringFunc(s, func(s string) string {
-		d, err := url.QueryUnescape(s)
+	h.value = rBraceBracket.ReplaceAllStringFunc(s, func(id string) string {
+		d, err := url.QueryUnescape(id)
 		if err != nil {
-			return s
+			return id
 		}
 		return d
 	})
@@ -33,8 +34,12 @@ func (h *HRef) UnmarshalJSON(data []byte) error {
 }
 
 func (h *HRef) Resolve(schemas *map[string]*Schema) error {
-	h.example = h.replaceBraceBracket(func(s string) string {
-		schema := (*schemas)[s]
+	h.example = h.replaceBraceBracket(func(id string) string {
+		schema := (*schemas)[id]
+		if schema == nil {
+			log.Printf("schema '%s' doesn't exist, it is referred from url", id)
+			return ""
+		}
 		return schema.Example.RawString()
 	})
 	return nil
