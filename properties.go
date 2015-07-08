@@ -1,6 +1,9 @@
 package jsonschema
 
-import "net/url"
+import (
+	"log"
+	"net/url"
+)
 
 type Properties struct {
 	SchemaMap
@@ -18,6 +21,7 @@ func (p *Properties) ExampleData(includesReadOnly bool) (map[string]interface{},
 	m := make(map[string]interface{})
 	for name, schema := range p.Schemas {
 		if schema == nil {
+			log.Printf("schema doesn't exist at '%s' in properties", name)
 			continue
 		}
 		if !includesReadOnly && schema.ReadOnly {

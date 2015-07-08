@@ -1,6 +1,9 @@
 package jsonschema
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"log"
+)
 
 type SchemaMap struct {
 	Schemas map[string]*Schema
@@ -25,7 +28,11 @@ func (s *SchemaMap) Collect(schemas map[string]*Schema, p string) error {
 }
 
 func (s *SchemaMap) Resolve(schemas map[string]*Schema, root *Schema) error {
-	for _, schema := range s.Schemas {
+	for name, schema := range s.Schemas {
+		if schema == nil {
+			log.Printf("schema doesn't exist at '%s'", name)
+			continue
+		}
 		if err := schema.Resolve(schemas, root); err != nil {
 			return err
 		}
