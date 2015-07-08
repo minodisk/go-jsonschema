@@ -40,14 +40,14 @@ func (b *SchemaOrStrings) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
-// func (s *SchemaOrStrings) Collect(schemas *map[string]*Schema, p string) (err error) {
+// func (s *SchemaOrStrings) Collect(schemas map[string]*Schema, p string) (err error) {
 // 	if s.IsSchema {
 // 		return s.Collect(schemas, p)
 // 	}
 // 	return nil
 // }
 
-func (s *SchemaOrStrings) Resolve(schemas *map[string]*Schema, root *Schema) (err error) {
+func (s *SchemaOrStrings) Resolve(schemas map[string]*Schema, root *Schema) (err error) {
 	if s.IsSchema {
 		return s.Resolve(schemas, root)
 	}

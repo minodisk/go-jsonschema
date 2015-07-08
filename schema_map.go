@@ -15,7 +15,7 @@ func (s *SchemaMap) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SchemaMap) Collect(schemas *map[string]*Schema, p string) error {
+func (s *SchemaMap) Collect(schemas map[string]*Schema, p string) error {
 	for _, schema := range s.Schemas {
 		if err := schema.Collect(schemas, p); err != nil {
 			return err
@@ -24,7 +24,7 @@ func (s *SchemaMap) Collect(schemas *map[string]*Schema, p string) error {
 	return nil
 }
 
-func (s *SchemaMap) Resolve(schemas *map[string]*Schema, root *Schema) error {
+func (s *SchemaMap) Resolve(schemas map[string]*Schema, root *Schema) error {
 	for _, schema := range s.Schemas {
 		if err := schema.Resolve(schemas, root); err != nil {
 			return err

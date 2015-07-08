@@ -33,9 +33,9 @@ func (h *HRef) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (h *HRef) Resolve(schemas *map[string]*Schema) error {
+func (h *HRef) Resolve(schemas map[string]*Schema) error {
 	h.example = h.replaceBraceBracket(func(id string) string {
-		schema := (*schemas)[id]
+		schema := schemas[id]
 		if schema == nil {
 			log.Printf("schema '%s' doesn't exist, it is referred from url", id)
 			return ""

@@ -93,10 +93,10 @@ func (s *Schema) initialize() (err error) {
 	s.root = s
 	s.definitions = format.NewDefinitions()
 	schemas := map[string]*Schema{}
-	if err := s.Collect(&schemas, "#"); err != nil {
+	if err := s.Collect(schemas, "#"); err != nil {
 		return err
 	}
-	if err := s.Resolve(&schemas, s); err != nil {
+	if err := s.Resolve(schemas, s); err != nil {
 		return err
 	}
 	return nil
@@ -121,20 +121,20 @@ func (s *Schema) Host() string {
 	return u.Host
 }
 
-func (s *Schema) Collect(schemas *map[string]*Schema, p string) error {
+func (s *Schema) Collect(schemas map[string]*Schema, p string) error {
 	if err := s.Definitions.Collect(schemas, p); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *Schema) Resolve(schemas *map[string]*Schema, root *Schema) error {
+func (s *Schema) Resolve(schemas map[string]*Schema, root *Schema) error {
 	if s.isResolved {
 		return nil
 	}
 
 	if s.Ref != "" {
-		schema := (*schemas)[s.Ref]
+		schema := schemas[s.Ref]
 		if schema == nil {
 			return fmt.Errorf("undefined $ref: %s", s.Ref)
 		}

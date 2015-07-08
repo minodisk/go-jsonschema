@@ -21,7 +21,7 @@ func (f *Format) UnmarshalJSON(raw []byte) error {
 	return nil
 }
 
-func (f *Format) Resolve(schemas *map[string]*Schema, root *Schema) error {
+func (f *Format) Resolve(schemas map[string]*Schema, root *Schema) error {
 	f.definitions = root.definitions
 	return nil
 }
