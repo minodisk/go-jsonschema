@@ -131,7 +131,16 @@ func (l Link) RequestContentType() string {
 }
 
 func (l Link) HasRequestBody() bool {
-	return l.Schema != nil
+	return includes([]string{"POST", "PATCH", "PUT"}, l.Method) && l.EncType != "null" && l.Schema != nil
+}
+
+func includes(arr []string, elem string) bool {
+	for _, e := range arr {
+		if e == elem {
+			return true
+		}
+	}
+	return false
 }
 
 func (l Link) RequestBody() string {

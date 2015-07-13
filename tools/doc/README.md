@@ -14,6 +14,10 @@ jsonschema doc schema.json
 - Partial files: one file for one schema
 - Example inference: infer `example` from `format` or `type`
 
+## Inspired
+
+- [r7kamura/jdoc](https://github.com/r7kamura/jdoc)
+
 ## Support
 
 - [x] Title
@@ -31,7 +35,7 @@ jsonschema doc schema.json
           - [ ] Multi-files as array
   - Response
     - Rel
-      - [ ] Instances
+      - [x] Instances
     - EncType
       - [x] Null
     - Example response
