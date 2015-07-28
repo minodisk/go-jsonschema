@@ -98,10 +98,16 @@ func (l *Link) Resolve(schemas map[string]*Schema, root *Schema) (err error) {
 }
 
 func (l Link) Endpoint() string {
+	if l.HRef == nil {
+		return ""
+	}
 	return l.HRef.ColonString()
 }
 
 func (l Link) ExampleEndpoint() string {
+	if l.HRef == nil {
+		return ""
+	}
 	return l.HRef.ExampleString()
 }
 
