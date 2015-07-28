@@ -24,12 +24,12 @@
 
 {{if $link.Description}}{{$link.Description}}
 
-{{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}- **{{$name}}**
+{{end}}{{if $link.Schema}}{{range $name, $property := $link.Schema.Properties.Schemas}}{{if not $property.ReadOnly}}- **{{$name}}**
 {{if $property.Description}}  - {{insertHead $property.Description "    "}}
 {{end}}{{if $property.Example}}  - Example: `{{$property.Example}}`
 {{end}}{{if $property.Type}}  - Type: {{$property.Type}}
 {{end}}{{if $property.Pattern}}  - Pattern: `/{{$property.Pattern}}/`
-{{end}}{{end}}{{end}}
+{{end}}{{end}}{{end}}{{end}}
 ```http
 {{$link.Method}} {{$link.ExampleEndpoint}}{{$link.QueryString}} HTTP/1.1{{if $link.HasRequestBody}}
 Content-Type: {{$link.RequestContentType}}{{end}}
