@@ -23,7 +23,7 @@ type Type struct {
 	Go    string
 }
 
-func (t *Type) Resolve(f *Format, i Items) {
+func (t *Type) Resolve(f *Format, i Items, title string) {
 	t.Go = map[string]string{
 		"array":   "[]interface{}",
 		"boolean": "bool",
@@ -33,8 +33,20 @@ func (t *Type) Resolve(f *Format, i Items) {
 		"object":  "map[string]interface{}",
 		"string":  "string",
 	}[string(t.types[0])]
-	if f != nil && f.String() == "date-time" {
-		t.Go = "time.Time"
+	switch t.Go {
+	case "string":
+		if f != nil && f.String() == "date-time" {
+			t.Go = "time.Time"
+		}
+	case "[]interface{}":
+		it := i.GoType()
+		if it != "" {
+			t.Go = fmt.Sprintf("[]%s", it)
+		}
+	case "map[string]interface{}":
+		if title != "" {
+			t.Go = title
+		}
 	}
 }
 

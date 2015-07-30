@@ -18,21 +18,23 @@ func Route(r martini.Router) {
 }
 
 type Album struct {
-	CreatedAt    time.Time              `json:"created_at"`
-	DeletedAt    time.Time              `json:"deleted_at"`
-	ID           string                 `json:"id"`
-	LikedUserIds []interface{}          `json:"liked_user_ids"`
-	Name         string                 `json:"name"`
-	Private      bool                   `json:"private"`
-	UpdatedAt    time.Time              `json:"updated_at"`
-	User         map[string]interface{} `json:"user"`
+	CreatedAt    time.Time `json:"created_at"`
+	DeletedAt    time.Time `json:"deleted_at"`
+	ID           string    `json:"id"`
+	LikedUserIds []int64   `json:"liked_user_ids"`
+	Name         string    `json:"name"`
+	Private      bool      `json:"private"`
+	TaggedUsers  []User    `json:"tagged_users"`
+	UpdatedAt    time.Time `json:"updated_at"`
+	User         User      `json:"user"`
 }
 
 type User struct {
-	CreatedAt time.Time `json:"created_at"`
-	Email     string    `json:"email"`
-	Icon      string    `json:"icon"`
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	UpdatedAt time.Time `json:"updated_at"`
+	CreatedAt  time.Time `json:"created_at"`
+	Email      string    `json:"email"`
+	Icon       string    `json:"icon"`
+	ID         int64     `json:"id"`
+	Name       string    `json:"name"`
+	ScreenName string    `json:"screen_name"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }

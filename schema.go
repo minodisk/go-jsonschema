@@ -182,7 +182,7 @@ func (s *Schema) Resolve(schemas map[string]*Schema, root *Schema) error {
 		return err
 	}
 	if s.Type != nil {
-		s.Type.Resolve(s.Format, s.Items)
+		s.Type.Resolve(s.Format, s.Items, s.Title)
 	}
 
 	for _, link := range s.Links {

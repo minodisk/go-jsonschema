@@ -38,7 +38,7 @@
           "type": "string"
         },
         "liked_user_ids": {
-          "description": "id list of users who like album",
+          "description": "list of users' id who liked album",
           "items": {
             "$ref": "#/definitions/user/definitions/user_id"
           },
@@ -53,6 +53,13 @@
           "description": "whether to be private",
           "example": false,
           "type": "boolean"
+        },
+        "tagged_users": {
+          "description": "list of users who is tagged in this album",
+          "items": {
+            "$ref": "#/definitions/user"
+          },
+          "type": "array"
         },
         "updated_at": {
           "description": "when album was updated",
@@ -153,6 +160,9 @@
         "private": {
           "$ref": "#/definitions/album/definitions/private"
         },
+        "tagged_users": {
+          "$ref": "#/definitions/album/definitions/tagged_users"
+        },
         "updated_at": {
           "$ref": "#/definitions/album/definitions/updated_at"
         },
@@ -192,6 +202,12 @@
         "name": {
           "description": "name of user",
           "example": "Gopher",
+          "type": "string"
+        },
+        "screen_name": {
+          "description": "screen name of user",
+          "example": "gopher-1030",
+          "pattern": "^[a-z0-9-_]{5,30}$",
           "type": "string"
         },
         "updated_at": {
@@ -268,6 +284,9 @@
         },
         "name": {
           "$ref": "#/definitions/user/definitions/name"
+        },
+        "screen_name": {
+          "$ref": "#/definitions/user/definitions/screen_name"
         },
         "updated_at": {
           "$ref": "#/definitions/user/definitions/updated_at"

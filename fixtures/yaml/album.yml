@@ -38,6 +38,11 @@ definitions:
     type: array
     items:
       $ref: "#/definitions/user/definitions/user_id"
+  tagged_users:
+    description: list of users who is tagged in this album
+    type: array
+    items:
+      $ref: "#/definitions/user"
   file:
     description: attachment of album
     example: ... contents of file ...
@@ -60,6 +65,8 @@ properties:
     $ref: "#/definitions/album/definitions/user"
   liked_user_ids:
     $ref: "#/definitions/album/definitions/liked_user_ids"
+  tagged_users:
+    $ref: "#/definitions/album/definitions/tagged_users"
 links:
 - title: Create
   description: Create a new album.

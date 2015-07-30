@@ -23,3 +23,13 @@ func (i Items) ExampleData(includesReadOnly bool) ([]interface{}, error) {
 	}
 	return arr, nil
 }
+
+func (i Items) GoType() string {
+	if i.IsSchema {
+		if i.Schema.Title != "" {
+			return i.Schema.Title
+		}
+		return i.Schema.Type.Go
+	}
+	return "interface{}"
+}
