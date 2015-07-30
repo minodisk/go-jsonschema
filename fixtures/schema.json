@@ -85,21 +85,21 @@
             },
             "type": "object"
           },
-          "title": "Create"
+          "title": "CreateAlbum"
         },
         {
           "description": "List existing albums.",
           "href": "/albums",
           "method": "GET",
           "rel": "instances",
-          "title": "List"
+          "title": "ReadAlbums"
         },
         {
           "description": "Read an existing album.",
           "href": "/albums/{(#/definitions/album/definitions/album_id)}",
           "method": "GET",
           "rel": "self",
-          "title": "Read"
+          "title": "ReadAlbum"
         },
         {
           "description": "Update an existing album.",
@@ -114,7 +114,7 @@
             },
             "type": "object"
           },
-          "title": "Update"
+          "title": "UpdateAlbum"
         },
         {
           "description": "Delete an existing album.",
@@ -122,7 +122,7 @@
           "mediaType": "null",
           "method": "DELETE",
           "rel": "destroy",
-          "title": "Delete"
+          "title": "DeleteAlbum"
         },
         {
           "description": "Upload an attachment file for an album.",
@@ -138,7 +138,7 @@
             },
             "type": "object"
           },
-          "title": "Create"
+          "title": "CreateAttachment"
         }
       ],
       "properties": {
@@ -231,19 +231,19 @@
           "schema": {
             "$ref": "#/definitions/user"
           },
-          "title": "Create"
+          "title": "CreateUser"
         },
         {
           "description": "Read users list.",
           "href": "/users",
           "method": "GET",
-          "title": "ReadList"
+          "title": "ReadUsers"
         },
         {
           "description": "Read user.",
           "href": "/users/{(#/definitions/user/definitions/user_id)}",
           "method": "GET",
-          "title": "Read"
+          "title": "ReadUser"
         },
         {
           "description": "Upload an icon file for user.",
@@ -259,14 +259,14 @@
             },
             "type": "object"
           },
-          "title": "Create"
+          "title": "CreateUser"
         },
         {
           "description": "Delete user.",
           "href": "/users/{(#/definitions/user/definitions/user_id)}",
           "mediaType": "null",
           "method": "DELETE",
-          "title": "Delete"
+          "title": "DeleteUser"
         }
       ],
       "properties": {

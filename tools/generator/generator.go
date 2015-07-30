@@ -2,10 +2,11 @@ package generator
 
 import (
 	"bytes"
-	"go/format"
 	"io/ioutil"
 	"log"
 	"text/template"
+
+	"golang.org/x/tools/imports"
 
 	"github.com/minodisk/go-jsonschema"
 	"github.com/serenize/snaker"
@@ -33,7 +34,7 @@ func Run(o Options) (err error) {
 	if err != nil {
 		return err
 	}
-	code, err := Generate(s, t)
+	code, err := Generate(s, t, o.Output)
 	if err != nil {
 		return err
 	}
@@ -48,7 +49,7 @@ func getTemplate(src string) (buf []byte, err error) {
 	return ioutil.ReadFile(src)
 }
 
-func Generate(schema, tmpl []byte) (code []byte, err error) {
+func Generate(schema, tmpl []byte, filename string) (code []byte, err error) {
 	s, err := jsonschema.New(schema)
 	if err != nil {
 		return nil, err
@@ -59,5 +60,9 @@ func Generate(schema, tmpl []byte) (code []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return format.Source(buf.Bytes())
+	// opt := &imports.Options{
+	// 	Comments: true,
+	// }
+	return imports.Process(filename, buf.Bytes(), nil)
+	// return format.Source(buf.Bytes())
 }

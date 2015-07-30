@@ -68,7 +68,7 @@ properties:
   tagged_users:
     $ref: "#/definitions/album/definitions/tagged_users"
 links:
-- title: Create
+- title: CreateAlbum
   description: Create a new album.
   href: "/albums"
   method: POST
@@ -78,17 +78,17 @@ links:
     properties:
       name:
         $ref: "#/definitions/album/definitions/name"
-- title: List
+- title: ReadAlbums
   description: List existing albums.
   href: "/albums"
   method: GET
   rel: instances
-- title: Read
+- title: ReadAlbum
   description: Read an existing album.
   href: "/albums/{(#/definitions/album/definitions/album_id)}"
   method: GET
   rel: self
-- title: Update
+- title: UpdateAlbum
   description: Update an existing album.
   href: "/albums/{(#/definitions/album/definitions/album_id)}"
   method: PATCH
@@ -98,13 +98,14 @@ links:
     properties:
       name:
         $ref: "#/definitions/album/definitions/name"
-- title: Delete
+- title: DeleteAlbum
   description: Delete an existing album.
   href: "/albums/{(#/definitions/album/definitions/album_id)}"
   method: DELETE
   rel: destroy
   mediaType: 'null'
-- title: Create
+
+- title: CreateAttachment
   description: Upload an attachment file for an album.
   method: POST
   href: "/albums/{(#/definitions/album/definitions/album_id)}/files"

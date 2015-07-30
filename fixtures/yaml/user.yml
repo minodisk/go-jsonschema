@@ -56,22 +56,23 @@ properties:
     $ref: "#/definitions/user/definitions/email"
   icon:
     $ref: "#/definitions/user/definitions/icon"
+
 links:
-- title: Create
+- title: CreateUser
   description: Create a user.
   method: POST
   href: /users
   schema:
     $ref: "#/definitions/user"
-- title: ReadList
+- title: ReadUsers
   description: Read users list.
   method: GET
   href: /users
-- title: Read
+- title: ReadUser
   description: Read user.
   method: GET
   href: "/users/{(#/definitions/user/definitions/user_id)}"
-- title: Create
+- title: CreateUser
   description: Upload an icon file for user.
   method: POST
   href: "/users/{(#/definitions/user/definitions/user_id)}/icons"
@@ -82,7 +83,7 @@ links:
     properties:
       icon:
         $ref: "#/definitions/user/definitions/file"
-- title: Delete
+- title: DeleteUser
   description: Delete user.
   method: DELETE
   href: "/users/{(#/definitions/user/definitions/user_id)}"
