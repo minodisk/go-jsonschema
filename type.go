@@ -20,6 +20,22 @@ const (
 
 type Type struct {
 	types []PrimitiveType
+	Go    string
+}
+
+func (t *Type) Resolve(f *Format, i Items) {
+	t.Go = map[string]string{
+		"array":   "[]interface{}",
+		"boolean": "bool",
+		"integer": "int64",
+		"number":  "float64",
+		"null":    "nil",
+		"object":  "map[string]interface{}",
+		"string":  "string",
+	}[string(t.types[0])]
+	if f != nil && f.String() == "date-time" {
+		t.Go = "time.Time"
+	}
 }
 
 func (t *Type) UnmarshalJSON(data []byte) error {
@@ -61,47 +77,3 @@ func (t *Type) Is(p PrimitiveType) bool {
 	}
 	return false
 }
-
-// func (t Type) Validate(o interface{}) error {
-// 	if t.validate(o) {
-// 		return nil
-// 	}
-// 	return TypeError{o}
-// }
-//
-// func (t Type) validate(o interface{}) bool {
-// 	if t.isString {
-// 		return validateWith(t.string, o)
-// 	}
-// 	for _, s := range t.strings {
-// 		if validateWith(s, o) {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
-//
-// func validateWith(t string, o interface{}) bool {
-// 	switch T(t) {
-// 	case TypeInteger:
-// 		switch t := o.(type) {
-// 		default:
-// 			return false
-// 		case int, int8, int16, int32, int64:
-// 			return true
-// 		case float32:
-// 			return t == float32(int64(t))
-// 		case float64:
-// 			return t == float64(int64(t))
-// 		}
-// 	}
-// 	return false
-// }
-//
-// type TypeError struct {
-// 	value interface{}
-// }
-//
-// func (e TypeError) Error() string {
-// 	return fmt.Sprintf("unexpected type %T", e.value)
-// }

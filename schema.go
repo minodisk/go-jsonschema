@@ -181,6 +181,10 @@ func (s *Schema) Resolve(schemas map[string]*Schema, root *Schema) error {
 	if err := s.Definitions.Resolve(schemas, root); err != nil {
 		return err
 	}
+	if s.Type != nil {
+		s.Type.Resolve(s.Format, s.Items)
+	}
+
 	for _, link := range s.Links {
 		link.SetParent(s)
 		if err := link.Resolve(schemas, root); err != nil {
@@ -188,6 +192,7 @@ func (s *Schema) Resolve(schemas map[string]*Schema, root *Schema) error {
 		}
 	}
 
+	// Create Example
 	if s.Example.HasValue() {
 		return nil
 	}
@@ -221,10 +226,6 @@ func (s Schema) QueryString() string {
 }
 
 func (s Schema) ExampleData(includesReadOnly bool) (interface{}, error) {
-	// if s.Example != nil {
-	// 	return s.Example, nil
-	// }
-
 	if s.Type != nil {
 		if s.Type.Is(TypeArray) {
 			return s.Items.ExampleData(includesReadOnly)
@@ -233,16 +234,5 @@ func (s Schema) ExampleData(includesReadOnly bool) (interface{}, error) {
 			return s.Properties.ExampleData(includesReadOnly)
 		}
 	}
-
-	// if s.Format != nil {
-	// 	return s.Format.ExampleData()
-	// }
-
-	// if s.Type != nil {
-	// 	return NewDefaultExample(s.Type)
-	// }
-	// log.Printf("%T: %+v", s.Example, s.Example)
 	return s.Example, nil
-
-	// return nil, fmt.Errorf("can't create example with no type: %+v", s)
 }

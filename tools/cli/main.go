@@ -8,6 +8,7 @@ import (
 	"github.com/minodisk/go-jsonschema/tools/combine"
 	"github.com/minodisk/go-jsonschema/tools/doc"
 	"github.com/minodisk/go-jsonschema/tools/encoding"
+	"github.com/minodisk/go-jsonschema/tools/generator"
 )
 
 const (
@@ -51,8 +52,8 @@ func main() {
 					Value: "markdown",
 					Usage: "the format of output document",
 				},
-				watch,
 				meta,
+				watch,
 			},
 			Action: func(c *cli.Context) {
 				if err := doc.Generate(doc.Options{
@@ -61,8 +62,8 @@ func main() {
 					Engine:   doc.Engine(c.String("engine")),
 					Output:   c.String("output"),
 					Format:   c.String("format"),
-					IsWatch:  c.Bool("watch"),
 					Meta:     c.String("meta"),
+					IsWatch:  c.Bool("watch"),
 				}); err != nil {
 					log.Println(err)
 				}
@@ -73,7 +74,6 @@ func main() {
 			Name:  "combine",
 			Usage: "combine partial schema files into one schema file",
 			Flags: []cli.Flag{
-				meta,
 				cli.StringFlag{
 					Name:  "output, o",
 					Usage: "the path of the output file",
@@ -83,15 +83,48 @@ func main() {
 					Value: "json",
 					Usage: "the encoding of output file",
 				},
+				meta,
 				watch,
 			},
 			Action: func(c *cli.Context) {
 				if err := combine.Run(combine.Options{
 					Input:    c.Args()[0],
-					Meta:     c.String("meta"),
 					Output:   c.String("output"),
 					Encoding: encoding.Encoding(c.String("encoding")),
+					Meta:     c.String("meta"),
 					IsWatch:  c.Bool("watch"),
+				}); err != nil {
+					log.Println(err)
+				}
+			},
+		},
+
+		{
+			Name:  "generate",
+			Usage: "generate go files of router and struct",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "output, o",
+					Usage: "the path of the output file",
+				},
+				cli.StringFlag{
+					Name:  "template, t",
+					Usage: "template filename",
+				},
+				watch,
+			},
+			Action: func(c *cli.Context) {
+				args := c.Args()
+				var input string
+				if len(args) > 0 {
+					input = args[0]
+				} else {
+					input = ""
+				}
+				if err := generator.Run(generator.Options{
+					Input:    input,
+					Output:   c.String("output"),
+					Template: c.String("template"),
 				}); err != nil {
 					log.Println(err)
 				}
