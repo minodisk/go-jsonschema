@@ -17,6 +17,21 @@ func Minimum(defined float64, specified interface{}) error {
 	return nil
 }
 
+type MaximumError struct {
+	Defined, Specified float64
+}
+
+func (err MaximumError) Error() string {
+	return fmt.Sprintf("MaximumError: %f is defined as maximum, but specified %f", err.Defined, err.Specified)
+}
+
+func Minimum(defined float64, specified interface{}) error {
+	if specified > defined {
+		return MaximumError{defined, specified}
+	}
+	return nil
+}
+
 type MaxItemsError struct {
 	Max    int
 	Length int
