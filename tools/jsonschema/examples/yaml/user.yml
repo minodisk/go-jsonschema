@@ -27,6 +27,11 @@ definitions:
     example: gopher-1030
     type: string
     pattern: ^[a-z0-9-_]{5,30}$
+  age:
+    description: age of user
+    example: 32
+    type: integer
+    minimum: 18
   email:
     description: unique email address of user
     example: gopher@example.com

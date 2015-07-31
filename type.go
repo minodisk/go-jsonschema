@@ -23,7 +23,7 @@ type Type struct {
 	Go    string
 }
 
-func (t *Type) Resolve(f *Format, i Items, title string) {
+func (t *Type) Resolve(f *Format, i *Items, title string) {
 	t.Go = map[string]string{
 		"array":   "[]interface{}",
 		"boolean": "bool",
@@ -39,15 +39,26 @@ func (t *Type) Resolve(f *Format, i Items, title string) {
 			t.Go = "time.Time"
 		}
 	case "[]interface{}":
-		it := i.GoType()
-		if it != "" {
-			t.Go = fmt.Sprintf("[]%s", it)
+		if i != nil {
+			it := i.GoType()
+			if it != "" {
+				t.Go = fmt.Sprintf("[]%s", it)
+			}
 		}
 	case "map[string]interface{}":
 		if title != "" {
 			t.Go = title
 		}
 	}
+}
+
+func (t *Type) IsNumeric() bool {
+	for _, tp := range t.types {
+		if tp != "integer" && tp != "number" {
+			return false
+		}
+	}
+	return true
 }
 
 func (t *Type) UnmarshalJSON(data []byte) error {

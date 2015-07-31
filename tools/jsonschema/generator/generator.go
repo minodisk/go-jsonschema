@@ -1,4 +1,4 @@
-//go:generate go-bindata -pkg generator -o schema.go.tmpl.go schema.go.tmpl
+//go:generate go-bindata -pkg generator -o assets.go assets
 
 package generator
 
@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"log"
+	"strings"
 	"text/template"
 
 	"golang.org/x/tools/imports"
@@ -18,6 +19,9 @@ var (
 	funcMap = template.FuncMap{
 		"snakeToCamel": snaker.SnakeToCamel,
 		"camelToSnake": snaker.CamelToSnake,
+		"firstChar": func(s string) string {
+			return strings.ToLower(string(s[0]))
+		},
 	}
 )
 
@@ -32,39 +36,45 @@ func Run(o Options) (err error) {
 	if err != nil {
 		return err
 	}
-	t, err := getTemplate(o.Template)
+
+	var t []byte
+	if o.Template == "" {
+		log.Println("[generate] use defualt template")
+		t, err = Asset("assets/routing.go.tmpl")
+	} else {
+		t, err = ioutil.ReadFile(o.Template)
+	}
 	if err != nil {
 		return err
 	}
-	code, err := Generate(s, t, o.Output)
+
+	v, err := Asset("assets/validator.go")
 	if err != nil {
 		return err
 	}
+
+	code, err := Generate(s, t, v, o.Output)
+	if err != nil {
+		return err
+	}
+
 	return ioutil.WriteFile(o.Output, code, 0644)
 }
 
-func getTemplate(src string) (buf []byte, err error) {
-	if src == "" {
-		log.Println("[generate] use defualt template")
-		return Asset("schema.go.tmpl")
-	}
-	return ioutil.ReadFile(src)
-}
-
-func Generate(schema, tmpl []byte, filename string) (code []byte, err error) {
+func Generate(schema, tmpl, v []byte, filename string) (code []byte, err error) {
 	s, err := jsonschema.New(schema)
 	if err != nil {
 		return nil, err
 	}
 	t := template.Must(template.New("").Funcs(funcMap).Parse(string(tmpl)))
 	buf := bytes.NewBuffer([]byte{})
-	err = t.Execute(buf, s)
+	err = t.Execute(buf, map[string]interface{}{
+		"package":       "main",
+		"schema":        s,
+		"validatorCode": strings.Replace(strings.Replace(string(v), "package dummy", "", 1), "import \"fmt\"", "", -1),
+	})
 	if err != nil {
 		return nil, err
 	}
-	// opt := &imports.Options{
-	// 	Comments: true,
-	// }
 	return imports.Process(filename, buf.Bytes(), nil)
-	// return format.Source(buf.Bytes())
 }

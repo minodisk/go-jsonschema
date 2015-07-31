@@ -30,10 +30,10 @@ type Schema struct {
 	Pattern   string `json:"pattern"`
 	// 5.3. Validation keywords for arrays
 	AdditionalItems SchemaOrBool `json:"additionalItems"` // Schema or bool
-	Items           Items        `json:"items"`           // Schema or []Schema
-	MaxItems        int          `json:"maxItems"`
-	MinItems        int          `json:"minItems"`
-	UniqueItems     bool         `json:"uniqueItems"`
+	Items           *Items       `json:"items"`           // Schema or []Schema
+	MaxItems        *int         `json:"maxItems"`
+	MinItems        *int         `json:"minItems"`
+	UniqueItems     *bool        `json:"uniqueItems"`
 	// 5.4. Validation keywords for objects
 	MaxProperties        int               `json:"maxProperties"`
 	MinProperties        int               `json:"minProperties"`
@@ -152,8 +152,10 @@ func (s *Schema) Resolve(schemas map[string]*Schema, root *Schema) error {
 	if err := s.AdditionalItems.Resolve(schemas, root); err != nil {
 		return err
 	}
-	if err := s.Items.Resolve(schemas, root); err != nil {
-		return err
+	if s.Items != nil {
+		if err := s.Items.Resolve(schemas, root); err != nil {
+			return err
+		}
 	}
 	if err := s.AdditionalProperties.Resolve(schemas, root); err != nil {
 		return err
