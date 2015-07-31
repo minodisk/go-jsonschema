@@ -1,3 +1,5 @@
+//go:generate go-bindata -pkg generator -o schema.go.tmpl.go schema.go.tmpl
+
 package generator
 
 import (
@@ -44,7 +46,7 @@ func Run(o Options) (err error) {
 func getTemplate(src string) (buf []byte, err error) {
 	if src == "" {
 		log.Println("[generate] use defualt template")
-		return Asset("fixtures/schema.go.tmpl")
+		return Asset("schema.go.tmpl")
 	}
 	return ioutil.ReadFile(src)
 }

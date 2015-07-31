@@ -7,6 +7,8 @@ import (
 	"github.com/go-martini/martini"
 )
 
+var a string
+
 func Route(r martini.Router) {
 	r.AddRoute("POST", "/albums", CreateAlbum)
 	r.AddRoute("GET", "/albums", ReadAlbums)
