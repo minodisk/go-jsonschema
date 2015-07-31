@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/minodisk/go-jsonschema/tools/combine"
-	"github.com/minodisk/go-jsonschema/tools/doc"
-	"github.com/minodisk/go-jsonschema/tools/encoding"
-	"github.com/minodisk/go-jsonschema/tools/generator"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/combine"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/doc"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/encoding"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/generator"
 )
 
 //go:generate go-bindata -pkg generator -o ../generator/schema.go.tmpl.go ../generator/schema.go.tmpl

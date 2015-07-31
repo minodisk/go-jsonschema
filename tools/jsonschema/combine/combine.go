@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/minodisk/go-jsonschema/tools/encoding"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/encoding"
 	"github.com/minodisk/go-watcher"
 
 	"gopkg.in/yaml.v2"

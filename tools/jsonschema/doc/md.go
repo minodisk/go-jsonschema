@@ -11,9 +11,9 @@ import (
 	"text/template"
 
 	"github.com/minodisk/go-jsonschema"
-	"github.com/minodisk/go-jsonschema/tools/combine"
-	"github.com/minodisk/go-jsonschema/tools/encoding"
-	"github.com/minodisk/go-jsonschema/tools/utils"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/combine"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/encoding"
+	"github.com/minodisk/go-jsonschema/tools/jsonschema/utils"
 	"github.com/minodisk/go-watcher"
 )
 
