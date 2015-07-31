@@ -3,6 +3,8 @@ package router
 
 import "github.com/go-martini/martini"
 
+var a string
+
 func Route(r martini.Router) {
 {{range $name, $schema := .Properties.Schemas}}{{range $i, $link := $schema.Links}}  r.AddRoute("{{$link.Method}}", "{{$link.Endpoint}}", {{$link.Title}})
 {{end}}{{end}}}

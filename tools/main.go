@@ -11,6 +11,8 @@ import (
 	"github.com/minodisk/go-jsonschema/tools/generator"
 )
 
+//go:generate go-bindata -pkg generator -o ../generator/schema.go.tmpl.go ../generator/schema.go.tmpl
+
 const (
 	version = "0.0.0"
 )
