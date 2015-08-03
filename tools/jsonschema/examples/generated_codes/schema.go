@@ -37,11 +37,32 @@ type Album struct {
 }
 
 func (a Album) Validate() (errs []error) {
-	errs = []error{}
+	errs := []error{}
+	var validator Validator
+
+	validator = Validator{"Album", "CreatedAt"}
+
+	validator = Validator{"Album", "DeletedAt"}
+
+	validator = Validator{"Album", "ID"}
+
+	validator = Validator{"Album", "LikedUserIds"}
+
+	validator = Validator{"Album", "Name"}
+
+	validator = Validator{"Album", "Private"}
+
+	validator = Validator{"Album", "TaggedUsers"}
+
+	validator = Validator{"Album", "UpdatedAt"}
+
+	validator = Validator{"Album", "User"}
+
 	return errs
 }
 
 type User struct {
+	Age        int64     `json:"age"`
 	CreatedAt  time.Time `json:"created_at"`
 	Email      string    `json:"email"`
 	Icon       string    `json:"icon"`
@@ -52,8 +73,63 @@ type User struct {
 }
 
 func (u User) Validate() (errs []error) {
-	errs = []error{}
+	errs := []error{}
+	var validator Validator
+
+	validator = Validator{"User", "Age"}
+
+	if err := validator.MultipleOf(u.Age, 10); err != nil {
+		errs = append(errs, err)
+	}
+	if err := validator.Maximum(u.Age, 60, true); err != nil {
+		errs = append(errs, err)
+	}
+	if err := validator.Minimum(u.Age, 18, false); err != nil {
+		errs = append(errs, err)
+	}
+
+	validator = Validator{"User", "CreatedAt"}
+
+	validator = Validator{"User", "Email"}
+
+	validator = Validator{"User", "Icon"}
+
+	validator = Validator{"User", "ID"}
+
+	validator = Validator{"User", "Name"}
+
+	validator = Validator{"User", "ScreenName"}
+
+	validator = Validator{"User", "UpdatedAt"}
+
 	return errs
+}
+
+type Validator struct {
+	SchemaName, PropertyName string
+}
+
+func (v validator) MultipleOf(defined float64, specified interface{}) error {
+	s := float64(specified)
+	reminder := s % defined
+	if reminder != 0 {
+		return MultipleOfError{v, specified}
+	}
+	return nil
+}
+
+func (v validator) Maximum(specified interface{}, maximum float64, exclusive bool) error {
+	if specified > maximum {
+		return MaximumError{specified, maximum, exclusive}
+	}
+	return nil
+}
+
+func (v validator) Minimum(defined float64, specified interface{}) error {
+	if specified < defined {
+		return MinimuError{defined, specified}
+	}
+	return nil
 }
 
 type MaxItemsError struct {
@@ -65,7 +141,7 @@ func (err MaxItemsError) Error() string {
 	return fmt.Sprintf("MaxItemError: %d is defined as max, but actual %d", err.Max, err.Length)
 }
 
-func MaxItems(items []interface{}, max int) error {
+func MaxItems(max int, items []interface{}) error {
 	length := len(items)
 	if length > max {
 		return MaxItemsError{max, length}
@@ -82,10 +158,56 @@ func (err MinItemsError) Error() string {
 	return fmt.Sprintf("MinItemError: %d is defined as max, but actual %d", err.Min, err.Length)
 }
 
-func MinItems(items []interface{}, min int) error {
+func MinItems(min int, items []interface{}) error {
 	length := len(items)
 	if length < min {
 		return MinItemsError{min, length}
 	}
 	return nil
+}
+
+type UniqueItemError struct {
+	Item interface{}
+}
+
+func (err UniqueItemError) Error() string {
+	return fmt.Sprintf("UniqueItemError: %v is duplicated", err.Item)
+}
+
+func UniqueItems(items []interface{}) error {
+	for i, item := range items {
+		rests := items[i+1:]
+		for _, rest := range rests {
+			if item == rest {
+				return UniqueItemError{item}
+			}
+		}
+	}
+	return nil
+}
+
+type MaximumError struct {
+	Specified, Maximum float64
+	Exclusive          bool
+}
+
+func (err MaximumError) Error() string {
+	return fmt.Sprintf("%f is defined as maximum, but specified %f", err.Defined, err.Specified)
+}
+
+type MultipleOfError struct {
+	Validator
+	Defined, Specified float64
+}
+
+func (err MultipleOfError) Error() string {
+	return fmt.Sprintf("the value of %s in %s is multiple of %f, but specified with %f", err.Defined, err.Validator.MultipleOf)
+}
+
+type MinimumError struct {
+	Defined, Specified float64
+}
+
+func (err MinimumError) Error() string {
+	return fmt.Sprintf("MinimumError: %f is defined as minimum, but specified %f", err.Defined, err.Specified)
 }

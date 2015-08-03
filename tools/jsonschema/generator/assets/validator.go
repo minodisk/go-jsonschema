@@ -1,44 +1,46 @@
-package dummy
+package validator
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
-type MaximumError struct {
-	Defined, Specified float64
+type Validator struct {
+	SchemaName, PropertyName string
 }
 
-func (err MaximumError) Error() string {
-	return fmt.Sprintf("MaximumError: %f is defined as maximum, but specified %f", err.Defined, err.Specified)
-}
-
-func Maximum(defined float64, specified interface{}) error {
-	if specified > defined {
-		return MaximumError{defined, specified}
+func (v Validator) MultipleOf(t, s float64) error {
+	d := t / s
+	if math.Ceil(d)-d != 0 {
+		return MultipleOfError{v, t, s}
 	}
 	return nil
 }
 
-type MinimumError struct {
-	Defined, Specified float64
-}
-
-func (err MinimumError) Error() string {
-	return fmt.Sprintf("MinimumError: %f is defined as minimum, but specified %f", err.Defined, err.Specified)
-}
-
-func Minimum(defined float64, specified interface{}) error {
-	if specified < defined {
-		return MinimuError{defined, specified}
+func (v Validator) Maximum(t, s float64, e bool) error {
+	if e {
+		if t >= s {
+			return MaximumError{v, t, s, e}
+		}
+	} else {
+		if t > s {
+			return MaximumError{v, t, s, e}
+		}
 	}
 	return nil
 }
 
-type MaxItemsError struct {
-	Max    int
-	Length int
-}
-
-func (err MaxItemsError) Error() string {
-	return fmt.Sprintf("MaxItemError: %d is defined as max, but actual %d", err.Max, err.Length)
+func (v Validator) Minimum(t, s float64, e bool) error {
+	if e {
+		if t <= s {
+			return MinimumError{v, t, s, e}
+		}
+	} else {
+		if t < s {
+			return MinimumError{v, t, s, e}
+		}
+	}
+	return nil
 }
 
 func MaxItems(max int, items []interface{}) error {
@@ -49,29 +51,12 @@ func MaxItems(max int, items []interface{}) error {
 	return nil
 }
 
-type MinItemError struct {
-	Min    int
-	Length int
-}
-
-func (err MinItemsError) Error() string {
-	return fmt.Sprintf("MinItemError: %d is defined as max, but actual %d", err.Min, err.Length)
-}
-
 func MinItems(min int, items []interface{}) error {
 	length := len(items)
 	if length < min {
 		return MinItemsError{min, length}
 	}
 	return nil
-}
-
-type UniqueItemError struct {
-	Item interface{}
-}
-
-func (err UniqueItemError) Error() string {
-	return fmt.Sprintf("UniqueItemError: %v is duplicated", err.Item)
 }
 
 func UniqueItems(items []interface{}) error {
@@ -84,4 +69,59 @@ func UniqueItems(items []interface{}) error {
 		}
 	}
 	return nil
+}
+
+type MultipleOfError struct {
+	Validator
+	Specified, MultipleOf float64
+}
+
+func (err MultipleOfError) Error() string {
+	return fmt.Sprintf("the value of %s in %s should be multiple of %f, but specified with %f", err.SchemaName, err.PropertyName, err.MultipleOf, err.Specified)
+}
+
+type MaximumError struct {
+	Validator
+	Specified, Maximum float64
+	Exclusive          bool
+}
+
+func (err MaximumError) Error() string {
+	return fmt.Sprintf("%f is defined as maximum, but specified %f", err.Maximum, err.Specified)
+}
+
+type MinimumError struct {
+	Validator
+	Defined, Specified float64
+	Exclusive          bool
+}
+
+func (err MinimumError) Error() string {
+	return fmt.Sprintf("MinimumError: %f is defined as minimum, but specified %f", err.Defined, err.Specified)
+}
+
+type MaxItemsError struct {
+	Max    int
+	Length int
+}
+
+func (err MaxItemsError) Error() string {
+	return fmt.Sprintf("MaxItemError: %d is defined as max, but actual %d", err.Max, err.Length)
+}
+
+type MinItemsError struct {
+	Min    int
+	Length int
+}
+
+func (err MinItemsError) Error() string {
+	return fmt.Sprintf("MinItemError: %d is defined as max, but actual %d", err.Min, err.Length)
+}
+
+type UniqueItemError struct {
+	Item interface{}
+}
+
+func (err UniqueItemError) Error() string {
+	return fmt.Sprintf("UniqueItemError: %v is duplicated", err.Item)
 }

@@ -19,11 +19,11 @@ type Schema struct {
 	// See http://json-schema.org/latest/json-schema-validation.html
 	// 5.   Validation keywords sorted by instance types
 	// 5.1. Validation keywords for numeric instances (number and integer)
-	MultipleOf       float64 `json:"multipleOf"`
-	Maximum          float64 `json:"maximum"`
-	ExclusiveMaximum bool    `json:"exclusiveMaximum"`
-	Minimum          float64 `json:"minimum"`
-	ExclusiveMinimum bool    `json:"exclusiveMinimum"`
+	MultipleOf       *float64 `json:"multipleOf"`
+	Maximum          *float64 `json:"maximum"`
+	ExclusiveMaximum bool     `json:"exclusiveMaximum"`
+	Minimum          *float64 `json:"minimum"`
+	ExclusiveMinimum bool     `json:"exclusiveMinimum"`
 	// 5.2. Validation keywords for strings
 	MaxLength int    `json:"max_length"`
 	MinLength int    `json:"min_length"`

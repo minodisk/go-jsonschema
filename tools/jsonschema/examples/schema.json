@@ -176,6 +176,15 @@
     "user": {
       "$schema": "http://json-schema.org/draft-04/hyper-schema",
       "definitions": {
+        "age": {
+          "description": "age of user",
+          "example": 32,
+          "exclusiveMaximum": true,
+          "maximum": 60,
+          "minimum": 18,
+          "multipleOf": 10,
+          "type": "integer"
+        },
         "created_at": {
           "description": "when user was created",
           "format": "date-time",
@@ -270,6 +279,9 @@
         }
       ],
       "properties": {
+        "age": {
+          "$ref": "#/definitions/user/definitions/age"
+        },
         "created_at": {
           "$ref": "#/definitions/user/definitions/created_at"
         },

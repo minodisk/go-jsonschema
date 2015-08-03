@@ -31,7 +31,10 @@ definitions:
     description: age of user
     example: 32
     type: integer
+    multipleOf: 10
     minimum: 18
+    maximum: 60
+    exclusiveMaximum: true
   email:
     description: unique email address of user
     example: gopher@example.com
@@ -57,6 +60,8 @@ properties:
     $ref: "#/definitions/user/definitions/name"
   screen_name:
     $ref: "#/definitions/user/definitions/screen_name"
+  age:
+    $ref: "#/definitions/user/definitions/age"
   email:
     $ref: "#/definitions/user/definitions/email"
   icon:
