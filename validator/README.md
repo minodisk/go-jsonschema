@@ -38,7 +38,7 @@ See [jsonschema client tool](../tools/jsonschema/README.md).
   - ~~[ ] AdditionalProperties~~ Won't support
   - [ ] Properties
   - ~~[ ] PatternProperties~~ Won't support
-  - [ ] Dependencies
+  - [x] Dependencies
 - 5.5. Validation keywords for any instance type
   - [ ] Enum
   - [ ] Type
