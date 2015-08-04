@@ -35,9 +35,9 @@ See [jsonschema client tool](../tools/jsonschema/README.md).
   - [x] MaxProperties
   - [x] MinProperties
   - [x] Required
-  - ~~[ ] AdditionalProperties~~ Won't support
+  - ~~AdditionalProperties~~ Won't support[^dynamic]
   - [ ] Properties
-  - ~~[ ] PatternProperties~~ Won't support
+  - ~~PatternProperties~~ Won't support[^dynamic]
   - [x] Dependencies
 - 5.5. Validation keywords for any instance type
   - [ ] Enum
@@ -47,3 +47,5 @@ See [jsonschema client tool](../tools/jsonschema/README.md).
   - [ ] OneOf
   - [ ] Not
   - [ ] Definitions
+
+[^dynamic]: Dynamic properties aren't allowed in static typing language like Go.
