@@ -40,8 +40,8 @@ See [jsonschema client tool](../tools/jsonschema/README.md).
   - ~~PatternProperties~~ Won't support[^dynamic]
   - [x] Dependencies
 - 5.5. Validation keywords for any instance type
-  - [ ] Enum
-  - [ ] Type
+  - [x] Enum
+  - [x] Type
   - [ ] AllOf
   - [ ] AnyOf
   - [ ] OneOf
