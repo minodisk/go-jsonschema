@@ -52,6 +52,10 @@ func (t *Type) Resolve(f *Format, i *Items, title string) {
 	}
 }
 
+func (t *Type) IsSingle() bool {
+	return len(t.types) == 1
+}
+
 func (t *Type) Contains(types ...string) bool {
 	for _, c := range types {
 		for _, d := range t.types {

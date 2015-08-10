@@ -212,8 +212,12 @@
           "description": "name of user",
           "example": "Gopher",
           "max_length": 20,
+          "maximum": 100,
           "min_length": 4,
-          "type": "string"
+          "type": [
+            "string",
+            "integer"
+          ]
         },
         "screen_name": {
           "description": "screen name of user",

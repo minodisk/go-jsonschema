@@ -54,10 +54,13 @@ func (u User) Validate() (errs []error) {
 
 	validator = Validator{"User", "Name"}
 
-	if err := validator.MaxLength(u.Name, 20); err != nil {
+	if err := validator.Maximum(u.Name, 100, false); err != nil {
 		errs = append(errs, err)
 	}
 
+	if err := validator.MaxLength(u.Name, 20); err != nil {
+		errs = append(errs, err)
+	}
 	if err := validator.MinLength(u.Name, 4); err != nil {
 		errs = append(errs, err)
 	}

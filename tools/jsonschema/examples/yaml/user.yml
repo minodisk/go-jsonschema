@@ -21,7 +21,10 @@ definitions:
   name:
     description: name of user
     example: Gopher
-    type: string
+    type:
+      - string
+      - integer
+    maximum: 100
     min_length: 4
     max_length: 20
   screen_name:

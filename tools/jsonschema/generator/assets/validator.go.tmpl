@@ -27,18 +27,13 @@ func ({{$instance}} {{$schema.Title}}) Validate() (errs []error) {
     {{if $property.MaxLength}}
     if err := validator.MaxLength({{$instance}}.{{$var}}, {{$property.MaxLength}}); err != nil {
       errs = append(errs, err)
-    }
-    {{end}}
-    {{if $property.MinLength}}
+    }{{end}}{{if $property.MinLength}}
     if err := validator.MinLength({{$instance}}.{{$var}}, {{$property.MinLength}}); err != nil {
       errs = append(errs, err)
-    }
-    {{end}}
-    {{if $property.Pattern}}
+      }{{end}}{{if $property.Pattern}}
     if err := validator.Pattern({{$instance}}.{{$var}}, "{{$property.Pattern}}"); err != nil {
       errs = append(errs, err)
-    }
-    {{end}}
+    }{{end}}
   {{end}}
   {{if $property.Items}}
     {{if $property.MaxItems}}
