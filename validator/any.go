@@ -39,7 +39,7 @@ func (err EnumError) Error() string {
 	return fmt.Sprintf("%s must be one of %v, but `%v`", err.Validator, err.Enum, err.Specified)
 }
 
-func (v Validator) Type(obj interface{}, def string) error {
+func (v Validator) Type(obj interface{}, def []string) error {
 	var a string
 	switch obj.(type) {
 	case nil:
@@ -60,17 +60,20 @@ func (v Validator) Type(obj interface{}, def string) error {
 			return fmt.Errorf("InvalidType: %+v", obj)
 		}
 	}
-	if a != def {
-		return TypeError{v, a, def}
+	for _, d := range def {
+		if a == d {
+			return nil
+		}
 	}
-	return nil
+	return TypeError{v, a, def}
 }
 
 type TypeError struct {
-	Validator          Validator
-	Object, Definition string
+	Validator  Validator
+	Object     string
+	Definition []string
 }
 
 func (err TypeError) Error() string {
-	return fmt.Sprintf("%s must be %s, but `%s`", err.Validator, err.Definition, err.Object)
+	return fmt.Sprintf("%s must be one of %v, but `%s`", err.Validator, err.Definition, err.Object)
 }

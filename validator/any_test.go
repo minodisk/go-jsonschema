@@ -1,8 +1,6 @@
 package validator_test
 
 import (
-	"encoding/json"
-	"log"
 	"testing"
 
 	"github.com/minodisk/go-jsonschema/validator"
@@ -24,11 +22,6 @@ func TestEnum(t *testing.T) {
 	if err == nil {
 		t.Error(err)
 	}
-	buf, err := json.MarshalIndent(err, "", "  ")
-	if err != nil {
-		t.Error(err)
-	}
-	log.Println(string(buf))
 	err = v.Enum(3.14, []interface{}{"a", "b", 3})
 	if err == nil {
 		t.Error(err)
@@ -44,38 +37,115 @@ func TestType(t *testing.T) {
 	v := validator.Validator{}
 
 	for _, val := range []interface{}{nil} {
-		err = v.Type(val, "null")
+		err = v.Type(val, []string{"null"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{nil} {
+		err = v.Type(val, []string{"null", "boolean"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{nil} {
+		err = v.Type(val, []string{"boolean"})
+		if err == nil {
+			t.Error(err)
+		}
+	}
+
+	for _, val := range []interface{}{true, false} {
+		err = v.Type(val, []string{"boolean"})
 		if err != nil {
 			t.Error(err)
 		}
 	}
 	for _, val := range []interface{}{true, false} {
-		err = v.Type(val, "boolean")
+		err = v.Type(val, []string{"boolean", "integer"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{true, false} {
+		err = v.Type(val, []string{"integer"})
+		if err == nil {
+			t.Error(err)
+		}
+	}
+
+	for _, val := range []interface{}{3, int8(3), int16(3), int32(3), int64(3)} {
+		err = v.Type(val, []string{"integer"})
 		if err != nil {
 			t.Error(err)
 		}
 	}
 	for _, val := range []interface{}{3, int8(3), int16(3), int32(3), int64(3)} {
-		err = v.Type(val, "integer")
+		err = v.Type(val, []string{"integer", "number"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{3, int8(3), int16(3), int32(3), int64(3)} {
+		err = v.Type(val, []string{"number"})
+		if err == nil {
+			t.Error(err)
+		}
+	}
+
+	for _, val := range []interface{}{3.14, float32(3.14), float64(3.14), float32(3), float64(3)} {
+		err = v.Type(val, []string{"number"})
 		if err != nil {
 			t.Error(err)
 		}
 	}
 	for _, val := range []interface{}{3.14, float32(3.14), float64(3.14), float32(3), float64(3)} {
-		err = v.Type(val, "number")
+		err = v.Type(val, []string{"number", "array"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{3.14, float32(3.14), float64(3.14), float32(3), float64(3)} {
+		err = v.Type(val, []string{"array"})
+		if err == nil {
+			t.Error(err)
+		}
+	}
+
+	for _, val := range []interface{}{[]int{1, 2, 3}, []string{"a", "b", "c"}} {
+		err = v.Type(val, []string{"array"})
 		if err != nil {
 			t.Error(err)
 		}
 	}
 	for _, val := range []interface{}{[]int{1, 2, 3}, []string{"a", "b", "c"}} {
-		err = v.Type(val, "array")
+		err = v.Type(val, []string{"array", "object"})
+		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{[]int{1, 2, 3}, []string{"a", "b", "c"}} {
+		err = v.Type(val, []string{"object"})
+		if err == nil {
+			t.Error(err)
+		}
+	}
+
+	for _, val := range []interface{}{map[string]int{"a": 1, "b": 2, "c": 3}} {
+		err = v.Type(val, []string{"object"})
 		if err != nil {
 			t.Error(err)
 		}
 	}
 	for _, val := range []interface{}{map[string]int{"a": 1, "b": 2, "c": 3}} {
-		err = v.Type(val, "object")
+		err = v.Type(val, []string{"object", "null"})
 		if err != nil {
+			t.Error(err)
+		}
+	}
+	for _, val := range []interface{}{map[string]int{"a": 1, "b": 2, "c": 3}} {
+		err = v.Type(val, []string{"null"})
+		if err == nil {
 			t.Error(err)
 		}
 	}
