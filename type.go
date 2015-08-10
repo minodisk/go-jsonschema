@@ -52,13 +52,15 @@ func (t *Type) Resolve(f *Format, i *Items, title string) {
 	}
 }
 
-func (t *Type) IsNumeric() bool {
-	for _, tp := range t.types {
-		if tp != "integer" && tp != "number" {
-			return false
+func (t *Type) Contains(types ...string) bool {
+	for _, c := range types {
+		for _, d := range t.types {
+			if string(d) == c {
+				return true
+			}
 		}
 	}
-	return true
+	return false
 }
 
 func (t *Type) UnmarshalJSON(data []byte) error {

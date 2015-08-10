@@ -5,7 +5,7 @@ package generator
 import (
 	"bytes"
 	"io/ioutil"
-	"log"
+	"path"
 	"strings"
 	"text/template"
 
@@ -31,50 +31,57 @@ type Options struct {
 	Output   string
 }
 
-func Run(o Options) (err error) {
-	s, err := ioutil.ReadFile(o.Input)
-	if err != nil {
-		return err
-	}
-
-	var t []byte
-	if o.Template == "" {
-		log.Println("[generate] use defualt template")
-		t, err = Asset("assets/routing.go.tmpl")
-	} else {
-		t, err = ioutil.ReadFile(o.Template)
-	}
-	if err != nil {
-		return err
-	}
-
-	v, err := Asset("assets/validator.go")
-	if err != nil {
-		return err
-	}
-
-	code, err := Generate(s, t, v, o.Output)
-	if err != nil {
-		return err
-	}
-
-	return ioutil.WriteFile(o.Output, code, 0644)
+type IO struct {
+	Input  string
+	Output string
 }
 
-func Generate(schema, tmpl, v []byte, filename string) (code []byte, err error) {
+func Run(o Options) error {
+	schema, err := ioutil.ReadFile(o.Input)
+	if err != nil {
+		return err
+	}
+
+	for _, io := range []IO{
+		IO{"assets/routing.go.tmpl", "routing.go"},
+		IO{"assets/struct.go.tmpl", "struct.go"},
+		IO{"assets/validator.go.tmpl", "validator.go"},
+	} {
+		buf, err := Asset(io.Input)
+		if err != nil {
+			return err
+		}
+		filename := path.Join(o.Output, io.Output)
+		code, err := Generate(schema, buf, filename)
+		if err != nil {
+			return err
+		}
+		err = ioutil.WriteFile(filename, code, 0644)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func Generate(schema, tmpl []byte, filename string) ([]byte, error) {
 	s, err := jsonschema.New(schema)
 	if err != nil {
 		return nil, err
 	}
+
 	t := template.Must(template.New("").Funcs(funcMap).Parse(string(tmpl)))
 	buf := bytes.NewBuffer([]byte{})
+
 	err = t.Execute(buf, map[string]interface{}{
-		"package":       "main",
-		"schema":        s,
-		"validatorCode": strings.Replace(strings.Replace(string(v), "package dummy", "", 1), "import \"fmt\"", "", -1),
+		"package": "main",
+		"schema":  s,
 	})
 	if err != nil {
 		return nil, err
 	}
+
+	// return buf.Bytes(), nil
 	return imports.Process(filename, buf.Bytes(), nil)
 }

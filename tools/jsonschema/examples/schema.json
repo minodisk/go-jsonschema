@@ -211,6 +211,8 @@
         "name": {
           "description": "name of user",
           "example": "Gopher",
+          "max_length": 20,
+          "min_length": 4,
           "type": "string"
         },
         "screen_name": {

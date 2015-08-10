@@ -22,6 +22,8 @@ definitions:
     description: name of user
     example: Gopher
     type: string
+    min_length: 4
+    max_length: 20
   screen_name:
     description: screen name of user
     example: gopher-1030
